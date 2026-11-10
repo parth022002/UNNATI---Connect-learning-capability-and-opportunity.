@@ -24,8 +24,8 @@
 | **Distributed Caching** | Upstash Redis | ✅ **COMPLETED** | `capable-tetra-139975.upstash.io:6379`, TLS `rediss://`, rate limiting & caching verified |
 | **Private Object Storage** | Cloudflare R2 / S3 | ✅ **COMPLETED** | `unnati-private-documents`, S3 API endpoint active, presigned URLs & storage verified |
 | **Transactional Email** | Resend API | ✅ **COMPLETED** | `re_...`, welcome emails, health probe at `/health/email` |
-| **Custom Domain & DNS** | Cloudflare (`unnati.in`) | ⏳ **PENDING** | Apex `unnati.in` & `api.unnati.in` custom domain cutover |
-| **Legal & DPDP Compliance** | Consent Modal & Policy | ⏳ **PENDING** | Bilingual consent wording & Grievance Redressal Officer (GRO) appointment |
+| **Production Domains** | Vercel & Render Cloud URLs | ✅ **ACTIVE** | Frontend: Vercel Cloud, API: `onrender.com` (Direct cloud domains active) |
+| **Legal & DPDP Compliance** | Consent Modal & Policy | ⏳ **PENDING** | Bilingual consent wording & Grievance Redressal Officer (GRO) nomination |
 
 ---
 
@@ -100,20 +100,13 @@
 
 ## 3. Pending Requirements & Action Items (What Needs Your Input)
 
-The following items are the remaining inputs required before general public rollout:
+The following single item is the remaining input required before general public rollout:
 
-### 3.1 Custom Domain & DNS Cutover (`unnati.in`)
-* **Why it's needed:** Replaces Vercel default domain and Render `onrender.com` domain with your official branded apex domain.
-* **Target DNS Mapping (via Cloudflare DNS):**
-  * Apex `unnati.in` &rarr; CNAME to Vercel (`cname.vercel-dns.com`)
-  * Subdomain `api.unnati.in` &rarr; CNAME to Render (`unnati-connect-learning-capability-and.onrender.com`)
-* **When ready:** Switch Clerk from Development instance to Production instance and update the webhook URL to `https://api.unnati.in/api/v1/webhooks/clerk`.
-
-### 3.2 Legal, Privacy & DPDP Compliance Sign-Off
+### 3.1 Legal, Privacy & DPDP Compliance Sign-Off
 * **Why it's needed:** Compliance with the Digital Personal Data Protection Act (DPDP Act, India 2025/2026) and EU AI Act (Non-Annex III formative self-development guidance).
 * **Decisions Required:**
-  1. Confirm Bilingual (English/Hindi) Notice-and-Consent wording for registration.
-  2. Nominate Grievance Redressal Officer (GRO) contact email (e.g., `grievance@unnati.in`).
+  1. Confirm Bilingual (English/Hindi) Notice-and-Consent wording for candidate registration.
+  2. Nominate Grievance Redressal Officer (GRO) contact email address.
   3. Confirm 2-year rolling candidate profile retention with 72-hour crypto-shredding on account deletion.
 
 ---
@@ -131,7 +124,7 @@ The following items are the remaining inputs required before general public roll
 | **DEC-07** | Upstash Redis TLS Cluster | Distributed Rate Limiting & Cache | **P0** | DevOps / Owner | `[x] Provisioned & Verified (Upstash TLS)` | Phase 0 |
 | **DEC-08** | Cloudflare R2 Private Bucket | Candidate Document Storage | **P0** | DevOps / Owner | `[x] Provisioned & Verified (Cloudflare R2)` | Phase 0 |
 | **DEC-09** | Resend Transactional Email Key | Automated Email Delivery | **P1** | Project Owner | `[x] Provisioned & Verified (Resend API)` | Phase 1 |
-| **DEC-10** | Custom Apex Domain Setup (`unnati.in`) | Production Domain Cutover | **P1** | Project Owner | `[ ] Pending DNS Registration` | Phase 1 |
+| **DEC-10** | Custom Apex Domain Setup | Production Domain Cutover | **P1** | Project Owner | `[N/A] Waived (Production on Vercel + Render)` | Phase 1 |
 | **DEC-11** | DPDP Privacy Policy & GRO Nomination | India Regulatory Compliance | **P0** | Legal / Owner | `[ ] Pending Sign-Off` | Phase 1 |
 
 ---

@@ -38,7 +38,7 @@ def sync_clerk_user(db: Session, claims: Dict[str, Any], requested_role: str = "
         raise ValueError("Missing 'sub' claim in authentication token.")
 
     # Extract email and names from claims or defaults
-    email = claims.get("email") or f"{clerk_id}@users.unnati.in"
+    email = claims.get("email") or f"{clerk_id}@user.clerk"
     first_name = claims.get("first_name") or ""
     last_name = claims.get("last_name") or ""
 

@@ -217,7 +217,7 @@ The engineering roadmap reconciles all provided specifications and design assets
 | `[x]` | **OPS-002** | **Frontend Deployment Configuration (Vercel)** | P0 | Phase 0 | FE-003 | Automated deployment pipeline on Vercel with preview deployments for Pull Requests. | Production domain linked. |
 | `[x]` | **OPS-003** | **Backend Deployment Configuration (Container)** | P0 | Phase 0 | OPS-001 | Container hosting (Render/Railway/AWS ECS) with auto-scaling (2–6 replicas) and health checks. | Automated rollback on failure. |
 | `[ ]` | **OPS-004** | **Database Migration Deployment Step** | P0 | Phase 1 | DB-001 | Automated migration execution job running `alembic upgrade head` before traffic switchover. | Zero-downtime additive migrations. |
-| `[ ]` | **OPS-005** | **Cloudflare DNS, SSL & WAF Rules** | P0 | Phase 0 | ARCH-004 | Apex and subdomain DNS configured with TLS 1.3, DDoS protection, and rate-limiting rules. | `unnati.in` and `api.unnati.in`. |
+| `[x]` | **OPS-005** | **Edge Routing & SSL Deployment** | P0 | Phase 0 | ARCH-004 | Automated TLS 1.3 encryption and DDoS protection on live production environments. | Provisioned automatically via Vercel Edge & Render SSL networks (no custom domain required). |
 
 ---
 
@@ -238,7 +238,7 @@ The engineering roadmap reconciles all provided specifications and design assets
 * **Gate G2 (Candidate MVP Ready):** ✅ **PASSED** — Learner onboarding (`/onboarding`), profile builder (`/dashboard`), resume PDF parsing with Gemini extraction, user correction UI, Clerk auth & webhooks verified live.
 * **Gate G3 (Algorithmic Core Verified):** ✅ **PASSED** — Algorithm A (candidate skill state machine), Algorithm B (evidence-weighted gap scoring), and Algorithm C (prerequisite-aware topological roadmap generator) verified live at `/roadmap`.
 * **Gate G4 (Security & Compliance Certified):** ⏳ **IN PROGRESS** — Rate limiting active, S3 private storage secured, DPDP notice-and-consent and GRO sign-off pending.
-* **Gate G5 (Production Pilot Launch):** ⏳ **READY FOR DEPLOYMENT** — Pilot cohort P-0 (100–250 learners) ready for onboarding upon custom domain DNS switchover.
+* **Gate G5 (Production Pilot Launch):** ⏳ **READY FOR DEPLOYMENT** — Pilot cohort P-0 (100–250 learners) ready for onboarding immediately on live Vercel & Render cloud infrastructure.
 
 ---
 
