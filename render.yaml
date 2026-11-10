@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: unnati-api
+    runtime: python
+    rootDir: apps/api
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: CLERK_ISSUER
+        value: https://allowing-raptor-9178.clerk.accounts.dev
+      - key: CLERK_JWKS_URL
+        value: https://allowing-raptor-9178.clerk.accounts.dev/.well-known/jwks.json
+      - key: CLERK_AUDIENCE
+        value: unnati-api
+      - key: CLERK_CLOCK_SKEW_SECONDS
+        value: "5"
+      - key: DATABASE_URL
+        sync: false
+      - key: CLERK_WEBHOOK_SECRET
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        value: "http://localhost:3000,http://127.0.0.1:3000"

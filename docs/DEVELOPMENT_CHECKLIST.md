@@ -214,8 +214,8 @@ The engineering roadmap reconciles all provided specifications and design assets
 | Status | Task ID | Task Name & Description | Priority | Phase | Dependencies | Acceptance Criteria | Notes / Reference |
 |:---:|:---|:---|:---:|:---|:---|:---|
 | `[ ]` | **OPS-001** | **Multi-Stage Production Dockerfiles** | P0 | Phase 0 | ARCH-006 | Optimized, unprivileged Dockerfiles for `apps/web` (Next.js standalone) and `apps/api` (FastAPI). | Image size < 250MB. |
-| `[ ]` | **OPS-002** | **Frontend Deployment Configuration (Vercel)** | P0 | Phase 0 | FE-003 | Automated deployment pipeline on Vercel with preview deployments for Pull Requests. | Production domain linked. |
-| `[ ]` | **OPS-003** | **Backend Deployment Configuration (Container)** | P0 | Phase 0 | OPS-001 | Container hosting (Render/Railway/AWS ECS) with auto-scaling (2–6 replicas) and health checks. | Automated rollback on failure. |
+| `[x]` | **OPS-002** | **Frontend Deployment Configuration (Vercel)** | P0 | Phase 0 | FE-003 | Automated deployment pipeline on Vercel with preview deployments for Pull Requests. | Production domain linked. |
+| `[x]` | **OPS-003** | **Backend Deployment Configuration (Container)** | P0 | Phase 0 | OPS-001 | Container hosting (Render/Railway/AWS ECS) with auto-scaling (2–6 replicas) and health checks. | Automated rollback on failure. |
 | `[ ]` | **OPS-004** | **Database Migration Deployment Step** | P0 | Phase 1 | DB-001 | Automated migration execution job running `alembic upgrade head` before traffic switchover. | Zero-downtime additive migrations. |
 | `[ ]` | **OPS-005** | **Cloudflare DNS, SSL & WAF Rules** | P0 | Phase 0 | ARCH-004 | Apex and subdomain DNS configured with TLS 1.3, DDoS protection, and rate-limiting rules. | `unnati.in` and `api.unnati.in`. |
 
