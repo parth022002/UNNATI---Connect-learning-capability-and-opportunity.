@@ -51,6 +51,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
     return pathname === href || (href !== "/" && pathname?.startsWith(href));
   };
 
+  const handleOpenCompanion = () => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("open-unnati-companion"));
+    }
+    onOpenCompanion?.();
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/90 bg-white/90 backdrop-blur-md shadow-soft-sm transition-all">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -109,7 +116,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
         <div className="flex items-center gap-3">
           {/* AI Career Mentor Trigger */}
           <button
-            onClick={onOpenCompanion}
+            onClick={handleOpenCompanion}
             className="group relative hidden sm:flex items-center gap-2 rounded-xl border border-purple-200 bg-purple-50/80 px-3.5 py-2 text-xs font-bold text-unnati-indigo shadow-soft-sm hover:border-purple-300 hover:bg-purple-100 transition-all cursor-pointer"
             title="Open AI Career Mentor"
           >
@@ -188,7 +195,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                onOpenCompanion?.();
+                handleOpenCompanion();
               }}
               className="flex items-center justify-between w-full px-4 py-3 rounded-xl border border-purple-200 bg-purple-50 text-unnati-indigo text-sm font-bold mt-2"
             >

@@ -15,9 +15,10 @@
 | **Warm Design System & Theme Tokens** | 4 | 4 | **100%** | 🟢 Complete |
 | **Core Application Routes Refactored** | 8 | 8 | **100%** | 🟢 Complete |
 | **Accessible UI Primitives & Atmosphere** | 6 | 6 | **100%** | 🟢 Complete |
+| **Global Bottom-Right AI Chatbot Widget** | 5 | 5 | **100%** | 🟢 Complete |
 | **Accessibility (WCAG 2.2 AA) & Responsiveness** | 4 | 4 | **100%** | 🟢 Complete |
 | **Next.js 15 Build & Static Page Generation** | 13 | 13 | **100%** | 🟢 Complete (Exit 0) |
-| **TOTAL FRONTEND IMPLEMENTATION** | **43** | **43** | **100%** | 🟢 **100% COMPLETE** |
+| **TOTAL FRONTEND IMPLEMENTATION** | **48** | **48** | **100%** | 🟢 **100% COMPLETE** |
 
 ```
 FRONTEND COMPLETION: [████████████████████████████████████████] 100%
@@ -107,7 +108,37 @@ All 13 routes compiled, prerendered, and tested with zero errors.
 
 ---
 
-## 5. Accessibility & Quality Verification (100% Complete)
+## 5. Global Bottom-Right AI Chatbot Widget (`CareerCompanionWidget.tsx`) (100% Complete)
+
+- [x] **Persistent Bottom-Right Floating Launcher:**
+  - Anchored at `fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-40`.
+  - Branded gradient pill (`from-unnati-indigo via-purple-700 to-unnati-violet`) with 24px official UNNATI logo mark, live animated pulsing green status beacon, and clear label *"Ask UNNATI AI"*.
+  - Welcome dismissible tooltip bubble for new visitors (`"👋 Need career guidance? Ask UNNATI AI!"`).
+- [x] **Universal Persona Selector (Easy for Anyone):**
+  - Instant category filtering tabs:
+    1. 🌟 **All Topics**
+    2. 🎓 **Students & Freshers**
+    3. 💼 **Business & Marketing**
+    4. 📊 **Finance & Analytics**
+    5. 💻 **Tech & Design**
+    6. 🔄 **Career Switchers**
+  - Tailored one-click suggested question chips dynamically adapt to the active persona so non-technical users, high schoolers, and working professionals immediately find relevant topics.
+- [x] **Multi-Domain Intelligent Mentorship Engine:**
+  - Rich, plain-English guidance covering student degree pathways, zero-experience resume building, product management, digital marketing, data analytics without coding, financial modeling, UI/UX portfolios, full-stack vs frontend/backend, and career switcher transitions.
+  - Transparent citation tags (e.g. `O*NET 2026`, `ESCO European Taxonomy`, `UNNATI Mentorship Engine`).
+  - Actionable direct-route links within responses (e.g. `[Explore 20+ Career Pathways]`, `[Take a 10-Minute Skill Check]`, `[Inspect Your Roadmap]`, `[Upload Resume on Dashboard]`).
+- [x] **Accessibility & Universal Ergonomics:**
+  - Keyboard shortcuts (`Escape` to minimize/close, `Enter` to send).
+  - One-click response copy to clipboard with instant confirmation checkmark.
+  - "Clear / Restart Chat" button to start a fresh topic anytime.
+  - Responsive floating card layout (`sm:w-[450px] md:w-[470px] h-[600px] max-h-[85vh]`) with touch-friendly controls down to 320px mobile screens.
+- [x] **Global Mounting in `RootLayout` (`layout.tsx`):**
+  - Chat state and conversation history persist across navigation between pages (`/explore`, `/roadmap`, `/dashboard`, etc.) without resets.
+  - Navbar "Ask AI Mentor" buttons on desktop and mobile menu trigger the widget via standard window event.
+
+---
+
+## 6. Accessibility & Quality Verification (100% Complete)
 
 - [x] **WCAG 2.2 AA Contrast Compliance:** All body text meets minimum 4.5:1 contrast against warm card backgrounds; headings and large buttons exceed 3.0:1 contrast.
 - [x] **Screen Reader & Keyboard Navigability:** Form inputs have visible labels; comparison buttons, chips, and modals support full keyboard navigation (`Tab`, `Enter`, `Escape`).

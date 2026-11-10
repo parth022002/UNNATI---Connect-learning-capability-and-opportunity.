@@ -2,6 +2,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import ConsentModal from "../components/privacy/ConsentModal";
+import { CareerCompanionWidget } from "@/components/companion/CareerCompanionWidget";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <body className="min-h-screen bg-warm-pattern text-slate-900 font-sans antialiased selection:bg-purple-200 selection:text-purple-900">
           {children}
           <ConsentModal />
+          <CareerCompanionWidget />
         </body>
       </html>
     </ClerkProvider>

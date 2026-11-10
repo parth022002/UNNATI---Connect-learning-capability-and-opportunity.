@@ -156,7 +156,7 @@ The engineering roadmap reconciles all provided specifications and design assets
 | `[x]` | **FE-010** | **Skill Gap Radar Chart & Diagnostic View** | P0 | Phase 3 | GAP-001 | Radar / spider visualization comparing candidate competency against target role benchmark. | Implemented at `/roadmap` with Algorithm B matrix. |
 | `[x]` | **FE-011** | **Personalized Learning Roadmap Visualizer** | P0 | Phase 3 | ROAD-001 | Node-based visual roadmap displaying milestones, estimated study hours, learning resources, and progress toggles. | Implemented at `/roadmap` with Algorithm C 3-phase journey. |
 | `[x]` | **FE-012** | **Adaptive Assessment Taking Interface** | P0 | Phase 4 | ASSESS-002 | Distraction-free quiz UI with timer, progress indicator, multiple-choice / code snippet questions, and instant feedback. | Implemented at `/assessments` with IRT 2PL difficulty scoring and Bayesian unlock. |
-| `[x]` | **FE-013** | **Real-Time AI Career Companion Drawer / Chat** | P0 | Phase 4 | AI-002 | Streaming conversational chat with markdown support, code highlighting, suggested prompts, and citation popovers. | Implemented via `CareerCompanionDrawer.tsx` with Gemini/Groq simulation, copy tools, and source citations. |
+| `[x]` | **FE-013** | **Global Bottom-Right AI Career Chatbot Widget** | P0 | Phase 4 | AI-002 | Persistent bottom-right floating AI chatbot (`CareerCompanionWidget.tsx`) with universal persona selector (Students, Business, Finance, Tech, Career Switchers), instant suggested question chips, responsive layout, markdown support, source citations, and clipboard copy. | Mounted globally in `layout.tsx` at `fixed bottom-6 right-6 z-40`, accessible across all routes. |
 
 ---
 
