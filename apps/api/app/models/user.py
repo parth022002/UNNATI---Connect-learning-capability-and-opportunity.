@@ -1,6 +1,7 @@
 import uuid
+from datetime import datetime
 from typing import Optional, List
-from sqlalchemy import String, Text, Boolean, Integer, Float, ForeignKey
+from sqlalchemy import String, Text, Boolean, Integer, Float, ForeignKey, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base, UUIDPrimaryKeyMixin, TimestampMixin
 
@@ -82,3 +83,12 @@ class ExperienceRecord(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     user: Mapped["User"] = relationship("User", back_populates="experience")
+
+class ClerkWebhookEvent(Base):
+    __tablename__ = "clerk_webhook_events"
+
+    event_id: Mapped[str] = mapped_column(String(255), primary_key=True)
+    event_type: Mapped[str] = mapped_column(String(100), nullable=False)
+    processed_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
