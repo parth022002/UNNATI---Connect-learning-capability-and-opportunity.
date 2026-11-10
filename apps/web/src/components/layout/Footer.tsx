@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
@@ -12,10 +12,22 @@ import {
   Github, 
   Globe, 
   Heart,
-  CheckCircle2
+  CheckCircle2,
+  ChevronDown
 } from "lucide-react";
 
 export const Footer: React.FC = () => {
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    explore: false,
+    platform: false,
+    learners: false,
+    trust: false,
+  });
+
+  const toggleSection = (section: string) => {
+    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
+  };
+
   const handleOpenCompanion = (e: React.MouseEvent) => {
     e.preventDefault();
     if (typeof window !== "undefined") {
@@ -118,11 +130,17 @@ export const Footer: React.FC = () => {
           {/* ----------------------------------------------------
               COLUMN 2 — EXPLORE (1fr)
              ---------------------------------------------------- */}
-          <div className="space-y-4">
-            <h4 className="font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2">
-              Explore
-            </h4>
-            <ul className="space-y-2.5 text-[14px] font-medium">
+          <div className="space-y-3 sm:space-y-4">
+            <button
+              type="button"
+              onClick={() => toggleSection("explore")}
+              className="w-full flex items-center justify-between font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2 text-left md:cursor-default"
+              aria-expanded={openSections.explore}
+            >
+              <span>Explore</span>
+              <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform duration-200 md:hidden ${openSections.explore ? "rotate-180 text-unnati-indigo" : ""}`} />
+            </button>
+            <ul className={`space-y-2.5 text-[14px] font-medium pt-1 md:pt-0 ${openSections.explore ? "block" : "hidden md:block"}`}>
               <li>
                 <Link href="/explore" className="text-slate-600 hover:text-unnati-indigo transition-colors block">
                   Career Pathways
@@ -154,11 +172,17 @@ export const Footer: React.FC = () => {
           {/* ----------------------------------------------------
               COLUMN 3 — PLATFORM (1fr)
              ---------------------------------------------------- */}
-          <div className="space-y-4">
-            <h4 className="font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2">
-              Platform
-            </h4>
-            <ul className="space-y-2.5 text-[14px] font-medium">
+          <div className="space-y-3 sm:space-y-4">
+            <button
+              type="button"
+              onClick={() => toggleSection("platform")}
+              className="w-full flex items-center justify-between font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2 text-left md:cursor-default"
+              aria-expanded={openSections.platform}
+            >
+              <span>Platform</span>
+              <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform duration-200 md:hidden ${openSections.platform ? "rotate-180 text-unnati-indigo" : ""}`} />
+            </button>
+            <ul className={`space-y-2.5 text-[14px] font-medium pt-1 md:pt-0 ${openSections.platform ? "block" : "hidden md:block"}`}>
               <li>
                 <Link href="/dashboard" className="text-slate-600 hover:text-unnati-indigo transition-colors block">
                   Learner Dashboard
@@ -194,11 +218,17 @@ export const Footer: React.FC = () => {
           {/* ----------------------------------------------------
               COLUMN 4 — FOR LEARNERS (1fr)
              ---------------------------------------------------- */}
-          <div className="space-y-4">
-            <h4 className="font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2">
-              For Learners
-            </h4>
-            <ul className="space-y-2.5 text-[14px] font-medium">
+          <div className="space-y-3 sm:space-y-4">
+            <button
+              type="button"
+              onClick={() => toggleSection("learners")}
+              className="w-full flex items-center justify-between font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2 text-left md:cursor-default"
+              aria-expanded={openSections.learners}
+            >
+              <span>For Learners</span>
+              <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform duration-200 md:hidden ${openSections.learners ? "rotate-180 text-unnati-indigo" : ""}`} />
+            </button>
+            <ul className={`space-y-2.5 text-[14px] font-medium pt-1 md:pt-0 ${openSections.learners ? "block" : "hidden md:block"}`}>
               <li>
                 <Link href="/onboarding?persona=student" className="text-slate-600 hover:text-unnati-indigo transition-colors block">
                   Students &amp; Freshers
@@ -230,11 +260,17 @@ export const Footer: React.FC = () => {
           {/* ----------------------------------------------------
               COLUMN 5 — TRUST & LEGAL (1fr)
              ---------------------------------------------------- */}
-          <div className="space-y-4">
-            <h4 className="font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2">
-              Trust &amp; Legal
-            </h4>
-            <ul className="space-y-2.5 text-[14px] font-medium">
+          <div className="space-y-3 sm:space-y-4">
+            <button
+              type="button"
+              onClick={() => toggleSection("trust")}
+              className="w-full flex items-center justify-between font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2 text-left md:cursor-default"
+              aria-expanded={openSections.trust}
+            >
+              <span>Trust &amp; Legal</span>
+              <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform duration-200 md:hidden ${openSections.trust ? "rotate-180 text-unnati-indigo" : ""}`} />
+            </button>
+            <ul className={`space-y-2.5 text-[14px] font-medium pt-1 md:pt-0 ${openSections.trust ? "block" : "hidden md:block"}`}>
               <li>
                 <Link href="/privacy" className="text-slate-600 hover:text-unnati-indigo transition-colors block">
                   Privacy Policy

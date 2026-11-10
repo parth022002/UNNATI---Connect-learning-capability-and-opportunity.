@@ -26,4 +26,8 @@ uploads/
 storage/
 *.tsbuildinfo
 
+# Test screenshots and browser session dumps
+/*.png
+.playwright-mcp/
+
 

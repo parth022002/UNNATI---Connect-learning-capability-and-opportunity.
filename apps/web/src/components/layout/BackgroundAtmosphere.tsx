@@ -18,7 +18,7 @@ import React from "react";
  */
 export const BackgroundAtmosphere: React.FC = () => {
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden max-w-full w-full z-0" aria-hidden="true">
       {/* 1. Hero Ambient Halo (Soft Lavender & Delicate Peach) */}
       <div 
         className="absolute -top-[16%] left-1/2 -translate-x-1/2 w-[1150px] h-[700px] bg-gradient-to-b from-purple-100/55 via-orange-50/40 to-transparent blur-[95px] opacity-80 motion-reduce:animate-none" 

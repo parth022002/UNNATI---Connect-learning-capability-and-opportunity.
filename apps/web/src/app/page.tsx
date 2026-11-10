@@ -507,8 +507,8 @@ export default function HomePage() {
             {/* Desktop Animated Connector Line */}
             <div className="hidden lg:block absolute top-[280px] left-[6%] right-[6%] h-[2px] bg-gradient-to-r from-purple-300 via-orange-300 to-emerald-300 z-0 opacity-40" />
 
-            {/* Connected Journey Grid with Visual Flow Indicator */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5 relative z-10">
+            {/* Connected Journey Grid: 1 Col on Mobile (Vertical Timeline), 3 Col on Tablet, 6 Col on Desktop */}
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-5 relative z-10">
               {[
                 {
                   num: "01",
@@ -1182,14 +1182,14 @@ export default function HomePage() {
                 <p className="text-sm sm:text-base text-purple-200 max-w-xl mx-auto mt-4 leading-relaxed">
                   Join students, graduates, and professionals building verifiable capability and moving toward the careers they deserve.
                 </p>
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                  <Link href="/onboarding">
-                    <Button variant="saffron" size="lg" className="btn-shimmer text-base font-bold shadow-soft-md shadow-glow-saffron h-13 px-8 rounded-2xl text-white">
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <Link href="/onboarding" className="w-full sm:w-auto">
+                    <Button variant="saffron" size="lg" className="btn-shimmer w-full sm:w-auto text-base font-bold shadow-soft-md shadow-glow-saffron h-13 px-8 rounded-2xl text-white">
                       Get Started Free <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>
                   </Link>
-                  <Link href="/explore">
-                    <Button variant="outline" size="lg" className="text-base font-semibold bg-white/10 hover:bg-white/20 text-white border-white/30 h-13 px-8 rounded-2xl">
+                  <Link href="/explore" className="w-full sm:w-auto">
+                    <Button variant="outline" size="lg" className="w-full sm:w-auto text-base font-semibold bg-white/10 hover:bg-white/20 text-white border-white/30 h-13 px-8 rounded-2xl">
                       Explore Career Pathways
                     </Button>
                   </Link>
