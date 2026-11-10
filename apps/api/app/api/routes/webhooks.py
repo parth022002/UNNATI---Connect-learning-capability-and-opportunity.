@@ -44,7 +44,7 @@ async def handle_clerk_webhook(
 
         try:
             wh = Webhook(webhook_secret)
-            evt = wh.verify(
+            wh.verify(
                 body_bytes,
                 {
                     "svix-id": svix_id,
@@ -52,11 +52,18 @@ async def handle_clerk_webhook(
                     "svix-signature": svix_signature,
                 }
             )
+            evt = json.loads(body_bytes.decode("utf-8"))
         except WebhookVerificationError as e:
             logger.error(f"Clerk webhook signature verification failed: {e}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Webhook signature verification failed."
+            )
+        except Exception as e:
+            logger.error(f"Failed to parse webhook JSON payload: {e}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid JSON payload."
             )
     else:
         # Development fallback with warning if secret is not set yet
@@ -70,6 +77,9 @@ async def handle_clerk_webhook(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Invalid JSON payload."
             )
+
+    if not isinstance(evt, dict):
+        evt = {}
 
     event_type = evt.get("type", "unknown")
     data = evt.get("data", {})
@@ -85,25 +95,31 @@ async def handle_clerk_webhook(
         full_name = f"{first_name} {last_name}".strip() or None
 
         if clerk_id and primary_email:
-            existing_user = db.scalar(select(User).where(User.clerk_id == clerk_id))
-            if not existing_user:
-                new_user = User(
-                    clerk_id=clerk_id,
-                    email=primary_email,
-                    full_name=full_name,
-                    role="student",
-                    is_active=True
-                )
-                db.add(new_user)
-                db.flush()
+            try:
+                existing_user = db.scalar(select(User).where(User.clerk_id == clerk_id))
+                if not existing_user:
+                    new_user = User(
+                        clerk_id=clerk_id,
+                        email=primary_email,
+                        full_name=full_name,
+                        role="student",
+                        is_active=True
+                    )
+                    db.add(new_user)
+                    db.flush()
 
-                profile = UserProfile(
-                    user_id=new_user.id,
-                    profile_completeness_score=20
-                )
-                db.add(profile)
-                db.commit()
-                logger.info(f"Created new candidate user in DB from webhook: {clerk_id} ({primary_email})")
+                    profile = UserProfile(
+                        user_id=new_user.id,
+                        profile_completeness_score=20
+                    )
+                    db.add(profile)
+                    db.commit()
+                    logger.info(f"Created new candidate user in DB from webhook: {clerk_id} ({primary_email})")
+                else:
+                    logger.info(f"User already exists: {clerk_id}")
+            except Exception as e:
+                db.rollback()
+                logger.error(f"Error persisting user.created webhook: {e}")
 
     # 2. User Updated
     elif event_type == "user.updated":
@@ -115,24 +131,32 @@ async def handle_clerk_webhook(
         full_name = f"{first_name} {last_name}".strip() or None
 
         if clerk_id:
-            user = db.scalar(select(User).where(User.clerk_id == clerk_id))
-            if user:
-                if primary_email:
-                    user.email = primary_email
-                if full_name:
-                    user.full_name = full_name
-                db.commit()
-                logger.info(f"Updated candidate user in DB from webhook: {clerk_id}")
+            try:
+                user = db.scalar(select(User).where(User.clerk_id == clerk_id))
+                if user:
+                    if primary_email:
+                        user.email = primary_email
+                    if full_name:
+                        user.full_name = full_name
+                    db.commit()
+                    logger.info(f"Updated candidate user in DB from webhook: {clerk_id}")
+            except Exception as e:
+                db.rollback()
+                logger.error(f"Error updating user in webhook: {e}")
 
     # 3. User Deleted
     elif event_type == "user.deleted":
         clerk_id = data.get("id")
         if clerk_id:
-            user = db.scalar(select(User).where(User.clerk_id == clerk_id))
-            if user:
-                user.is_active = False
-                db.commit()
-                logger.info(f"Deactivated candidate user in DB from webhook: {clerk_id}")
+            try:
+                user = db.scalar(select(User).where(User.clerk_id == clerk_id))
+                if user:
+                    user.is_active = False
+                    db.commit()
+                    logger.info(f"Deactivated candidate user in DB from webhook: {clerk_id}")
+            except Exception as e:
+                db.rollback()
+                logger.error(f"Error deactivating user in webhook: {e}")
 
     return {"status": "success", "event_type": event_type}
 
