@@ -17,9 +17,9 @@ export const Footer: React.FC = () => {
     <footer className="border-t border-slate-200/90 bg-white text-slate-700 relative z-10">
       {/* Main Footer Container */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-18 pb-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
           
-          {/* Brand & Mission Column (Prominent 56px Logo Lockup) */}
+          {/* Column 1 — Brand (54–56px Logo Lockup) */}
           <div className="lg:col-span-4 space-y-4">
             <Link href="/" className="inline-flex items-center gap-4 group focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet rounded-2xl">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-100/90 via-white to-orange-50/80 p-1.5 border-2 border-purple-200/90 shadow-soft-md group-hover:border-unnati-violet group-hover:shadow-glow-violet transition-all">
@@ -63,15 +63,15 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Navigation Column 1: Explore & Learn */}
+          {/* Column 2 — Explore */}
           <div className="lg:col-span-2 space-y-3.5">
             <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-slate-900">
-              Explore &amp; Learn
+              Explore
             </h4>
             <ul className="space-y-2.5 text-[14px] font-medium">
               <li>
                 <Link href="/explore" className="text-slate-600 hover:text-unnati-indigo transition-colors">
-                  Career Pathways (20+)
+                  Career Pathways
                 </Link>
               </li>
               <li>
@@ -81,46 +81,46 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link href="/assessments" className="text-slate-600 hover:text-unnati-indigo transition-colors">
-                  Diagnostic Skill Checks
+                  Skills Check
                 </Link>
               </li>
               <li>
                 <Link href="/roadmap" className="text-slate-600 hover:text-unnati-indigo transition-colors">
-                  Personalized Roadmaps
+                  Learning Roadmaps
                 </Link>
               </li>
               <li>
                 <Link href="/dashboard" className="text-slate-600 hover:text-unnati-indigo transition-colors">
-                  Candidate Dashboard
+                  Skills Inventory
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Navigation Column 2: Platform Tour */}
+          {/* Column 3 — Platform */}
           <div className="lg:col-span-2 space-y-3.5">
             <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-slate-900">
               Platform
             </h4>
             <ul className="space-y-2.5 text-[14px] font-medium">
               <li>
-                <Link href="/#how-it-works" className="text-slate-600 hover:text-unnati-indigo transition-colors">
-                  Continuous Journey
+                <Link href="/dashboard" className="text-slate-600 hover:text-unnati-indigo transition-colors">
+                  Learner Dashboard
                 </Link>
               </li>
               <li>
-                <Link href="/#showcase" className="text-slate-600 hover:text-unnati-indigo transition-colors">
-                  Product Showcase
+                <Link href="/explore" className="text-slate-600 hover:text-unnati-indigo transition-colors">
+                  Career Discovery
                 </Link>
               </li>
               <li>
-                <Link href="/#diagnostic" className="text-slate-600 hover:text-unnati-indigo transition-colors">
-                  Interactive Diagnostic
+                <Link href="/assessments" className="text-slate-600 hover:text-unnati-indigo transition-colors">
+                  Assessments
                 </Link>
               </li>
               <li>
-                <Link href="/#audiences" className="text-slate-600 hover:text-unnati-indigo transition-colors">
-                  Audience Pathways
+                <Link href="/roadmap" className="text-slate-600 hover:text-unnati-indigo transition-colors">
+                  Progress Tracking
                 </Link>
               </li>
               <li>
@@ -129,13 +129,13 @@ export const Footer: React.FC = () => {
                   className="text-left text-slate-600 hover:text-unnati-indigo transition-colors font-medium flex items-center gap-1.5 cursor-pointer"
                 >
                   <MessageSquare className="h-4 w-4 text-unnati-saffron" />
-                  <span>AI Career Companion</span>
+                  <span>AI Mentor</span>
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Navigation Column 3: For Learners */}
+          {/* Column 4 — For Learners */}
           <div className="lg:col-span-2 space-y-3.5">
             <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-slate-900">
               For Learners
@@ -169,7 +169,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Navigation Column 4: Trust & Support */}
+          {/* Column 5 — Trust & Legal */}
           <div className="lg:col-span-2 space-y-3.5">
             <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-slate-900">
               Trust &amp; Legal
@@ -177,22 +177,31 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-[14px] font-medium">
               <li>
                 <Link href="/privacy" className="text-slate-600 hover:text-unnati-indigo transition-colors">
-                  Privacy Policy (DPDP)
+                  Privacy Policy
                 </Link>
               </li>
               <li>
                 <Link href="/privacy" className="text-slate-600 hover:text-unnati-indigo transition-colors">
-                  Grievance Officer (GRO)
+                  Terms of Use
                 </Link>
               </li>
               <li>
                 <Link href="/privacy" className="text-slate-600 hover:text-unnati-indigo transition-colors">
-                  72-Hour Data Erasure
+                  Data Protection
                 </Link>
               </li>
               <li>
-                <Link href="/#faq" className="text-slate-600 hover:text-unnati-indigo transition-colors">
-                  Frequently Asked Questions
+                <a 
+                  href="mailto:grievance@unnati.in" 
+                  className="text-slate-600 hover:text-unnati-indigo transition-colors flex items-center gap-1.5"
+                >
+                  <Mail className="h-3.5 w-3.5 text-purple-600" />
+                  <span>Contact Support</span>
+                </a>
+              </li>
+              <li>
+                <Link href="/privacy" className="text-slate-600 hover:text-unnati-indigo transition-colors">
+                  Grievance Officer
                 </Link>
               </li>
               <li>
@@ -206,12 +215,6 @@ export const Footer: React.FC = () => {
                   <ArrowUpRight className="h-3.5 w-3.5" />
                 </a>
               </li>
-              <li>
-                <a href="mailto:grievance@unnati.in" className="text-slate-600 hover:text-unnati-indigo transition-colors flex items-center gap-1.5">
-                  <Mail className="h-3.5 w-3.5 text-purple-600" />
-                  <span>Contact Support</span>
-                </a>
-              </li>
             </ul>
           </div>
 
@@ -220,7 +223,7 @@ export const Footer: React.FC = () => {
 
       {/* Sub-Footer: Copyright, Ethics, Compliance (with generous clearance padding for chatbot) */}
       <div className="border-t border-slate-100 bg-slate-50/90 py-6 pb-28 sm:pb-8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 sm:pr-36">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 sm:pr-40">
           <div className="flex items-center gap-2">
             <span>&copy; {new Date().getFullYear()} UNNATI (उन्नति). All rights reserved.</span>
           </div>

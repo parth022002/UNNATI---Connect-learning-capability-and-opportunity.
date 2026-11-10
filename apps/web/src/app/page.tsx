@@ -336,14 +336,14 @@ export default function HomePage() {
                       <button
                         key={idx}
                         onClick={() => setActiveHeroStep(idx)}
-                        className={`py-1.5 text-[11px] font-bold rounded-lg transition-all cursor-pointer truncate px-1 text-center ${
+                        className={`py-1.5 text-[11px] font-bold rounded-lg transition-all cursor-pointer whitespace-nowrap px-1 text-center ${
                           activeHeroStep === idx
                             ? "bg-white text-unnati-indigo shadow-soft-sm"
                             : "text-slate-500 hover:text-slate-900"
                         }`}
                         title={s.summary}
                       >
-                        {s.title}
+                        <span className="whitespace-nowrap">{s.title}</span>
                       </button>
                     ))}
                   </div>
@@ -574,14 +574,19 @@ export default function HomePage() {
                       </div>
 
                       {idx === 5 ? (
-                        <div className="mt-4 pt-3 border-t border-purple-200/80 flex items-center gap-1.5 text-[11px] font-bold text-unnati-indigo">
-                          <RefreshCw className="h-3.5 w-3.5 animate-spin text-unnati-saffron" />
-                          <span>Continuous Loop ↻</span>
+                        <div className="mt-4 pt-3 border-t border-purple-200/80 flex items-center justify-between text-[11px] font-bold text-unnati-indigo">
+                          <span className="flex items-center gap-1.5">
+                            <RefreshCw className="h-3.5 w-3.5 animate-spin text-unnati-saffron" />
+                            <span>Continuous Loop ↻</span>
+                          </span>
+                          <span className="text-[10px] bg-purple-100 text-unnati-indigo px-2 py-0.5 rounded-full font-bold">
+                            Adaptive
+                          </span>
                         </div>
                       ) : (
-                        <div className="mt-4 pt-2 flex items-center gap-1 text-[11px] font-bold text-slate-400 group-hover:text-unnati-indigo transition-colors">
-                          <span>Next Stage</span>
-                          <ArrowRight className="h-3 w-3" />
+                        <div className="mt-4 pt-3 border-t border-slate-200/70 flex items-center justify-between text-[11px] font-bold text-slate-400 group-hover:text-unnati-indigo transition-colors">
+                          <span>Stage {step.num} of 06</span>
+                          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 text-unnati-saffron" />
                         </div>
                       )}
                     </div>
@@ -624,14 +629,14 @@ export default function HomePage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveShowcaseTab(tab.id as any)}
-                  className={`flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                  className={`flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     activeShowcaseTab === tab.id
                       ? "bg-unnati-indigo text-white shadow-soft-md"
                       : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
                   }`}
                 >
-                  <Icon className="h-4 w-4" />
-                  <span>{tab.label}</span>
+                  <Icon className="h-4 w-4 shrink-0" />
+                  <span className="whitespace-nowrap">{tab.label}</span>
                 </button>
               );
             })}
@@ -951,13 +956,13 @@ export default function HomePage() {
               <button
                 key={key}
                 onClick={() => setSelectedDemoDomain(key)}
-                className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   selectedDemoDomain === key
                     ? "bg-unnati-indigo text-white shadow-soft-md"
                     : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
                 }`}
               >
-                {domainDemos[key].domain}
+                <span className="whitespace-nowrap">{domainDemos[key].domain}</span>
               </button>
             ))}
           </div>

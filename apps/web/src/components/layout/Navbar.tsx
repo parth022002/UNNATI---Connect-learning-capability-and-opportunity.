@@ -55,16 +55,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
   const authenticatedLinks = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/roadmap", label: "My Roadmap", icon: MapPin },
-    { href: "/explore", label: "Explore Careers", icon: Compass },
+    { href: "/explore", label: "Career Pathways", icon: Compass },
     { href: "/assessments", label: "Skills Check", icon: FileCheck2 },
   ];
 
-  // Public visitor navigation items (Restrained, calm, purposeful)
+  // Public visitor navigation items (Single-line, restrained, calm)
   const publicLinks = [
     { href: "/#how-it-works", label: "How It Works", icon: Briefcase },
     { href: "/explore", label: "Career Pathways", icon: Compass },
     { href: "/assessments", label: "Skills Check", icon: FileCheck2 },
-    { href: "/#showcase", label: "Platform Tour", icon: Layers },
     { href: "/#faq", label: "FAQ", icon: HelpCircle },
   ];
 
@@ -97,7 +96,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
            ======================================================== */}
         <Link 
           href="/" 
-          className="group flex items-center gap-3.5 sm:gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet rounded-2xl shrink-0"
+          className="group flex items-center gap-3.5 sm:gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet rounded-2xl shrink-0 whitespace-nowrap"
           aria-label="UNNATI Home"
         >
           {/* Authentic Logo Mark Container (54–56px) */}
@@ -113,27 +112,27 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
           </div>
 
           {/* Wordmark Stack with High Readability */}
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2 leading-none">
-              <span className="font-heading text-2xl sm:text-[26px] font-black tracking-tight text-unnati-indigo group-hover:text-unnati-violet transition-colors">
+          <div className="flex flex-col shrink-0">
+            <div className="flex items-center gap-2 leading-none whitespace-nowrap">
+              <span className="font-heading text-2xl sm:text-[26px] font-black tracking-tight text-unnati-indigo group-hover:text-unnati-violet transition-colors whitespace-nowrap">
                 UNNATI
               </span>
-              <span className="text-xs sm:text-[13px] font-bold text-purple-700 font-sans tracking-normal">
+              <span className="text-xs sm:text-[13px] font-bold text-purple-700 font-sans tracking-normal whitespace-nowrap">
                 (उन्नति)
               </span>
-              <span className="inline-block h-2 w-2 rounded-full bg-unnati-saffron animate-pulse" />
+              <span className="inline-block h-2 w-2 rounded-full bg-unnati-saffron animate-pulse shrink-0" />
             </div>
-            <span className="text-[11px] sm:text-[12px] font-bold tracking-wider text-slate-500 uppercase mt-1">
+            <span className="text-[11px] sm:text-[12px] font-bold tracking-wider text-slate-500 uppercase mt-1 whitespace-nowrap">
               Your Growth Companion
             </span>
           </div>
         </Link>
 
         {/* ========================================================
-            GROUP B: PRIMARY NAVIGATION (Cerebrium / Trionn Discipline)
+            GROUP B: PRIMARY NAVIGATION (Single-Line Text Enforced)
            ======================================================== */}
         <nav 
-          className="hidden md:flex items-center gap-1.5 lg:gap-2 xl:gap-3"
+          className="hidden lg:flex items-center gap-1.5 xl:gap-2.5 shrink-0 whitespace-nowrap"
           aria-label="Main Navigation"
         >
           {currentLinks.map((link) => {
@@ -143,41 +142,41 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
               <Link
                 key={link.label}
                 href={link.href}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-[14.5px] font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-[14.5px] font-semibold whitespace-nowrap shrink-0 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet ${
                   active
                     ? "bg-purple-100/90 text-unnati-indigo border border-purple-200 shadow-soft-sm font-bold"
                     : "text-slate-600 hover:text-unnati-indigo hover:bg-slate-100/80"
                 }`}
               >
                 <Icon className={`h-[17px] w-[17px] shrink-0 transition-colors ${active ? "text-unnati-saffron" : "text-slate-400 group-hover:text-unnati-indigo"}`} />
-                <span>{link.label}</span>
+                <span className="whitespace-nowrap shrink-0">{link.label}</span>
               </Link>
             );
           })}
         </nav>
 
         {/* ========================================================
-            GROUP C: ACCOUNT & CONVERSION ACTIONS (Epiminds / SharpLink Hierarchy)
+            GROUP C: ACCOUNT & CONVERSION ACTIONS (Single-Line Enforced)
            ======================================================== */}
-        <div className="flex items-center gap-2.5 sm:gap-3.5">
+        <div className="flex items-center gap-2.5 sm:gap-3.5 shrink-0 whitespace-nowrap">
           
           {/* Distinctive Secondary Action: AI Career Mentor Trigger */}
           <button
             onClick={handleOpenCompanion}
-            className="group relative hidden sm:flex items-center gap-2 rounded-xl border border-purple-200/90 bg-purple-50/90 hover:bg-purple-100 px-3.5 sm:px-4 text-xs sm:text-[13.5px] font-bold text-unnati-indigo shadow-soft-sm hover:border-purple-300 transition-all cursor-pointer h-11 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet"
+            className="group relative hidden sm:flex items-center gap-2 rounded-xl border border-purple-200/90 bg-purple-50/90 hover:bg-purple-100 px-3.5 sm:px-4 text-xs sm:text-[13.5px] font-bold text-unnati-indigo shadow-soft-sm hover:border-purple-300 transition-all cursor-pointer h-11 shrink-0 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet"
             title="Open 24/7 AI Career Mentor"
             aria-label="Open AI Career Mentor"
           >
-            <Sparkles className="h-4 w-4 text-unnati-saffron animate-pulse" />
-            <span>Ask AI Mentor</span>
-            <span className="rounded-full bg-emerald-100 border border-emerald-200 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800 tracking-wide">
+            <Sparkles className="h-4 w-4 text-unnati-saffron animate-pulse shrink-0" />
+            <span className="whitespace-nowrap shrink-0">Ask AI Mentor</span>
+            <span className="rounded-full bg-emerald-100 border border-emerald-200 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800 tracking-wide shrink-0">
               24/7
             </span>
           </button>
 
           {/* User Authentication Status */}
           {isLoaded && isSignedIn ? (
-            <div className="flex items-center gap-3 pl-2 border-l border-slate-200">
+            <div className="flex items-center gap-3 pl-2 border-l border-slate-200 shrink-0">
               <UserButton 
                 appearance={{
                   elements: {
@@ -188,38 +187,38 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
               />
             </div>
           ) : isLoaded && !isSignedIn ? (
-            <div className="flex items-center gap-2 sm:gap-2.5">
+            <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 whitespace-nowrap">
               {/* Quiet Sign In Link */}
-              <Link href="/sign-in">
+              <Link href="/sign-in" className="shrink-0">
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="hidden sm:inline-flex text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 h-11 px-3.5"
+                  className="hidden sm:inline-flex text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 h-11 px-3.5 shrink-0 whitespace-nowrap"
                 >
-                  Sign In
+                  <span className="whitespace-nowrap">Sign In</span>
                 </Button>
               </Link>
               
               {/* Prominent Primary Conversion Button (Saffron Accent) */}
-              <Link href="/onboarding">
+              <Link href="/onboarding" className="shrink-0">
                 <Button 
                   variant="saffron" 
                   size="sm" 
-                  className="btn-shimmer text-xs sm:text-sm py-2 px-4 sm:px-6 shadow-soft-md font-bold whitespace-nowrap h-11 rounded-xl shadow-glow-saffron text-white"
+                  className="btn-shimmer text-xs sm:text-sm py-2 px-4 sm:px-6 shadow-soft-md font-bold whitespace-nowrap shrink-0 h-11 rounded-xl shadow-glow-saffron text-white"
                 >
-                  <span>Start Journey</span>
-                  <ArrowRight className="h-4 w-4 ml-1.5 hidden xs:inline" />
+                  <span className="whitespace-nowrap">Start Journey</span>
+                  <ArrowRight className="h-4 w-4 ml-1.5 hidden xs:inline shrink-0" />
                 </Button>
               </Link>
             </div>
           ) : (
-            <div className="h-11 w-28 bg-slate-100 rounded-xl animate-pulse" />
+            <div className="h-11 w-28 bg-slate-100 rounded-xl animate-pulse shrink-0" />
           )}
 
-          {/* Mobile Menu Toggle Button (Touch target >= 48px) */}
+          {/* Mobile & Tablet Menu Toggle Button (Touch target >= 48px, active on < lg) */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex md:hidden p-2.5 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet min-h-[48px] min-w-[48px] items-center justify-center cursor-pointer"
+            className="flex lg:hidden p-2.5 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet min-h-[48px] min-w-[48px] items-center justify-center cursor-pointer shrink-0"
             aria-expanded={mobileMenuOpen}
             aria-label="Toggle navigation menu"
           >
@@ -233,7 +232,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
          ======================================================== */}
       {mobileMenuOpen && (
         <div 
-          className="md:hidden fixed inset-x-0 top-[80px] sm:top-[84px] bg-slate-900/40 backdrop-blur-sm z-40 h-[calc(100vh-80px)] overflow-y-auto animate-in fade-in duration-200"
+          className="lg:hidden fixed inset-x-0 top-[80px] sm:top-[84px] bg-slate-900/40 backdrop-blur-sm z-40 h-[calc(100vh-80px)] overflow-y-auto animate-in fade-in duration-200"
           onClick={() => setMobileMenuOpen(false)}
         >
           <div 
@@ -257,10 +256,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
                     }`}
                   >
                     <Icon className="h-5 w-5 text-unnati-violet shrink-0" />
-                    <span>{link.label}</span>
+                    <span className="whitespace-nowrap">{link.label}</span>
                   </Link>
                 );
               })}
+              {/* Additional Deep Route Links in Mobile Drawer */}
+              <Link
+                href="/#showcase"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-[15px] font-semibold min-h-[48px] text-slate-700 hover:bg-slate-50 transition-all"
+              >
+                <Layers className="h-5 w-5 text-unnati-violet shrink-0" />
+                <span className="whitespace-nowrap">Platform Tour</span>
+              </Link>
             </div>
 
             {/* Mobile AI Mentor Trigger */}
