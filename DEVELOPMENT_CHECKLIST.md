@@ -102,21 +102,23 @@ BACKEND & API SERVICES:     [█████████████████
 
 ---
 
-## 5. Phase 4 — Master Footer Architecture (5 Columns)
+## 5. Phase 4 — Master Footer Architecture (5 Columns & Top Baseline Alignment)
 
-- [x] **`FTR-01`**: **Column 1 — Brand:** Prominent 54–56px logo, wordmark `UNNATI (उन्नति)`, tagline, 14px mission statement, DPDP Act compliance note, and GitHub repository link.  
+- [x] **`FTR-01`**: **Column 1 — Brand (1.5fr):** Prominent 54–56px logo, wordmark `UNNATI (उन्नति)`, tagline, 14px mission statement, DPDP Act compliance note, social/platform links, and GitHub repository link.  
   *Status:* **Completed** (Verified)
-- [x] **`FTR-02`**: **Column 2 — Explore:** Career Pathways, Role Benchmarks, Skills Check, Learning Roadmaps, Skills Inventory.  
+- [x] **`FTR-02`**: **Column 2 — Explore (1fr):** Career Pathways, Role Benchmarks, Skills Check, Learning Roadmaps, Skills Inventory.  
   *Status:* **Completed** (Verified)
-- [x] **`FTR-03`**: **Column 3 — Platform:** Learner Dashboard, Career Discovery, Assessments, Progress Tracking, AI Mentor.  
+- [x] **`FTR-03`**: **Column 3 — Platform (1fr):** Learner Dashboard, Career Discovery, Assessments, Progress Tracking, AI Mentor.  
   *Status:* **Completed** (Verified)
-- [x] **`FTR-04`**: **Column 4 — For Learners:** Students and Freshers, Recent Graduates, Working Professionals, Career Switchers, Multi-Disciplinary Catalog.  
+- [x] **`FTR-04`**: **Column 4 — For Learners (1fr):** Students and Freshers, Recent Graduates, Working Professionals, Career Switchers, Multi-Disciplinary Catalog.  
   *Status:* **Completed** (Verified)
-- [x] **`FTR-05`**: **Column 5 — Trust & Legal:** Privacy Policy, Terms of Use, Data Protection, Contact Support, Grievance Redressal Officer (`grievance@unnati.in`).  
+- [x] **`FTR-05`**: **Column 5 — Trust & Legal (1fr):** Privacy Policy, Terms of Use, Data Protection, Contact Support, Grievance Redressal Officer (`grievance@unnati.in`).  
   *Status:* **Completed** (Verified)
-- [x] **`FTR-06`**: **Sub-Footer Bar:** Copyright notice, DPDP Act 2026 badge, secondary legal links.  
+- [x] **`FTR-06`**: **Top Baseline Alignment & Visual Separation:** Strict CSS Grid `lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]` with `items-start`, uniform `h-6` baseline alignment across all column headers, uniform `mt-4` heading-to-link spacing, and distinctive `bg-slate-50/95` surface with `border-t-2 border-slate-200/90`.  
   *Status:* **Completed** (Verified)
-- [x] **`FTR-07`**: **Chatbot Clearance:** Generous bottom clearance padding (`pb-28 sm:pb-8`) and right margin (`sm:pr-40`) ensuring the floating AI companion never obscures footer text or links.  
+- [x] **`FTR-07`**: **Sub-Footer Bar & Developer Credit:** Full-width divider (`border-t border-slate-200/90 bg-slate-100/70`), Copyright notice, DPDP Act 2026 badge, secondary legal links, and tasteful, prominent developer credit: `Designed & Developed by Part Ahuja` in a centered pill container.  
+  *Status:* **Completed** (Verified)
+- [x] **`FTR-08`**: **Chatbot Clearance:** Generous bottom clearance padding (`pb-28 sm:pb-8`) and right margin (`sm:pr-40`) ensuring the floating AI companion never obscures footer text, links, or developer credit.  
   *Status:* **Completed** (Verified)
 
 ---
