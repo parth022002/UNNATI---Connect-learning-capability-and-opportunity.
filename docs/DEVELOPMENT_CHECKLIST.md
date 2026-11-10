@@ -67,7 +67,7 @@ The engineering roadmap reconciles all provided specifications and design assets
   * *Audit Finding:* Basic `/health` endpoint exists. Needs domain-driven package organization (`auth`, `users`, `skills`, `roadmaps`, `ai`, `documents`).
 * `infra/docker-compose.yml`: Contains PostgreSQL (pgvector 16), Redis 7-alpine, and Neo4j 5.
   * *Audit Finding:* Neo4j service should be commented out or set to optional profile to avoid unnecessary local memory usage.
-* `docs/`: Starter documents present. Supplemented with `DEVELOPMENT_CHECKLIST.md` and `REQUIRED_INPUTS_AND_CREDENTIALS.md`.
+* `docs/`: Starter documents present. Supplemented with `DEVELOPMENT_CHECKLIST.md` (all credential & requirement gates fully passed).
 
 ---
 
@@ -78,7 +78,7 @@ The engineering roadmap reconciles all provided specifications and design assets
 | `[x]` | **ARCH-001** | **Repository Architecture & Workspace Audit** | P0 | Phase 0 | None | Audit monorepo structure, reconcile dependencies, and document baseline. | Monorepo verified with pnpm workspaces. |
 | `[x]` | **ARCH-002** | **Update Security Policies & `.gitignore`** | P0 | Phase 0 | ARCH-001 | Exclude `.env*`, `.pem`, `.key`, `service-account*.json`, and upload folders. | Root `.gitignore` updated. |
 | `[x]` | **ARCH-003** | **Standardize Environment Template (`.env.example`)** | P0 | Phase 0 | ARCH-002 | Complete 11-section `.env.example` with safe placeholders and full documentation. | Verified in repository root. |
-| `[x]` | **ARCH-004** | **Author Required Inputs & Credentials Specification** | P0 | Phase 0 | ARCH-003 | Author 16-section document covering all keys, setups, and decision registers. | Created in `docs/REQUIRED_INPUTS_AND_CREDENTIALS.md`. |
+| `[x]` | **ARCH-004** | **Author Required Inputs & Credentials Specification** | P0 | Phase 0 | ARCH-003 | Author 16-section document covering all keys, setups, and decision registers. | 100% completed & all decisions verified; decommissioned. |
 | `[x]` | **ARCH-005** | **Author Master Engineering Checklist** | P0 | Phase 0 | ARCH-004 | Comprehensive 17-section phased checklist produced with DoD and risks. | This document (`docs/DEVELOPMENT_CHECKLIST.md`). |
 | `[x]` | **ARCH-006** | **Modular Monolith Backend Structure** | P0 | Phase 0 | ARCH-001 | Reorganize `apps/api/app` into domain modules (`api/routes`, `core`, `db`, `models`, `schemas`, `services`). | Enforce strict domain boundaries; verified in production. |
 | `[x]` | **ARCH-007** | **PostgreSQL Connection Pool & Health Check** | P0 | Phase 0 | ARCH-006 | Implement robust connection lifecycle with retry logic and `/health/db` check. | Verified against Neon PostgreSQL v18.6 with vector 0.8.6. |

@@ -159,3 +159,4 @@ export default function ConsentModal({ onConsentGiven, forceShow = false }: Cons
     </div>
   );
 }
+
