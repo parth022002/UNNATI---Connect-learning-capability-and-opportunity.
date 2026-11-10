@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { BackgroundAtmosphere } from "@/components/layout/BackgroundAtmosphere";
 import { CareerCompanionDrawer } from "@/components/companion/CareerCompanionDrawer";
 import { Badge } from "@/components/ui/Badge";
@@ -20,450 +21,589 @@ import {
   Layers, 
   TrendingUp, 
   Award, 
-  Cpu, 
   ChevronDown, 
   ChevronUp, 
   Lock,
-  Code2,
-  FileCheck2,
-  ArrowUpRight
+  GraduationCap,
+  Briefcase,
+  Users,
+  Target,
+  BarChart3,
+  BookOpen,
+  FolderGit2,
+  CheckCheck
 } from "lucide-react";
 
 export default function HomePage() {
   const [isCompanionOpen, setIsCompanionOpen] = useState(false);
-  const [activeStage, setActiveStage] = useState(1);
-  const [selectedDemoRole, setSelectedDemoRole] = useState<"fullstack" | "aiml" | "devops">("fullstack");
+  const [selectedAudience, setSelectedAudience] = useState<number>(0);
+  const [selectedDemoDomain, setSelectedDemoDomain] = useState<"business" | "tech" | "finance">("business");
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-  const demoRoles = {
-    fullstack: {
-      title: "Senior Full-Stack Engineer",
-      matchScore: 82,
-      gapHours: "65 Study Hours",
-      missingSkills: ["Next.js App Router (P1)", "Redis Streams (P2)", "pgvector RAG (P1)"],
-      medianCtc: "₹24.5 LPA"
+  const audiences = [
+    {
+      title: "Students & Freshers",
+      subtitle: "College & University Learners",
+      icon: GraduationCap,
+      description: "Connect your coursework to industry expectations, build verified project portfolios, and prepare for campus and off-campus placements with zero guesswork.",
+      highlight: "87% faster time to first portfolio project"
     },
-    aiml: {
-      title: "Generative AI Systems Engineer",
-      matchScore: 68,
-      gapHours: "110 Study Hours",
-      missingSkills: ["Agentic Tool Calling (P0)", "LoRA Fine-Tuning (P1)", "Groq Low-Latency (P2)"],
-      medianCtc: "₹32.0 LPA"
+    {
+      title: "Recent Graduates",
+      subtitle: "0 – 1 Year Post-Degree",
+      icon: Award,
+      description: "Overcome the 'experience paradox'. Identify exactly which tools and practical skills high-growth companies expect, and bridge gaps with step-by-step milestones.",
+      highlight: "Personalized study paths fit to your pace"
     },
-    devops: {
-      title: "Platform Infrastructure & Cloud",
-      matchScore: 74,
-      gapHours: "85 Study Hours",
-      missingSkills: ["Kubernetes Operators (P1)", "Terraform State (P1)", "eBPF Tracing (P2)"],
-      medianCtc: "₹26.0 LPA"
+    {
+      title: "Working Professionals",
+      subtitle: "2 – 6+ Years Experience",
+      icon: Briefcase,
+      description: "Accelerate your career trajectory. Upskill in modern methodologies, lead complex cross-functional initiatives, and earn benchmarked recognition for senior roles.",
+      highlight: "Targeted skill upgrades for promotions"
+    },
+    {
+      title: "Career Switchers",
+      subtitle: "Transitioning Disciplines",
+      icon: Compass,
+      description: "Switching from non-tech to analytics, or operations to product? Map your transferable capabilities, pinpoint missing skills, and transition confidently.",
+      highlight: "Prerequisite mapping for smooth pivots"
+    }
+  ];
+
+  const domainDemos = {
+    business: {
+      roleTitle: "Product & Business Strategy Lead",
+      domain: "Business & Management",
+      readinessPct: 78,
+      studyHours: "45 Study Hours",
+      skillsToLearn: ["Product Roadmap Planning", "User Metrics & A/B Testing", "Financial Modeling"],
+      benchmarkSalary: "₹16.5L – ₹28.0L CTC"
+    },
+    tech: {
+      roleTitle: "Modern Software & Systems Engineer",
+      domain: "Technology & Engineering",
+      readinessPct: 82,
+      studyHours: "55 Study Hours",
+      skillsToLearn: ["Next.js & React Architecture", "Asynchronous Python / APIs", "Cloud Infrastructure (Docker)"],
+      benchmarkSalary: "₹18.0L – ₹30.0L CTC"
+    },
+    finance: {
+      roleTitle: "Financial & Data Analytics Specialist",
+      domain: "Finance & FinTech",
+      readinessPct: 72,
+      studyHours: "60 Study Hours",
+      skillsToLearn: ["Advanced SQL & Forecasting", "Financial Ratio Diagnostics", "Business Intelligence (Power BI)"],
+      benchmarkSalary: "₹14.0L – ₹24.0L CTC"
     }
   };
 
-  const currentDemo = demoRoles[selectedDemoRole];
+  const currentDemo = domainDemos[selectedDemoDomain];
 
   const faqs = [
     {
-      q: "How does UNNATI differ from standard job boards or online course platforms?",
-      a: "UNNATI is an autonomous AI growth companion, not a static job board. Using Algorithm A (Bayesian skill belief modeling), Algorithm B (evidence-weighted gap scoring), and Algorithm C (topological milestone DAGs), UNNATI diagnoses the exact delta between your current capabilities and target market benchmarks, synthesizing an ordered, step-by-step roadmap tailored to your weekly schedule."
+      q: "What is UNNATI, and how does it help my career?",
+      a: "UNNATI (उन्नति) is an AI-powered career growth companion. Rather than functioning as a passive job board or generic course catalog, UNNATI diagnoses the exact delta between your current skills and target career benchmarks. It builds an ordered, step-by-step learning roadmap tailored to your weekly schedule and verifies your progress through practical milestones."
     },
     {
-      q: "How does the AI Resume Extraction work?",
-      a: "When you upload your resume or transcript, Gemini 2.5 Flash extracts your education, verified experiences, and skills into structured Pydantic models. Skills enter the INFERRED state with a baseline confidence factor, which increases to ASSESSED and VERIFIED as you complete diagnostic quizzes and showcase real projects."
+      q: "Is UNNATI only for software engineers and programmers?",
+      a: "No! UNNATI is engineered for diverse career pathways including Business & Management, Data & Analytics, Finance & FinTech, Product Design, Operations, Supply Chain, and Technology. Any learner aiming to bridge the gap between education and real-world capability is supported."
     },
     {
-      q: "Is my personal and academic data protected under Indian privacy laws?",
-      a: "Yes. UNNATI is engineered in full compliance with the Digital Personal Data Protection Act (DPDP Act, India 2025/2026). We enforce strict purpose-specific consent logging, Row-Level Security (RLS) on PostgreSQL, zero plaintext storage, and an automated 72-hour crypto-shredding right-to-erasure pipeline."
+      q: "How does the AI Resume & Academic Ingestion work?",
+      a: "When you upload your resume or academic transcript, Gemini 2.5 Flash extracts your verified education, experiences, and background into structured profiles. Skills enter the 'Extracted' state with baseline confidence, which increases to 'Verified' as you complete practical diagnostic checks and build projects."
     },
     {
-      q: "What is Non-Annex III classification under AI governance?",
-      a: "UNNATI's student-facing guidance functions as a formative self-development tool rather than a high-risk employer screening gate. This keeps student advisory non-punitive, transparent, and focused entirely on empowering candidate progress."
+      q: "How is my personal data protected under Indian privacy laws?",
+      a: "UNNATI is built in strict compliance with the Digital Personal Data Protection (DPDP) Act, 2025/2026 (India). Your data is used exclusively for formative career self-development (Non-Annex III under EU AI Act). You maintain the right to erasure at any time, with automated 72-hour cryptographic shredding."
+    },
+    {
+      q: "Does UNNATI guarantee a job or placement?",
+      a: "UNNATI does not make artificial employment guarantees. Instead, we provide authentic capability development, structured portfolio milestones, and evidence-weighted readiness scoring that make you genuinely competitive for high-impact roles."
     }
   ];
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-purple-500 selection:text-white">
+    <div className="relative min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans selection:bg-purple-100 selection:text-unnati-indigo">
       <BackgroundAtmosphere />
       <Navbar onOpenCompanion={() => setIsCompanionOpen(true)} />
 
-      {/* Hero Section */}
-      <section className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          {/* Left Column: Vision & Calls to Action */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-950/40 px-3.5 py-1.5 text-xs font-semibold text-purple-200 backdrop-blur-md shadow-glow-violet animate-pulse-slow">
-              <Sparkles className="h-3.5 w-3.5 text-unnati-saffron" />
-              <span>Next-Gen Autonomous Career Architecture</span>
-              <span className="rounded-full bg-unnati-saffron px-1.5 py-0.2 text-[9px] font-bold text-white uppercase">
-                v1.0 Live
-              </span>
+      <main className="relative z-10 flex-1">
+        
+        {/* HERO SECTION: Warm, Aspirational, High-Impact */}
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Left Column: Core Positioning */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              
+              {/* Campaign Badge */}
+              <div className="inline-flex items-center gap-2 rounded-full bg-purple-100/80 border border-purple-200/90 px-4 py-1.5 text-xs font-bold text-unnati-indigo shadow-soft-sm">
+                <Sparkles className="h-4 w-4 text-unnati-saffron" />
+                <span>Your Growth Companion</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-unnati-saffron" />
+                <span className="text-slate-600 font-medium">Learn. Build. Grow. Succeed.</span>
+              </div>
+
+              {/* Aspirational Headline (Human-centred) */}
+              <h1 className="font-heading text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-[1.12]">
+                Your career journey deserves a <br />
+                <span className="text-gradient-indigo">clear, confident</span> <br />
+                <span className="text-gradient-saffron">direction forward.</span>
+              </h1>
+
+              {/* Subtitle */}
+              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl font-normal">
+                Discover your strengths, understand your skill gaps, and follow a personalised, step-by-step roadmap to the career you want — across <strong>Technology, Business, Finance, Design, and Analytics</strong>.
+              </p>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap items-center gap-4 pt-2">
+                <Link href="/onboarding">
+                  <Button variant="saffron" size="lg" className="btn-shimmer text-base font-bold shadow-soft-md">
+                    Start Your Free Journey <ArrowRight className="h-4 w-4 ml-1.5" />
+                  </Button>
+                </Link>
+                <Link href="/explore">
+                  <Button variant="outline" size="lg" className="text-base font-semibold">
+                    <Compass className="h-4 w-4 mr-1.5 text-unnati-violet" /> Explore Career Paths
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="pt-6 border-t border-slate-200/80 flex flex-wrap items-center gap-6 text-xs text-slate-500 font-medium">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-emerald-600" />
+                  <span>DPDP Act (India 2026) Compliant</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-unnati-indigo" />
+                  <span>Built for Students &amp; Professionals</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Lock className="h-4 w-4 text-orange-600" />
+                  <span>72-Hour Data Erasure Guarantee</span>
+                </div>
+              </div>
             </div>
 
-            <h1 className="font-heading text-4xl sm:text-6xl font-black tracking-tight text-white leading-[1.1]">
-              Connect Learning, <br />
-              <span className="text-gradient-violet">Capability</span> &amp; <br />
-              <span className="text-gradient-saffron">Opportunity.</span>
-            </h1>
+            {/* Right Column: Real-World Experience Showcase Card */}
+            <div className="lg:col-span-5">
+              <div className="clean-card p-6 sm:p-8 bg-white border-2 border-purple-100 shadow-soft-xl relative">
+                
+                {/* Showcase Header */}
+                <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-2xl bg-purple-100 border border-purple-200 flex items-center justify-center text-unnati-indigo font-bold text-sm">
+                      84%
+                    </div>
+                    <div>
+                      <h4 className="font-heading text-sm font-bold text-slate-900">Career Readiness Profile</h4>
+                      <p className="text-xs text-slate-500">Target: Product &amp; Technology Strategy</p>
+                    </div>
+                  </div>
+                  <Badge variant="success" className="text-xs">
+                    On Track
+                  </Badge>
+                </div>
 
-            <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl">
-              UNNATI extracts your authentic skills, calculates evidence-weighted competency gaps using <strong>Algorithm B</strong>, and maps a personalized topological milestone DAG to propel your career forward.
+                {/* Practical Skill Confidence Progression */}
+                <div className="mt-5 space-y-3.5">
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+                    <div className="flex items-center justify-between text-xs mb-1.5">
+                      <span className="font-bold text-slate-800">Business Analytics &amp; User Research</span>
+                      <span className="font-semibold text-emerald-700">Verified (Project Backed)</span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+                      <div className="h-full bg-emerald-500 rounded-full w-[92%]" />
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+                    <div className="flex items-center justify-between text-xs mb-1.5">
+                      <span className="font-bold text-slate-800">Strategic Product Roadmapping</span>
+                      <span className="font-semibold text-unnati-violet">Diagnostic Check Met</span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+                      <div className="h-full bg-unnati-violet rounded-full w-[80%]" />
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+                    <div className="flex items-center justify-between text-xs mb-1.5">
+                      <span className="font-bold text-slate-800">Financial Metrics &amp; Unit Economics</span>
+                      <span className="font-semibold text-orange-600">Next Priority Skill</span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+                      <div className="h-full bg-orange-500 rounded-full w-[55%]" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Next Milestone Study Card */}
+                <div className="mt-5 p-4 rounded-2xl bg-purple-50/80 border border-purple-200/90">
+                  <div className="flex items-center justify-between text-xs mb-1 font-bold">
+                    <span className="text-unnati-indigo">Next Milestone Recommendation</span>
+                    <span className="text-orange-700 font-mono">10 Hours</span>
+                  </div>
+                  <p className="text-xs text-slate-700 font-medium">
+                    Phase 2: Complete User Journey Mapping &amp; Product Metrics Sprint
+                  </p>
+                  <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
+                    <span>Curated Resources &amp; Rubric</span>
+                    <Link href="/roadmap" className="text-unnati-violet hover:text-unnati-indigo font-bold flex items-center gap-1">
+                      View Roadmap <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* SECTION 2: AUDIENCE PATHWAYS (Who UNNATI Helps) */}
+        <section id="audiences" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-200/80">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <Badge variant="violet" className="text-xs mb-2">
+              Tailored For Your Stage
+            </Badge>
+            <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              A Personalised Growth Journey for Every Ambition
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 mt-2">
+              Whether you are in college, stepping into your first role, or aiming for a leadership leap, UNNATI adapts to where you are.
             </p>
+          </div>
 
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {audiences.map((aud, idx) => {
+              const Icon = aud.icon;
+              return (
+                <Card 
+                  key={idx}
+                  hoverEffect
+                  className="clean-card p-6 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-100 text-unnati-indigo border border-purple-200 mb-4">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <h3 className="font-heading text-lg font-bold text-slate-900 mb-1">
+                      {aud.title}
+                    </h3>
+                    <p className="text-xs font-semibold text-unnati-saffron mb-3">
+                      {aud.subtitle}
+                    </p>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                      {aud.description}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-slate-500">
+                      {aud.highlight}
+                    </span>
+                    <Link href="/onboarding" className="text-unnati-violet hover:text-unnati-indigo">
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* SECTION 3: HOW UNNATI WORKS (5-Stage Visual Journey) */}
+        <section id="how-it-works" className="bg-white py-20 border-t border-slate-200">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <Badge variant="saffron" className="text-xs mb-2">
+                The UNNATI Pathway
+              </Badge>
+              <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                How UNNATI Powers Your Career Growth
+              </h2>
+              <p className="text-sm sm:text-base text-slate-600 mt-2">
+                Five synchronized stages connecting education, capability, and opportunity.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+              {[
+                {
+                  num: "01",
+                  title: "Discover Direction",
+                  desc: "Explore career pathways across business, tech, finance, design, and analytics matching your strengths.",
+                  icon: Compass
+                },
+                {
+                  num: "02",
+                  title: "Understand Skills",
+                  desc: "Upload your resume or syllabus to extract verified coursework, past projects, and capabilities.",
+                  icon: Layers
+                },
+                {
+                  num: "03",
+                  title: "Identify Gaps",
+                  desc: "Compare what you know against real-world employer benchmarks to pinpoint exact missing skills.",
+                  icon: Target
+                },
+                {
+                  num: "04",
+                  title: "Build Roadmap",
+                  desc: "Follow an ordered, milestone-based learning plan fit to your weekly study hours.",
+                  icon: MapPin
+                },
+                {
+                  num: "05",
+                  title: "Demonstrate & Grow",
+                  desc: "Build real projects, complete diagnostic checks, and prove readiness for high-growth opportunities.",
+                  icon: Award
+                }
+              ].map((step, idx) => {
+                const Icon = step.icon;
+                return (
+                  <div 
+                    key={idx}
+                    className="p-6 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-soft-sm flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="font-heading text-3xl font-black text-unnati-indigo">
+                          {step.num}
+                        </span>
+                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white border border-slate-200 text-unnati-violet">
+                          <Icon className="h-4 w-4" />
+                        </div>
+                      </div>
+                      <h3 className="font-heading text-base font-bold text-slate-900 mb-2">
+                        {step.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        {step.desc}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 4: INTERACTIVE SKILL GAP DEMO (In Plain English) */}
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 border-t border-slate-200/80">
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <Badge variant="violet" className="text-xs mb-2">
+              Interactive Career Diagnostic
+            </Badge>
+            <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              See How Your Roadmap Adapts to Any Career
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 mt-2">
+              Select a career discipline below to see how UNNATI pinpoints required skills, calculates study effort, and plans your path.
+            </p>
+          </div>
+
+          {/* Domain Tabs */}
+          <div className="flex justify-center gap-2 mb-8">
+            {(["business", "tech", "finance"] as const).map((key) => (
+              <button
+                key={key}
+                onClick={() => setSelectedDemoDomain(key)}
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                  selectedDemoDomain === key
+                    ? "bg-unnati-indigo text-white shadow-soft-md"
+                    : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
+                }`}
+              >
+                {domainDemos[key].domain}
+              </button>
+            ))}
+          </div>
+
+          {/* Interactive Calculation Card */}
+          <div className="max-w-4xl mx-auto clean-card p-6 sm:p-10 bg-white border-2 border-purple-100 shadow-soft-lg">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-100 gap-4">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-unnati-saffron">Target Career Track</span>
+                <h3 className="font-heading text-2xl font-bold text-slate-900 mt-0.5">{currentDemo.roleTitle}</h3>
+              </div>
+              <Badge variant="violet" className="text-xs font-semibold py-1">
+                {currentDemo.domain}
+              </Badge>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 py-6 border-b border-slate-100 text-center">
+              <div>
+                <p className="text-xs text-slate-500 font-semibold uppercase">Estimated Readiness</p>
+                <p className="font-heading text-3xl font-black text-emerald-600 mt-1">{currentDemo.readinessPct}%</p>
+                <p className="text-xs text-slate-400 mt-0.5">Based on existing profile</p>
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 font-semibold uppercase">Required Study Time</p>
+                <p className="font-heading text-3xl font-black text-orange-600 mt-1">{currentDemo.studyHours}</p>
+                <p className="text-xs text-slate-400 mt-0.5">~6 weeks at 8 hrs/week</p>
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 font-semibold uppercase">Median Compensation</p>
+                <p className="font-heading text-3xl font-black text-slate-900 mt-1">{currentDemo.benchmarkSalary}</p>
+                <p className="text-xs text-slate-400 mt-0.5">Indian Industry Benchmark</p>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+                Key Skills Recommended to Reach 100% Readiness:
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {currentDemo.skillsToLearn.map((skill, idx) => (
+                  <div key={idx} className="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200 text-xs font-semibold text-unnati-indigo flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-unnati-saffron shrink-0" />
+                    <span>{skill}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-8 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <span className="text-xs text-slate-500">
+                Want to build your exact roadmap based on your real resume or degree?
+              </span>
               <Link href="/onboarding">
-                <Button variant="saffron" size="lg" className="btn-shimmer text-sm font-bold shadow-glow-saffron">
-                  Launch Your Roadmap <ArrowRight className="h-4 w-4 ml-1" />
+                <Button variant="saffron" size="sm" className="btn-shimmer text-xs font-bold">
+                  Start Your Free Assessment <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 5: TRUST, ETHICS & DATA PROTECTION */}
+        <section className="bg-purple-950 text-white py-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto space-y-8">
+            <div className="text-center max-w-3xl mx-auto">
+              <Badge variant="outline" className="text-xs mb-2 border-purple-400/40 text-purple-200">
+                Data Trust &amp; Ethics
+              </Badge>
+              <h2 className="font-heading text-3xl font-extrabold text-white">
+                Engineered for Your Privacy and Autonomy
+              </h2>
+              <p className="text-sm text-purple-200 mt-2">
+                UNNATI is designed as a supportive mentor, not a punitive monitoring system.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300 font-bold mb-3">
+                  <ShieldCheck className="h-5 w-5" />
+                </div>
+                <h3 className="font-bold text-white text-base mb-1">Formative, Not High-Risk</h3>
+                <p className="text-xs text-purple-200 leading-relaxed">
+                  Classified as Non-Annex III formative mentorship under AI governance. We never perform automated screening out or punitive ranking.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/20 text-orange-300 font-bold mb-3">
+                  <Lock className="h-5 w-5" />
+                </div>
+                <h3 className="font-bold text-white text-base mb-1">72-Hour Crypto-Shredding</h3>
+                <p className="text-xs text-purple-200 leading-relaxed">
+                  Your data belongs to you. When you request account deletion, all private documents and profile records are cryptographically wiped within 72 hours.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/20 text-purple-300 font-bold mb-3">
+                  <CheckCheck className="h-5 w-5" />
+                </div>
+                <h3 className="font-bold text-white text-base mb-1">Evidence Transparency</h3>
+                <p className="text-xs text-purple-200 leading-relaxed">
+                  We clearly distinguish between self-reported skills, AI-extracted background, and diagnostic checks. You can correct any detail at any time.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 6: FREQUENTLY ASKED QUESTIONS */}
+        <section id="faq" className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center mb-12">
+            <Badge variant="violet" className="text-xs mb-2">
+              Common Questions
+            </Badge>
+            <h2 className="font-heading text-3xl font-extrabold text-slate-900">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-sm text-slate-600 mt-1">
+              Everything you need to know about UNNATI.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div
+                  key={idx}
+                  className="clean-card overflow-hidden transition-all border border-slate-200"
+                >
+                  <button
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                    className="w-full flex items-center justify-between p-5 text-left text-sm sm:text-base font-bold text-slate-900 hover:text-unnati-indigo transition-colors cursor-pointer"
+                  >
+                    <span>{faq.q}</span>
+                    {isOpen ? (
+                      <ChevronUp className="h-5 w-5 text-unnati-saffron shrink-0 ml-3" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5 text-slate-400 shrink-0 ml-3" />
+                    )}
+                  </button>
+                  {isOpen && (
+                    <div className="px-5 pb-5 pt-0 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                      <p className="mt-3">{faq.a}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* SECTION 7: FINAL CONVERSION BANNER */}
+        <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pb-20">
+          <div className="rounded-[2.5rem] bg-gradient-to-r from-unnati-indigo via-purple-900 to-unnati-indigo p-8 sm:p-14 text-center text-white shadow-soft-xl relative overflow-hidden">
+            <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-white">
+              Your Career Journey Starts With One Step
+            </h2>
+            <p className="text-sm sm:text-base text-purple-200 max-w-xl mx-auto mt-3 leading-relaxed">
+              Join students, graduates, and professionals building verifiable capability and moving towards the careers they deserve.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <Link href="/onboarding">
+                <Button variant="saffron" size="lg" className="btn-shimmer text-base font-bold shadow-soft-md">
+                  Get Started Free <ArrowRight className="h-4 w-4 ml-1.5" />
                 </Button>
               </Link>
               <Link href="/explore">
-                <Button variant="outline" size="lg" className="text-sm font-semibold">
-                  <Compass className="h-4 w-4 mr-1 text-purple-400" /> Explore Roles &amp; CTC
+                <Button variant="outline" size="lg" className="text-base font-semibold bg-white/10 hover:bg-white/20 text-white border-white/30">
+                  Explore Career Pathways
                 </Button>
               </Link>
             </div>
-
-            {/* Trust & Compliance Badges */}
-            <div className="pt-6 border-t border-white/10 flex flex-wrap items-center gap-6 text-xs text-slate-400">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-emerald-400" />
-                <span>DPDP Act (India 2026) Certified</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Zap className="h-4 w-4 text-purple-400" />
-                <span>Gemini 2.5 + Groq Powered</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Lock className="h-4 w-4 text-orange-400" />
-                <span>Zero-Data Retention Crypto-Shred</span>
-              </div>
-            </div>
           </div>
+        </section>
 
-          {/* Right Column: Hero Interactive Showcase Card */}
-          <div className="lg:col-span-5">
-            <div className="relative rounded-3xl border border-white/15 bg-slate-900/70 p-6 sm:p-8 backdrop-blur-2xl shadow-2xl shadow-purple-950/40">
-              <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-300 font-bold text-xs">
-                    0.94
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-white uppercase tracking-wider">Candidate Belief State</h4>
-                    <p className="text-[11px] text-slate-400">Bayesian Belief: High Confidence</p>
-                  </div>
-                </div>
-                <Badge variant="success" className="text-[10px]">
-                  Verified Learner
-                </Badge>
-              </div>
+      </main>
 
-              {/* Dynamic State Progression */}
-              <div className="mt-6 space-y-4">
-                <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5">
-                  <div className="flex items-center justify-between text-xs mb-1.5">
-                    <span className="font-semibold text-slate-300">FastAPI &amp; Async Microservices</span>
-                    <span className="font-mono text-emerald-400 font-bold">VERIFIED (0.96)</span>
-                  </div>
-                  <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-purple-500 to-emerald-400 rounded-full w-[96%]" />
-                  </div>
-                </div>
+      {/* Reusable Enterprise Brand Footer */}
+      <Footer />
 
-                <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5">
-                  <div className="flex items-center justify-between text-xs mb-1.5">
-                    <span className="font-semibold text-slate-300">PostgreSQL pgvector RAG</span>
-                    <span className="font-mono text-purple-300 font-bold">ASSESSED (0.88)</span>
-                  </div>
-                  <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-purple-500 to-unnati-violet rounded-full w-[88%]" />
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5">
-                  <div className="flex items-center justify-between text-xs mb-1.5">
-                    <span className="font-semibold text-slate-300">Next.js 15 Server Components</span>
-                    <span className="font-mono text-orange-400 font-bold">INFERRED (0.65)</span>
-                  </div>
-                  <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-purple-500 to-orange-400 rounded-full w-[65%]" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Next Recommended Milestone Teaser */}
-              <div className="mt-6 p-4 rounded-2xl border border-purple-500/30 bg-purple-950/30">
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="text-purple-300 font-bold">Next Optimized Milestone</span>
-                  <span className="text-[10px] text-orange-400 font-mono">12h Target</span>
-                </div>
-                <p className="text-xs text-white font-semibold">
-                  Phase 2: Event-Driven Task Queues with Upstash Redis Streams
-                </p>
-                <div className="mt-3 flex items-center justify-between text-[11px] text-slate-400">
-                  <span>Prerequisite: FastAPI Async Verified</span>
-                  <Link href="/roadmap" className="text-orange-300 hover:text-orange-200 font-bold flex items-center gap-1">
-                    Inspect DAG <ArrowRight className="h-3 w-3" />
-                  </Link>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* Live Skill Gap Diagnostic Sandbox Section */}
-      <section className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 border-t border-white/10">
-        <div className="text-center max-w-3xl mx-auto mb-10">
-          <Badge variant="saffron" className="text-xs mb-2">
-            Interactive Diagnostic Engine
-          </Badge>
-          <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            See Algorithm B Gap Scoring in Action
-          </h2>
-          <p className="text-sm text-slate-400 mt-2">
-            Select a target trajectory below to observe how our Bayesian scoring model estimates competency gaps and required learning hours.
-          </p>
-        </div>
-
-        {/* Role Selector Tabs */}
-        <div className="flex justify-center gap-2 mb-8">
-          {(["fullstack", "aiml", "devops"] as const).map((key) => (
-            <button
-              key={key}
-              onClick={() => setSelectedDemoRole(key)}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                selectedDemoRole === key
-                  ? "bg-gradient-to-r from-purple-700 to-unnati-violet text-white shadow-glow-violet border border-purple-400/40"
-                  : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 border border-white/5"
-              }`}
-            >
-              {demoRoles[key].title}
-            </button>
-          ))}
-        </div>
-
-        {/* Live Calculation Output Card */}
-        <div className="max-w-4xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 border border-white/15">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center pb-6 border-b border-white/10">
-            <div>
-              <p className="text-xs text-slate-400 uppercase font-mono">Algorithm B Readiness</p>
-              <p className="text-3xl font-extrabold text-emerald-400 mt-1">{currentDemo.matchScore}%</p>
-              <p className="text-[11px] text-slate-400 mt-0.5">Weighted Competency Match</p>
-            </div>
-            <div>
-              <p className="text-xs text-slate-400 uppercase font-mono">Estimated Bridge Time</p>
-              <p className="text-3xl font-extrabold text-orange-400 mt-1">{currentDemo.gapHours}</p>
-              <p className="text-[11px] text-slate-400 mt-0.5">Topological Path Length</p>
-            </div>
-            <div>
-              <p className="text-xs text-slate-400 uppercase font-mono">Median Indian Tech CTC</p>
-              <p className="text-3xl font-extrabold text-white mt-1">{currentDemo.medianCtc}</p>
-              <p className="text-[11px] text-slate-400 mt-0.5">Adzuna Benchmark 2026</p>
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">
-              Identified Core Competency Gaps:
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {currentDemo.missingSkills.map((skill, idx) => (
-                <div key={idx} className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20 text-xs font-medium text-purple-200 flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-unnati-saffron" />
-                  <span>{skill}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
-            <span className="text-xs text-slate-400">
-              Want a tailored roadmap based on your actual resume?
-            </span>
-            <Link href="/onboarding">
-              <Button size="sm" variant="saffron" className="text-xs">
-                Run Personalized Audit <ArrowRight className="h-3 w-3 ml-1" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 5-Stage Learner Journey Section */}
-      <section className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 border-t border-white/10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <Badge variant="violet" className="text-xs mb-2">
-            End-to-End Learner Journey
-          </Badge>
-          <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            How UNNATI Bridges the Capability Gap
-          </h2>
-          <p className="text-sm text-slate-400 mt-2">
-            Five synchronized algorithmic stages designed to turn raw potential into verified technical expertise.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          {[
-            {
-              num: "01",
-              title: "Career Discovery",
-              desc: "Explore 900+ occupations mapped across ESCO and O*NET taxonomies with compensation insights.",
-              icon: Compass,
-              badge: "Stage 1"
-            },
-            {
-              num: "02",
-              title: "Resume Extraction",
-              desc: "Gemini 2.5 Flash ingests resumes and transcripts with structured Pydantic schema validation.",
-              icon: FileCheck2,
-              badge: "Stage 2"
-            },
-            {
-              num: "03",
-              title: "Gap Diagnostics",
-              desc: "Algorithm B computes evidence-weighted deltas accounting for Bayesian state and recency decay.",
-              icon: Cpu,
-              badge: "Stage 3"
-            },
-            {
-              num: "04",
-              title: "Roadmap Synthesis",
-              desc: "Algorithm C builds a prerequisite-aware topological milestone DAG fit to your weekly hours.",
-              icon: MapPin,
-              badge: "Stage 4"
-            },
-            {
-              num: "05",
-              title: "Adaptive Mastery",
-              desc: "Item Response Theory quizzes verify capability and transition skills to verified employment state.",
-              icon: Award,
-              badge: "Stage 5"
-            }
-          ].map((stage, idx) => {
-            const Icon = stage.icon;
-            return (
-              <Card
-                key={idx}
-                hoverEffect
-                className="glass-panel p-5 rounded-2xl border-white/10 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="font-mono text-2xl font-black text-unnati-saffron">
-                      {stage.num}
-                    </span>
-                    <Badge variant="default" className="text-[10px]">
-                      {stage.badge}
-                    </Badge>
-                  </div>
-                  <h3 className="font-heading text-base font-bold text-white mb-2">
-                    {stage.title}
-                  </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    {stage.desc}
-                  </p>
-                </div>
-                <div className="mt-4 pt-3 border-t border-white/5 flex items-center text-xs font-semibold text-purple-300">
-                  <Icon className="h-4 w-4 mr-1 text-purple-400" />
-                  <span>Autonomous Agent</span>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Frequently Asked Questions */}
-      <section className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 border-t border-white/10">
-        <div className="text-center mb-10">
-          <Badge variant="default" className="text-xs mb-2">
-            FAQ &amp; Governance
-          </Badge>
-          <h2 className="font-heading text-3xl font-bold text-white">
-            Frequently Asked Questions
-          </h2>
-        </div>
-
-        <div className="space-y-4">
-          {faqs.map((faq, idx) => {
-            const isOpen = openFaqIndex === idx;
-            return (
-              <div
-                key={idx}
-                className="glass-panel rounded-2xl border border-white/10 overflow-hidden transition-all"
-              >
-                <button
-                  onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                  className="w-full flex items-center justify-between p-5 text-left text-sm font-semibold text-white hover:text-purple-200 transition-colors cursor-pointer"
-                >
-                  <span>{faq.q}</span>
-                  {isOpen ? (
-                    <ChevronUp className="h-4 w-4 text-unnati-saffron shrink-0 ml-2" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 text-slate-400 shrink-0 ml-2" />
-                  )}
-                </button>
-                {isOpen && (
-                  <div className="px-5 pb-5 pt-0 text-xs text-slate-300 leading-relaxed border-t border-white/5 animate-in fade-in duration-200">
-                    <p className="mt-2">{faq.a}</p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Final Call to Action */}
-      <section className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-16">
-        <div className="glass-panel-elevated rounded-3xl p-8 sm:p-12 text-center border border-purple-500/30 relative overflow-hidden">
-          <div className="glow-orb-saffron w-[350px] h-[350px] -top-20 -right-20 opacity-40" />
-          <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-white">
-            Ready to Accelerate Your Career Trajectory?
-          </h2>
-          <p className="text-sm text-slate-300 max-w-xl mx-auto mt-3 leading-relaxed">
-            Join hundreds of ambitious students and software engineers mapping their capabilities to high-growth opportunities.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Link href="/onboarding">
-              <Button variant="saffron" size="lg" className="btn-shimmer text-sm font-bold shadow-glow-saffron">
-                Get Started Free <ArrowRight className="h-4 w-4 ml-1" />
-              </Button>
-            </Link>
-            <Link href="/explore">
-              <Button variant="outline" size="lg" className="text-sm">
-                Explore Tech Trajectories
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-white/10 bg-slate-950 py-10 px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-slate-400">
-          <div className="flex items-center gap-3">
-            <Image src="/logo.png" alt="UNNATI" width={28} height={28} className="rounded-lg object-contain" />
-            <span className="font-heading font-bold text-white text-sm">
-              UNNATI<span className="text-unnati-saffron">.</span>
-            </span>
-            <span className="text-slate-500">© {new Date().getFullYear()} All rights reserved.</span>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <Link href="/dashboard" className="hover:text-white transition-colors">Dashboard</Link>
-            <Link href="/roadmap" className="hover:text-white transition-colors">Roadmap</Link>
-            <Link href="/explore" className="hover:text-white transition-colors">Roles</Link>
-            <Link href="/assessments" className="hover:text-white transition-colors">Assessments</Link>
-            <Link href="/privacy" className="hover:text-white transition-colors">DPDP Privacy</Link>
-          </div>
-        </div>
-      </footer>
-
-      {/* Global AI Companion Drawer */}
+      {/* Global AI Career Mentor Drawer */}
       <CareerCompanionDrawer
         isOpen={isCompanionOpen}
         onClose={() => setIsCompanionOpen(false)}

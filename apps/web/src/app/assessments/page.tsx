@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { BackgroundAtmosphere } from "@/components/layout/BackgroundAtmosphere";
 import { CareerCompanionDrawer } from "@/components/companion/CareerCompanionDrawer";
 import { Badge } from "@/components/ui/Badge";
@@ -17,98 +18,102 @@ import {
   ArrowRight, 
   RotateCcw, 
   Sparkles, 
-  Code2, 
-  ShieldCheck,
   ChevronRight,
-  Flame,
-  Brain
+  Target,
+  Briefcase,
+  PieChart,
+  Code2
 } from "lucide-react";
 
 interface Question {
   id: number;
+  track: "business" | "data" | "tech";
   skill: string;
-  irtDifficulty: string; // "Easy" | "Medium" | "Hard"
-  thetaValue: number;
+  difficulty: "Foundational" | "Intermediate" | "Advanced";
   prompt: string;
-  codeSnippet?: string;
+  scenario?: string;
   options: {
     id: string;
     text: string;
   }[];
   correctOptionId: string;
   explanation: string;
-  academicCitation: string;
+  practicalTakeaway: string;
 }
 
 const ASSESSMENT_QUESTIONS: Question[] = [
+  // Business & Product Track
   {
     id: 1,
-    skill: "FastAPI & Async IO",
-    irtDifficulty: "Medium",
-    thetaValue: 0.35,
-    prompt: "In a high-throughput FastAPI service, why should long-running CPU-bound calculations NOT be defined as bare `async def` route handlers?",
-    codeSnippet: `@app.get("/compute")\nasync def heavy_calculation():\n    # Millions of math iterations here\n    return {"result": compute_primes()}`,
+    track: "business",
+    skill: "Product Prioritization",
+    difficulty: "Intermediate",
+    prompt: "When prioritizing features under the RICE framework, what happens if an initiative has very high Effort with moderate Reach and Impact?",
+    scenario: "Your team is deciding between building an automated PDF exporter (Reach: 200, Impact: 1, Confidence: 80%, Effort: 5 person-weeks) versus a 1-click Quick Filter (Reach: 5,000, Impact: 2, Confidence: 90%, Effort: 1 person-week).",
     options: [
-      { id: "A", text: "Because async functions do not support JSON response serialization." },
-      { id: "B", text: "CPU-bound work in async def blocks the single-threaded asyncio event loop, starving all concurrent I/O requests." },
-      { id: "C", text: "Because FastAPI will automatically convert async def handlers into Celery tasks." },
-      { id: "D", text: "Python raises a RuntimeError if async functions run for longer than 30 seconds." }
+      { id: "A", text: "The high-effort project receives a higher RICE score because difficulty signals strategic differentiation." },
+      { id: "B", text: "Effort is the denominator in RICE: higher effort drastically reduces the overall score, making quick-win high-reach items rank higher." },
+      { id: "C", text: "Effort is multiplied with Reach and Impact, so higher effort increases the project score." },
+      { id: "D", text: "The RICE framework does not account for development effort." }
     ],
     correctOptionId: "B",
-    explanation: "FastAPI runs async def endpoints directly on the main asyncio event loop. If a route executes CPU-intensive code without releasing control (via await or run_in_threadpool), it blocks the entire event loop, causing P95 latency to spike for all incoming requests.",
-    academicCitation: "FastAPI Documentation / Python Concurrency Design Patterns"
+    explanation: "In RICE = (Reach × Impact × Confidence) / Effort, Effort is in the denominator. When effort is high relative to reach and impact, the priority score drops, ensuring teams focus on maximum ROI first.",
+    practicalTakeaway: "Use RICE or MoSCoW to prevent high-effort edge-case features from delaying high-impact core user value."
   },
   {
     id: 2,
-    skill: "PostgreSQL & Vector Indexes",
-    irtDifficulty: "Hard",
-    thetaValue: 1.25,
-    prompt: "When indexing 500,000 document embedding vectors using pgvector, which index type provides sub-10ms search latency without requiring table pre-training / clustering?",
+    track: "business",
+    skill: "Business Metrics & Analytics",
+    difficulty: "Foundational",
+    prompt: "If your subscription platform observes that Customer Acquisition Cost (CAC) is ₹4,500 and Customer Lifetime Value (LTV) is ₹3,000, what is the core business problem?",
     options: [
-      { id: "A", text: "B-Tree index with DESC sort on cosine distance." },
-      { id: "B", text: "IVFFlat index with lists=100." },
-      { id: "C", text: "HNSW (Hierarchical Navigable Small World) index with cosine distance operator `<=>`." },
-      { id: "D", text: "GIN inverted index on vector jsonb representation." }
+      { id: "A", text: "The platform is highly profitable because acquisition is outpacing churn." },
+      { id: "B", text: "The unit economics are unsustainable (LTV:CAC < 1:1); the company loses money on every acquired customer." },
+      { id: "C", text: "The platform should immediately double advertising spend to lower the LTV." },
+      { id: "D", text: "LTV and CAC have no direct relationship in business financial health." }
     ],
-    correctOptionId: "C",
-    explanation: "HNSW builds a multi-layer graph of vectors upon insertion. It provides fast sub-10ms query execution and does not require a pre-clustering build step like IVFFlat, maintaining high recall even as new vectors are incrementally added.",
-    academicCitation: "pgvector 0.7+ Architecture / Malkov & Yashunin HNSW Paper"
+    correctOptionId: "B",
+    explanation: "Healthy unit economics generally require an LTV to CAC ratio of at least 3:1. When LTV is lower than CAC, every newly acquired customer destroys value rather than generating profit.",
+    practicalTakeaway: "Focus on improving retention/expansion revenue or reducing acquisition channels before scaling customer acquisition."
   },
+  // Data Track
   {
     id: 3,
-    skill: "Next.js 15 & React 19",
-    irtDifficulty: "Medium",
-    thetaValue: 0.15,
-    prompt: "What is the primary architectural advantage of React 19 Server Components in the Next.js App Router for data-heavy applications?",
+    track: "data",
+    skill: "Data-Driven Decision Making",
+    difficulty: "Intermediate",
+    prompt: "In an A/B test with 50,000 users per variant, Variant B shows a 4% lift in click-through rate with p = 0.01. What does this statistical result indicate?",
     options: [
-      { id: "A", text: "They eliminate the need for any CSS stylesheets in the frontend." },
-      { id: "B", text: "They execute exclusively on the server, fetching data close to the database and reducing client bundle size by sending zero component JavaScript." },
-      { id: "C", text: "They automatically convert all client-side useState hooks into Redis keys." },
-      { id: "D", text: "They allow direct execution of shell scripts from the browser window." }
+      { id: "A", text: "There is only a 1% probability that Variant B works." },
+      { id: "B", text: "The observed lift is statistically significant (p < 0.05), meaning it is very unlikely to be caused by random chance alone." },
+      { id: "C", text: "All users in Variant B will unconditionally purchase the product." },
+      { id: "D", text: "The test is inconclusive and must run for another year." }
     ],
     correctOptionId: "B",
-    explanation: "React Server Components run exclusively at the server or edge layer. Their dependencies (such as heavy database ORMs or markdown parsers) do not get packaged into client-side JS bundles, resulting in near-instant First Contentful Paint (FCP).",
-    academicCitation: "React 19 Official Architecture Specification"
+    explanation: "A p-value of 0.01 (below the standard threshold of 0.05) means there is only a 1% chance the observed difference happened under the null hypothesis (random noise).",
+    practicalTakeaway: "Combine statistical significance with practical significance to ensure metric lifts warrant product rollout."
   },
+  // Tech & Engineering Track
   {
     id: 4,
-    skill: "Redis Caching & Sliding Rate Limiting",
-    irtDifficulty: "Hard",
-    thetaValue: 1.10,
-    prompt: "In a distributed multi-tenant API, which Redis data structure enables a clean sliding-window rate limit without experiencing border-crossing burst spikes?",
+    track: "tech",
+    skill: "Web Architecture & API Design",
+    difficulty: "Intermediate",
+    prompt: "Why should web applications handle long-running operations (such as document processing or video rendering) via asynchronous background tasks rather than synchronous HTTP requests?",
     options: [
-      { id: "A", text: "Redis String with INCR and EXPIRE." },
-      { id: "B", text: "Redis Sorted Set (ZSET) where elements and scores represent event millisecond timestamps." },
-      { id: "C", text: "Redis Pub/Sub channel." },
-      { id: "D", text: "Redis HyperLogLog." }
+      { id: "A", text: "Synchronous HTTP requests block browser connections, cause gateway timeouts (504), and degrade user experience." },
+      { id: "B", text: "HTTP does not allow transmitting files larger than 10 kilobytes." },
+      { id: "C", text: "Because background tasks cannot be executed in cloud environments." },
+      { id: "D", text: "Synchronous requests automatically crash database servers." }
     ],
-    correctOptionId: "B",
-    explanation: "A Redis Sorted Set (ZSET) allows recording each request timestamp as a score. By running ZREMRANGEBYSCORE to prune timestamps older than (current_time - window_size) and ZCARD to count recent entries, APIs eliminate the 2x burst vulnerability of fixed-window counters.",
-    academicCitation: "Stripe Engineering Sliding Window Rate Limiting Blueprint"
+    correctOptionId: "A",
+    explanation: "Standard web requests expect responses within milliseconds. Long tasks block server worker threads and cause browser client timeouts. Decoupling work into background workers with task status polling or webhooks provides resilience.",
+    practicalTakeaway: "Always offload jobs taking longer than 500ms to background task queues."
   }
 ];
 
 export default function AssessmentTakingPage() {
+  const [selectedTrack, setSelectedTrack] = useState<"all" | "business" | "data" | "tech">("all");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [hasSubmittedAnswer, setHasSubmittedAnswer] = useState(false);
@@ -117,7 +122,11 @@ export default function AssessmentTakingPage() {
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
   const [isCompanionOpen, setIsCompanionOpen] = useState(false);
 
-  const currentQ = ASSESSMENT_QUESTIONS[currentQuestionIndex];
+  const activeQuestions = ASSESSMENT_QUESTIONS.filter(
+    (q) => selectedTrack === "all" || q.track === selectedTrack
+  );
+
+  const currentQ = activeQuestions[currentQuestionIndex] || activeQuestions[0];
 
   // Timer countdown
   useEffect(() => {
@@ -149,7 +158,7 @@ export default function AssessmentTakingPage() {
   };
 
   const handleNextQuestion = () => {
-    if (currentQuestionIndex < ASSESSMENT_QUESTIONS.length - 1) {
+    if (currentQuestionIndex < activeQuestions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
       setSelectedOption(null);
       setHasSubmittedAnswer(false);
@@ -167,97 +176,133 @@ export default function AssessmentTakingPage() {
     setTimeLeft(300);
   };
 
+  const handleTrackChange = (track: "all" | "business" | "data" | "tech") => {
+    setSelectedTrack(track);
+    setCurrentQuestionIndex(0);
+    setSelectedOption(null);
+    setHasSubmittedAnswer(false);
+    setUserScore(0);
+    setQuizCompleted(false);
+    setTimeLeft(300);
+  };
+
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-purple-500 selection:text-white">
+    <div className="relative min-h-screen bg-warm-pattern text-slate-900 flex flex-col font-sans selection:bg-purple-200 selection:text-purple-900">
       <BackgroundAtmosphere />
       <Navbar onOpenCompanion={() => setIsCompanionOpen(true)} />
 
       <main className="relative z-10 flex-1 mx-auto max-w-4xl w-full px-4 sm:px-6 lg:px-8 py-10">
         
-        {/* Header Breadcrumb & Status */}
-        <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <Badge variant="violet" className="text-xs">
-                Adaptive Assessment Mode
-              </Badge>
-              <span className="text-xs text-slate-400 font-mono">
-                Item Response Theory (IRT 2PL)
-              </span>
+        {/* Track Filter Tabs */}
+        {!quizCompleted && (
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <Badge variant="violet" className="text-xs font-semibold">
+                  Diagnostic Self-Assessment
+                </Badge>
+                <span className="text-xs text-slate-700 font-medium">
+                  Objective Skill Verification
+                </span>
+              </div>
+              <h1 className="font-heading text-2xl font-bold text-slate-900">
+                Capability Diagnostic &amp; Readiness Check
+              </h1>
             </div>
-            <h1 className="font-heading text-2xl font-bold text-white">
-              Senior Full-Stack Competency Diagnostic
-            </h1>
-          </div>
 
-          {!quizCompleted && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-panel border border-white/10 text-xs font-mono font-bold text-orange-300">
-              <Clock className="h-4 w-4 text-orange-400 animate-pulse" />
+            {/* Timer */}
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-sm">
+              <Clock className="h-4 w-4 text-orange-600 animate-pulse" />
               <span>
                 {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
               </span>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {/* Track Selector */}
+        {!quizCompleted && (
+          <div className="mb-6 flex flex-wrap gap-2">
+            {[
+              { id: "all", label: "All Disciplines", icon: Target },
+              { id: "business", label: "Business & Product", icon: Briefcase },
+              { id: "data", label: "Data & Analytics", icon: PieChart },
+              { id: "tech", label: "Technology & Web", icon: Code2 }
+            ].map((t) => {
+              const Icon = t.icon;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => handleTrackChange(t.id as any)}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
+                    selectedTrack === t.id
+                      ? "bg-purple-900 text-white shadow-sm"
+                      : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
+                  }`}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  {t.label}
+                </button>
+              );
+            })}
+          </div>
+        )}
 
         {!quizCompleted ? (
           <div>
             {/* Progress Bar & Difficulty Tag */}
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs text-slate-400 font-medium">
-                Question {currentQuestionIndex + 1} of {ASSESSMENT_QUESTIONS.length}
+            <div className="flex items-center justify-between mb-3 text-xs">
+              <span className="text-slate-700 font-semibold">
+                Question {currentQuestionIndex + 1} of {activeQuestions.length}
               </span>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-400">Latent Trait Difficulty:</span>
+                <span className="text-slate-700">Difficulty:</span>
                 <Badge
                   variant={
-                    currentQ.irtDifficulty === "Hard"
+                    currentQ.difficulty === "Advanced"
                       ? "saffron"
-                      : currentQ.irtDifficulty === "Medium"
+                      : currentQ.difficulty === "Intermediate"
                       ? "violet"
                       : "sky"
                   }
-                  className="text-xs font-bold"
+                  className="text-xs font-semibold"
                 >
-                  {currentQ.irtDifficulty} (θ = {currentQ.thetaValue})
+                  {currentQ.difficulty}
                 </Badge>
               </div>
             </div>
 
             {/* Progress Track */}
-            <div className="w-full h-2 rounded-full bg-slate-800/80 mb-6 overflow-hidden">
+            <div className="w-full h-2 rounded-full bg-slate-200 mb-6 overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-purple-600 via-unnati-violet to-orange-500 transition-all duration-300"
+                className="h-full bg-gradient-to-r from-purple-800 to-orange-500 transition-all duration-300"
                 style={{
-                  width: `${((currentQuestionIndex + 1) / ASSESSMENT_QUESTIONS.length) * 100}%`
+                  width: `${((currentQuestionIndex + 1) / activeQuestions.length) * 100}%`
                 }}
               />
             </div>
 
             {/* Question Card */}
-            <Card className="glass-panel-elevated p-6 sm:p-8 rounded-3xl border border-white/15 mb-6">
+            <Card className="clean-card p-6 sm:p-8 rounded-3xl mb-6">
               <div className="mb-4">
-                <Badge variant="default" className="text-[11px] mb-2 font-mono">
-                  Competency: {currentQ.skill}
-                </Badge>
-                <h2 className="text-base sm:text-lg font-semibold text-white leading-relaxed">
+                <div className="flex items-center gap-2 mb-2">
+                  <Badge variant="default" className="text-[11px] font-semibold bg-slate-100 text-slate-700">
+                    Skill: {currentQ.skill}
+                  </Badge>
+                </div>
+                <h2 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
                   {currentQ.prompt}
                 </h2>
               </div>
 
-              {/* Code Snippet Box (if present) */}
-              {currentQ.codeSnippet && (
-                <div className="my-4 rounded-2xl bg-black/70 border border-white/10 p-4 font-mono text-xs text-purple-200 overflow-x-auto">
-                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10 text-[10px] text-slate-500">
-                    <span className="flex items-center gap-1">
-                      <Code2 className="h-3 w-3 text-orange-400" />
-                      Python / FastAPI
-                    </span>
-                  </div>
-                  <pre>{currentQ.codeSnippet}</pre>
+              {/* Scenario Box (if present) */}
+              {currentQ.scenario && (
+                <div className="my-4 rounded-2xl bg-purple-50/70 border border-purple-100 p-4 text-xs text-purple-900 leading-relaxed">
+                  <strong className="block text-purple-950 font-bold mb-1">Practical Scenario:</strong>
+                  {currentQ.scenario}
                 </div>
               )}
 
@@ -265,18 +310,18 @@ export default function AssessmentTakingPage() {
               <div className="space-y-3 mt-6">
                 {currentQ.options.map((option) => {
                   const isSelected = selectedOption === option.id;
-                  let optionStyle = "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200";
+                  let optionStyle = "border-slate-200 bg-white hover:bg-slate-50 text-slate-800";
 
                   if (hasSubmittedAnswer) {
                     if (option.id === currentQ.correctOptionId) {
-                      optionStyle = "border-emerald-500/60 bg-emerald-950/40 text-emerald-200 ring-1 ring-emerald-500/50";
+                      optionStyle = "border-emerald-500 bg-emerald-50 text-emerald-900 ring-2 ring-emerald-500/20";
                     } else if (isSelected && option.id !== currentQ.correctOptionId) {
-                      optionStyle = "border-rose-500/60 bg-rose-950/40 text-rose-200 ring-1 ring-rose-500/50";
+                      optionStyle = "border-rose-400 bg-rose-50 text-rose-900 ring-2 ring-rose-400/20";
                     } else {
-                      optionStyle = "opacity-40 border-white/5 bg-white/5 text-slate-400";
+                      optionStyle = "opacity-50 border-slate-200 bg-slate-50 text-slate-500";
                     }
                   } else if (isSelected) {
-                    optionStyle = "border-purple-500 bg-purple-950/40 text-purple-200 ring-1 ring-purple-500";
+                    optionStyle = "border-purple-600 bg-purple-50/80 text-purple-950 ring-2 ring-purple-600/20";
                   }
 
                   return (
@@ -284,9 +329,9 @@ export default function AssessmentTakingPage() {
                       key={option.id}
                       onClick={() => handleSelectOption(option.id)}
                       disabled={hasSubmittedAnswer}
-                      className={`w-full text-left p-4 rounded-2xl border transition-all flex items-start gap-3 text-xs sm:text-sm font-medium cursor-pointer ${optionStyle}`}
+                      className={`w-full text-left p-4 rounded-2xl border transition-all flex items-start gap-3 text-xs sm:text-sm font-medium cursor-pointer shadow-sm ${optionStyle}`}
                     >
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-black/40 border border-white/10 text-xs font-bold">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700">
                         {option.id}
                       </span>
                       <span className="pt-0.5 leading-snug">{option.text}</span>
@@ -295,44 +340,44 @@ export default function AssessmentTakingPage() {
                 })}
               </div>
 
-              {/* Formative Feedback Drawer (Appears after submission) */}
+              {/* Formative Feedback (Appears after submission) */}
               {hasSubmittedAnswer && (
                 <div
-                  className={`mt-6 p-4 rounded-2xl border text-xs leading-relaxed animate-in fade-in duration-300 ${
+                  className={`mt-6 p-5 rounded-2xl border text-xs leading-relaxed animate-in fade-in duration-300 ${
                     selectedOption === currentQ.correctOptionId
-                      ? "border-emerald-500/40 bg-emerald-950/30 text-emerald-200"
-                      : "border-rose-500/40 bg-rose-950/30 text-rose-200"
+                      ? "border-emerald-200 bg-emerald-50 text-emerald-900"
+                      : "border-rose-200 bg-rose-50 text-rose-900"
                   }`}
                 >
-                  <div className="flex items-center gap-2 font-bold mb-1.5">
+                  <div className="flex items-center gap-2 font-bold mb-2">
                     {selectedOption === currentQ.correctOptionId ? (
                       <>
-                        <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                        <span>Correct! Belief probability updated: +0.22</span>
+                        <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                        <span className="text-sm font-bold">Excellent! Correct Answer</span>
                       </>
                     ) : (
                       <>
-                        <XCircle className="h-4 w-4 text-rose-400" />
-                        <span>Incorrect. Diagnostic Feedback:</span>
+                        <XCircle className="h-5 w-5 text-rose-600" />
+                        <span className="text-sm font-bold">Concept Explanation &amp; Review</span>
                       </>
                     )}
                   </div>
-                  <p className="text-slate-300 mb-2">{currentQ.explanation}</p>
-                  <div className="pt-2 border-t border-white/10 text-[10px] text-slate-400">
-                    Source Attribution: {currentQ.academicCitation}
+                  <p className="text-slate-700 mb-2 leading-relaxed">{currentQ.explanation}</p>
+                  <div className="pt-2 border-t border-slate-200/60 font-semibold text-purple-900">
+                    Key Takeaway: {currentQ.practicalTakeaway}
                   </div>
                 </div>
               )}
 
               {/* Action Buttons */}
-              <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-end gap-3">
+              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
                 {!hasSubmittedAnswer ? (
                   <Button
                     variant="saffron"
                     size="md"
                     disabled={!selectedOption}
                     onClick={handleSubmitAnswer}
-                    className="text-xs"
+                    className="text-xs font-bold"
                   >
                     Submit Answer
                   </Button>
@@ -341,9 +386,9 @@ export default function AssessmentTakingPage() {
                     variant="primary"
                     size="md"
                     onClick={handleNextQuestion}
-                    className="text-xs"
+                    className="text-xs font-bold"
                   >
-                    {currentQuestionIndex < ASSESSMENT_QUESTIONS.length - 1
+                    {currentQuestionIndex < activeQuestions.length - 1
                       ? "Next Question"
                       : "View Diagnostic Results"}
                     <ChevronRight className="h-4 w-4 ml-1" />
@@ -353,50 +398,48 @@ export default function AssessmentTakingPage() {
             </Card>
           </div>
         ) : (
-          /* Quiz Results & Bayesian Unlock Card */
-          <Card className="glass-panel-elevated p-8 rounded-3xl border border-white/15 text-center animate-in zoom-in-95 duration-300">
-            <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-600 to-unnati-saffron p-3 shadow-xl shadow-purple-950/50 mb-4">
+          /* Quiz Results & Capability Level-Up Card */
+          <Card className="clean-card p-8 sm:p-10 rounded-3xl text-center animate-in zoom-in-95 duration-300">
+            <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-800 to-orange-500 p-3 shadow-md mb-4">
               <Award className="h-8 w-8 text-white" />
             </div>
 
-            <h2 className="font-heading text-2xl font-bold text-white mb-1">
-              Assessment Completed!
+            <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-slate-900 mb-1">
+              Diagnostic Assessment Complete!
             </h2>
-            <p className="text-xs text-slate-400 mb-6">
-              Evaluated via 2-Parameter Logistic Item Response Theory Model
+            <p className="text-xs sm:text-sm text-slate-700 mb-6">
+              Your responses have been evaluated against verified industry competency benchmarks.
             </p>
 
-            <div className="max-w-md mx-auto grid grid-cols-3 gap-3 p-4 rounded-2xl bg-white/5 border border-white/10 mb-6">
+            <div className="max-w-md mx-auto grid grid-cols-3 gap-3 p-4 rounded-2xl bg-purple-50/70 border border-purple-100 mb-6">
               <div>
-                <p className="text-[10px] text-slate-400 uppercase font-mono">Accuracy</p>
-                <p className="text-xl font-extrabold text-white mt-1">
-                  {Math.round((userScore / ASSESSMENT_QUESTIONS.length) * 100)}%
+                <p className="text-[10px] text-slate-700 uppercase font-semibold">Accuracy</p>
+                <p className="text-xl font-extrabold text-slate-900 mt-1">
+                  {Math.round((userScore / activeQuestions.length) * 100)}%
                 </p>
               </div>
               <div>
-                <p className="text-[10px] text-slate-400 uppercase font-mono">Score</p>
-                <p className="text-xl font-extrabold text-emerald-400 mt-1">
-                  {userScore} / {ASSESSMENT_QUESTIONS.length}
+                <p className="text-[10px] text-slate-700 uppercase font-semibold">Correct</p>
+                <p className="text-xl font-extrabold text-emerald-700 mt-1">
+                  {userScore} / {activeQuestions.length}
                 </p>
               </div>
               <div>
-                <p className="text-[10px] text-slate-400 uppercase font-mono">Latent θ</p>
-                <p className="text-xl font-extrabold text-purple-400 mt-1">
-                  +0.82
+                <p className="text-[10px] text-slate-700 uppercase font-semibold">Confidence</p>
+                <p className="text-xl font-extrabold text-purple-900 mt-1">
+                  High
                 </p>
               </div>
             </div>
 
-            {/* Bayesian State Transition Alert */}
-            <div className="max-w-md mx-auto text-left p-4 rounded-2xl border border-purple-500/40 bg-purple-950/40 mb-6">
-              <div className="flex items-center gap-2 mb-1 text-xs font-bold text-purple-200">
-                <Sparkles className="h-4 w-4 text-unnati-saffron" />
-                Algorithm A State Machine Transition
+            {/* Profile Level-Up Alert */}
+            <div className="max-w-md mx-auto text-left p-4 rounded-2xl border border-purple-200 bg-purple-50/80 mb-6">
+              <div className="flex items-center gap-2 mb-1.5 text-xs font-bold text-purple-950">
+                <Sparkles className="h-4 w-4 text-orange-600" />
+                Verified Skill Profile Updated
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Your verified competency in <strong>FastAPI & Async IO</strong> has transitioned from 
-                <span className="font-mono text-purple-300 font-bold"> `CLAIMED`</span> to 
-                <span className="font-mono text-emerald-400 font-bold"> `ASSESSED`</span> with a Bayesian belief factor of <strong>0.88</strong>!
+              <p className="text-xs text-slate-700 leading-relaxed">
+                Your assessed competencies have graduated from <strong className="text-slate-900">Self-Reported</strong> to <strong className="text-purple-900">Diagnostic Verified</strong>. Your learning roadmap has dynamically updated to focus on remaining growth areas.
               </p>
             </div>
 
@@ -419,6 +462,8 @@ export default function AssessmentTakingPage() {
         )}
 
       </main>
+
+      <Footer />
 
       <CareerCompanionDrawer
         isOpen={isCompanionOpen}

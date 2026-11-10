@@ -7,54 +7,57 @@ const config: Config = {
       colors: {
         unnati: {
           indigo: "#4C1D95",
+          "indigo-dark": "#310F68",
+          "indigo-light": "#5B21B6",
           violet: "#6D28D9",
           "violet-light": "#7C3AED",
-          "violet-dark": "#2E1065",
+          "violet-soft": "#EDE9FE",
+          "violet-tint": "#F5F3FF",
           saffron: "#EA580C",
           "saffron-bright": "#FF8A00",
-          "saffron-light": "#FFF7ED",
+          "saffron-soft": "#FFF7ED",
+          "saffron-tint": "#FFEDD5",
           teal: "#14B8A6",
           midnight: "#0F172A",
-          dark: "#090D16",
-          card: "#131C31",
-          cloud: "#F8FAFC"
+          dark: "#1E1B4B",
+          card: "#FFFFFF",
+          cloud: "#F8FAFC",
+          sand: "#FDFBF7",
+          border: "#E2E8F0"
         }
       },
       fontFamily: {
         sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
-        heading: ["Poppins", "sans-serif"]
+        heading: ["Poppins", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"]
       },
       keyframes: {
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-10px)" }
+          "50%": { transform: "translateY(-8px)" }
         },
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" }
         },
-        glow: {
-          "0%": { opacity: "0.4", filter: "blur(20px)" },
-          "100%": { opacity: "0.8", filter: "blur(32px)" }
-        },
-        aurora: {
-          "0%": { backgroundPosition: "0% 50%" },
-          "50%": { backgroundPosition: "100% 50%" },
-          "100%": { backgroundPosition: "0% 50%" }
+        pulseGlow: {
+          "0%, 100%": { opacity: "0.5", transform: "scale(1)" },
+          "50%": { opacity: "0.8", transform: "scale(1.05)" }
         }
       },
       animation: {
         float: "float 6s ease-in-out infinite",
         "float-delayed": "float 6s ease-in-out 3s infinite",
         "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        shimmer: "shimmer 3s linear infinite",
-        glow: "glow 4s ease-in-out infinite alternate",
-        aurora: "aurora 15s ease infinite"
+        "pulse-glow": "pulseGlow 5s ease-in-out infinite",
+        shimmer: "shimmer 3s linear infinite"
       },
       boxShadow: {
-        "glow-violet": "0 0 30px -5px rgba(109, 40, 217, 0.5)",
-        "glow-saffron": "0 0 30px -5px rgba(234, 88, 12, 0.4)",
-        glass: "0 8px 32px 0 rgba(0, 0, 0, 0.37)"
+        "soft-sm": "0 2px 4px 0 rgba(15, 23, 42, 0.04)",
+        "soft-md": "0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04)",
+        "soft-lg": "0 10px 25px -3px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04)",
+        "soft-xl": "0 20px 35px -5px rgba(76, 29, 149, 0.1), 0 10px 15px -3px rgba(15, 23, 42, 0.05)",
+        "glow-saffron": "0 10px 25px -5px rgba(234, 88, 12, 0.35)",
+        "glow-violet": "0 10px 25px -5px rgba(109, 40, 217, 0.35)"
       }
     }
   },

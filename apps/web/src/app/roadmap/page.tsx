@@ -5,6 +5,7 @@ import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { BackgroundAtmosphere } from "@/components/layout/BackgroundAtmosphere";
 import { CareerCompanionDrawer } from "@/components/companion/CareerCompanionDrawer";
 import { Badge } from "@/components/ui/Badge";
@@ -34,17 +35,20 @@ import {
 } from "lucide-react";
 import { 
   api, 
-  getClerkApiToken,
+  getClerkApiToken, 
   CareerRoadmap, 
   GapAnalysisResponse, 
   SkillGapItem 
 } from "@/lib/api";
 
 const TARGET_ROLES = [
+  "Associate Product Manager",
+  "Business & Data Analyst",
+  "Financial Analyst & Valuation",
   "Full-Stack Software Engineer",
-  "AI / Machine Learning Engineer",
-  "Frontend Engineer (React/Next.js)",
-  "Backend Systems Engineer (Python/Go)",
+  "Generative AI & ML Engineer",
+  "Product & UX Designer",
+  "Operations & Project Lead"
 ];
 
 export default function RoadmapPage() {
@@ -100,33 +104,36 @@ export default function RoadmapPage() {
       const token = await getClerkApiToken(getToken);
       if (!token) return;
 
-      const newRoadmap = await api.generateRoadmap(token, {
+      const roadmap = await api.generateRoadmap(token, {
         target_role: selectedRole,
         weekly_hours: 10,
       });
-      setActiveRoadmap(newRoadmap);
+      setActiveRoadmap(roadmap);
 
       const gaps = await api.getGapAnalysis(token, selectedRole);
       setGapData(gaps);
     } catch (err: any) {
-      console.error("Regeneration failed:", err);
-      setError(err.message || "Failed to regenerate roadmap.");
+      console.error("Roadmap regeneration error:", err);
+      setError(err.message || "Failed to recalibrate roadmap.");
     } finally {
       setGenerating(false);
     }
   };
 
   const toggleTask = (taskKey: string) => {
-    setCompletedTasks((prev) => ({ ...prev, [taskKey]: !prev[taskKey] }));
+    setCompletedTasks((prev) => ({
+      ...prev,
+      [taskKey]: !prev[taskKey]
+    }));
   };
 
   if (!isLoaded || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950 text-slate-100">
+      <div className="flex min-h-screen items-center justify-center bg-warm-pattern text-slate-900">
         <BackgroundAtmosphere />
         <div className="relative z-10 flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-unnati-violet border-t-transparent shadow-glow-violet" />
-          <p className="text-sm font-semibold text-purple-200">Synthesizing Topological Milestone DAG...</p>
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-purple-800 border-t-transparent shadow-md" />
+          <p className="text-sm font-semibold text-purple-900">Calibrating your learning roadmap...</p>
         </div>
       </div>
     );
@@ -134,14 +141,19 @@ export default function RoadmapPage() {
 
   if (!isSignedIn) {
     return (
-      <div className="relative flex min-h-screen flex-col items-center justify-center bg-slate-950 px-6 text-center text-slate-100 selection:bg-purple-500 selection:text-white">
+      <div className="relative flex min-h-screen flex-col items-center justify-center bg-warm-pattern px-6 text-center text-slate-900">
         <BackgroundAtmosphere />
-        <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/15 bg-slate-900/80 p-8 shadow-2xl backdrop-blur-2xl">
-          <h1 className="font-heading text-2xl font-black text-white">Sign in to UNNATI</h1>
-          <p className="mt-2 text-xs text-slate-400">Access your personalized learning roadmaps and Algorithm B gap analytics.</p>
+        <div className="relative z-10 w-full max-w-md clean-card rounded-3xl p-8 shadow-xl">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-800 to-orange-500 p-3 shadow-md">
+            <Image src="/logo.png" alt="UNNATI" width={48} height={48} className="object-contain" priority />
+          </div>
+          <h1 className="font-heading text-2xl font-black text-slate-900">Unlock Your Roadmap</h1>
+          <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+            Sign in to generate personalized milestones, skill gap breakdowns, and hands-on project sprints.
+          </p>
           <Link href="/sign-in" className="mt-6 block">
-            <Button variant="saffron" size="lg" className="w-full text-xs font-bold">
-              Sign In Now
+            <Button variant="saffron" size="lg" className="btn-shimmer w-full text-xs font-bold">
+              Sign In to Continue
             </Button>
           </Link>
         </div>
@@ -149,10 +161,10 @@ export default function RoadmapPage() {
     );
   }
 
-  const readiness = gapData?.readiness_score || activeRoadmap?.overall_readiness_score || 0;
+  const readiness = gapData ? Math.round(gapData.readiness_score * 100) : 0;
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-purple-500 selection:text-white">
+    <div className="relative min-h-screen bg-warm-pattern text-slate-900 flex flex-col font-sans selection:bg-purple-200 selection:text-purple-900">
       <BackgroundAtmosphere />
       <Navbar onOpenCompanion={() => setIsCompanionOpen(true)} />
 
@@ -160,47 +172,46 @@ export default function RoadmapPage() {
         
         {/* Error Alert */}
         {error && (
-          <div className="mb-6 flex items-center justify-between rounded-2xl border border-rose-500/40 bg-rose-950/40 p-4 text-xs font-medium text-rose-200 backdrop-blur-md">
+          <div className="mb-6 flex items-center justify-between rounded-2xl border border-rose-200 bg-rose-50 p-4 text-xs font-medium text-rose-900 shadow-sm animate-in slide-in-from-top duration-300">
             <div className="flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 text-rose-400 shrink-0" />
+              <AlertCircle className="h-4 w-4 text-rose-600 shrink-0" />
               <span>{error}</span>
             </div>
-            <button onClick={() => setError(null)} className="text-xs font-bold underline hover:text-white">
+            <button onClick={() => setError(null)} className="text-xs font-bold underline hover:text-rose-950">
               Dismiss
             </button>
           </div>
         )}
 
-        {/* Top Hero Banner */}
-        <section className="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 mb-8">
-          <div className="flex flex-wrap items-center justify-between gap-6">
+        {/* Top Control Bar: Role Selection & Readiness Overview */}
+        <section className="clean-card rounded-3xl p-6 sm:p-8 mb-8">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Badge variant="violet" className="text-[10px]">
-                  Algorithm C Topological Synthesis
+                <Badge variant="violet" className="text-xs font-semibold">
+                  Personalized Learning Path
                 </Badge>
-                <span className="text-xs text-slate-400 font-mono">
-                  Cycle-Free Prerequisite Graph
+                <span className="text-xs text-slate-700 font-medium">
+                  Step-by-Step Milestones
                 </span>
               </div>
-              <h1 className="font-heading text-2xl sm:text-3xl font-black text-white tracking-tight">
-                {activeRoadmap?.title || `${selectedRole} Roadmap`}
+              <h1 className="font-heading text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                Career Roadmap &amp; Skill Progression
               </h1>
-              <p className="mt-2 text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-                {activeRoadmap?.description || "Structured learning sequence based on evidence-weighted prerequisite gap analysis."}
+              <p className="mt-1 text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
+                Choose your target career to view your current readiness match, bridge identified skill gaps, and complete project sprints.
               </p>
 
-              {/* Role Selector Tabs */}
-              <div className="mt-5 flex flex-wrap gap-2">
+              {/* Target Role Selector Pills */}
+              <div className="mt-4 flex flex-wrap gap-2">
                 {TARGET_ROLES.map((role) => (
                   <button
                     key={role}
-                    type="button"
                     onClick={() => setSelectedRole(role)}
                     className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
                       selectedRole === role
-                        ? "bg-purple-600 text-white shadow-glow-violet border border-purple-400/40"
-                        : "border border-white/10 bg-white/5 text-slate-400 hover:text-white"
+                        ? "bg-purple-900 text-white shadow-sm"
+                        : "border border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                     }`}
                   >
                     {role}
@@ -210,25 +221,25 @@ export default function RoadmapPage() {
             </div>
 
             {/* Readiness Gauge Card */}
-            <div className="flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-purple-950/60 to-slate-900 border border-purple-500/30 p-6 text-center min-w-[200px] shadow-lg">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Target Readiness</span>
-              <div className="mt-1 text-4xl font-black text-emerald-400 font-mono">{readiness}%</div>
-              <p className="mt-1 text-xs text-slate-300">
+            <div className="flex flex-col items-center justify-center rounded-2xl bg-purple-50/70 border border-purple-100 p-6 text-center min-w-[210px]">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Readiness Score</span>
+              <div className="mt-1 text-4xl font-black text-emerald-700 font-mono">{readiness}%</div>
+              <p className="mt-1 text-xs text-slate-600">
                 {gapData ? `${gapData.skills_met_count} of ${gapData.total_skills_required} skills met` : "Calculating..."}
               </p>
-              <div className="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-unnati-saffron">
+              <div className="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-orange-600">
                 <TrendingUp className="h-3.5 w-3.5" />
-                Evidence-Weighted
+                Evidence-Weighted Match
               </div>
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+          <div className="mt-6 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setViewMode("matrix")}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                  viewMode === "matrix" ? "bg-white/15 text-white" : "text-slate-400 hover:text-white"
+                  viewMode === "matrix" ? "bg-purple-900 text-white" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 <BarChart3 className="h-3.5 w-3.5" /> Gap Breakdown
@@ -236,10 +247,10 @@ export default function RoadmapPage() {
               <button
                 onClick={() => setViewMode("radar")}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                  viewMode === "radar" ? "bg-white/15 text-white" : "text-slate-400 hover:text-white"
+                  viewMode === "radar" ? "bg-purple-900 text-white" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                <Radar className="h-3.5 w-3.5" /> Diagnostic Radar
+                <Radar className="h-3.5 w-3.5" /> Capability Radar
               </button>
             </div>
 
@@ -248,9 +259,9 @@ export default function RoadmapPage() {
               size="sm"
               onClick={handleRegenerate}
               disabled={generating}
-              className="text-xs"
+              className="text-xs font-semibold"
             >
-              <RefreshCw className={`h-3.5 w-3.5 mr-1 text-purple-400 ${generating ? "animate-spin" : ""}`} />
+              <RefreshCw className={`h-3.5 w-3.5 mr-1 text-purple-700 ${generating ? "animate-spin" : ""}`} />
               {generating ? "Recalibrating..." : "Recalibrate Roadmap"}
             </Button>
           </div>
@@ -258,12 +269,12 @@ export default function RoadmapPage() {
 
         {/* Diagnostic Radar / Matrix View Mode */}
         {viewMode === "radar" && gapData && (
-          <section className="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 mb-8 animate-in fade-in duration-300">
-            <h3 className="font-heading text-lg font-bold text-white mb-2">
-              Competency Radar Diagnostic (Algorithm B)
+          <section className="clean-card rounded-3xl p-6 sm:p-8 mb-8 animate-in fade-in duration-300">
+            <h3 className="font-heading text-lg font-bold text-slate-900 mb-1">
+              Capability Benchmark Diagnostic
             </h3>
-            <p className="text-xs text-slate-400 mb-6">
-              Compares your evidence-weighted capability against industry benchmark expectations.
+            <p className="text-xs text-slate-600 mb-6">
+              Compares your verified proficiency against industry expectations for {selectedRole}.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -271,9 +282,9 @@ export default function RoadmapPage() {
                 const currentPct = Math.round(item.current_proficiency * 100);
                 const targetPct = Math.round(item.target_proficiency * 100);
                 return (
-                  <div key={item.skill_name} className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                  <div key={item.skill_name} className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-bold text-white text-xs">{item.skill_name}</span>
+                      <span className="font-bold text-slate-900 text-xs">{item.skill_name}</span>
                       <Badge variant={item.is_met ? "success" : "saffron"} className="text-[10px]">
                         {item.is_met ? "Met" : `-${Math.round(item.gap * 100)}%`}
                       </Badge>
@@ -282,21 +293,21 @@ export default function RoadmapPage() {
                     {/* Comparative Dual Bar */}
                     <div className="space-y-1.5 text-[10px]">
                       <div>
-                        <div className="flex justify-between text-slate-400">
-                          <span>Your Level:</span>
-                          <span className="font-mono text-purple-300 font-bold">{currentPct}%</span>
+                        <div className="flex justify-between text-slate-500">
+                          <span>Your Verified Level:</span>
+                          <span className="font-mono text-purple-900 font-bold">{currentPct}%</span>
                         </div>
-                        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden mt-0.5">
-                          <div className="h-full bg-purple-500 rounded-full" style={{ width: `${currentPct}%` }} />
+                        <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden mt-0.5">
+                          <div className="h-full bg-purple-700 rounded-full" style={{ width: `${currentPct}%` }} />
                         </div>
                       </div>
                       <div>
-                        <div className="flex justify-between text-slate-400">
+                        <div className="flex justify-between text-slate-500">
                           <span>Market Benchmark:</span>
-                          <span className="font-mono text-slate-300">{targetPct}%</span>
+                          <span className="font-mono text-slate-700 font-semibold">{targetPct}%</span>
                         </div>
-                        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden mt-0.5">
-                          <div className="h-full bg-orange-500/80 rounded-full" style={{ width: `${targetPct}%` }} />
+                        <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden mt-0.5">
+                          <div className="h-full bg-orange-500 rounded-full" style={{ width: `${targetPct}%` }} />
                         </div>
                       </div>
                     </div>
@@ -307,21 +318,21 @@ export default function RoadmapPage() {
           </section>
         )}
 
-        {/* Milestone Phases: Algorithm C Topological Roadmap */}
+        {/* Milestone Phases Sequence */}
         <section className="mb-12">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-purple-400">Topological Learning DAG</p>
-              <h2 className="font-heading text-2xl font-bold text-white">Milestone Execution Sequence</h2>
+              <p className="text-xs font-bold uppercase tracking-wider text-purple-700">Structured Milestone Sequence</p>
+              <h2 className="font-heading text-2xl font-bold text-slate-900">Milestone Roadmap</h2>
             </div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 font-mono">
-              <Clock className="h-4 w-4 text-unnati-saffron" />
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 font-mono">
+              <Clock className="h-4 w-4 text-orange-600" />
               <span>{activeRoadmap?.total_estimated_weeks || 12} Weeks • {activeRoadmap?.weekly_hours || 10}h/wk</span>
             </div>
           </div>
 
           <div className="space-y-6">
-            {activeRoadmap?.milestones?.map((milestone, mIdx) => {
+            {activeRoadmap?.milestones?.map((milestone) => {
               const isLocked = milestone.status === "LOCKED";
               const isInProgress = milestone.status === "IN_PROGRESS";
               const isCompleted = milestone.status === "COMPLETED";
@@ -329,12 +340,12 @@ export default function RoadmapPage() {
               return (
                 <div
                   key={milestone.id}
-                  className={`glass-panel rounded-3xl p-6 sm:p-7 border transition-all duration-300 relative ${
+                  className={`clean-card rounded-3xl p-6 sm:p-7 transition-all duration-300 relative ${
                     isInProgress
-                      ? "border-purple-500/60 shadow-glow-violet bg-slate-900/80"
+                      ? "border-purple-300 shadow-md ring-1 ring-purple-200 bg-white"
                       : isCompleted
-                      ? "border-emerald-500/40 bg-slate-900/60"
-                      : "border-white/10 bg-slate-900/40 opacity-85"
+                      ? "border-emerald-200 bg-emerald-50/20"
+                      : "border-slate-200 bg-white/70 opacity-90"
                   }`}
                 >
                   <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
@@ -342,17 +353,17 @@ export default function RoadmapPage() {
                       <div
                         className={`flex h-11 w-11 items-center justify-center rounded-2xl font-bold text-sm ${
                           isCompleted
-                            ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                            ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
                             : isInProgress
-                            ? "bg-gradient-to-tr from-purple-700 to-unnati-violet text-white shadow-md shadow-purple-950"
-                            : "bg-white/5 text-slate-500 border border-white/5"
+                            ? "bg-purple-900 text-white shadow-sm"
+                            : "bg-slate-100 text-slate-400 border border-slate-200"
                         }`}
                       >
                         {isCompleted ? <CheckCircle2 className="h-6 w-6" /> : isLocked ? <Lock className="h-5 w-5" /> : `P${milestone.phase_number}`}
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-bold uppercase tracking-wider text-orange-400 font-mono">
+                          <span className="text-xs font-bold uppercase tracking-wider text-orange-600 font-mono">
                             Phase {milestone.phase_number} • {milestone.estimated_weeks} Weeks
                           </span>
                           <Badge
@@ -362,31 +373,31 @@ export default function RoadmapPage() {
                             {milestone.status.replace("_", " ")}
                           </Badge>
                         </div>
-                        <h3 className="text-base sm:text-lg font-bold text-white mt-0.5">{milestone.title}</h3>
+                        <h3 className="text-base sm:text-lg font-bold text-slate-900 mt-0.5">{milestone.title}</h3>
                       </div>
                     </div>
 
                     {isInProgress && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-500/20 border border-purple-500/30 px-3 py-1 text-xs font-bold text-purple-200">
-                        <Play className="h-3 w-3 fill-current text-unnati-saffron" /> Active Phase
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-100 border border-purple-200 px-3 py-1 text-xs font-bold text-purple-900">
+                        <Play className="h-3 w-3 fill-current text-orange-600" /> Active Phase
                       </span>
                     )}
                   </div>
 
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl mb-4">
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-3xl mb-4">
                     {milestone.description}
                   </p>
 
                   {/* Target Skills in this Phase */}
                   <div className="mb-5">
                     <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-                      Target Competencies:
+                      Target Capabilities in this Phase:
                     </p>
                     <div className="flex flex-wrap gap-1.5">
                       {milestone.target_skills.map((sk) => (
                         <span
                           key={sk}
-                          className="rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-purple-200"
+                          className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700"
                         >
                           {sk}
                         </span>
@@ -397,9 +408,9 @@ export default function RoadmapPage() {
                   {/* Modules & Deliverable Grid */}
                   <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
                     {/* Learning Modules with Checkbox Trackers */}
-                    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                      <p className="text-xs font-bold uppercase tracking-wider text-purple-300 flex items-center gap-1.5 mb-3">
-                        <BookOpen className="h-3.5 w-3.5 text-unnati-saffron" />
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+                      <p className="text-xs font-bold uppercase tracking-wider text-purple-900 flex items-center gap-1.5 mb-3">
+                        <BookOpen className="h-3.5 w-3.5 text-orange-600" />
                         Curated Learning Modules
                       </p>
                       <div className="space-y-2">
@@ -412,21 +423,21 @@ export default function RoadmapPage() {
                               onClick={() => toggleTask(taskKey)}
                               className={`flex items-center justify-between rounded-xl border p-2.5 text-xs transition cursor-pointer ${
                                 isDone
-                                  ? "border-emerald-500/30 bg-emerald-950/20 text-slate-300"
-                                  : "border-white/5 bg-white/5 text-slate-200 hover:bg-white/10"
+                                  ? "border-emerald-200 bg-emerald-50 text-slate-700"
+                                  : "border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
                               }`}
                             >
                               <div className="flex items-center gap-2.5">
                                 {isDone ? (
-                                  <CheckSquare className="h-4 w-4 text-emerald-400 shrink-0" />
+                                  <CheckSquare className="h-4 w-4 text-emerald-600 shrink-0" />
                                 ) : (
-                                  <Square className="h-4 w-4 text-slate-500 shrink-0" />
+                                  <Square className="h-4 w-4 text-slate-400 shrink-0" />
                                 )}
                                 <span className={isDone ? "line-through text-slate-400" : "font-medium"}>
                                   {mod.title}
                                 </span>
                               </div>
-                              <span className="text-[10px] text-slate-400 font-mono">
+                              <span className="text-[10px] text-slate-500 font-mono">
                                 {mod.duration_hours}h • {mod.type}
                               </span>
                             </div>
@@ -437,27 +448,27 @@ export default function RoadmapPage() {
 
                     {/* Capstone Project Deliverable */}
                     {milestone.project_deliverable && (
-                      <div className="rounded-2xl border border-purple-500/20 bg-purple-950/20 p-4 flex flex-col justify-between">
+                      <div className="rounded-2xl border border-purple-200 bg-purple-50/60 p-4 flex flex-col justify-between">
                         <div>
-                          <p className="text-xs font-bold uppercase tracking-wider text-orange-400 flex items-center gap-1.5 mb-2">
-                            <FolderGit2 className="h-3.5 w-3.5 text-orange-400" />
-                            Milestone Project Sprint
+                          <p className="text-xs font-bold uppercase tracking-wider text-orange-600 flex items-center gap-1.5 mb-2">
+                            <FolderGit2 className="h-3.5 w-3.5 text-orange-600" />
+                            Milestone Project Deliverable
                           </p>
-                          <h4 className="font-bold text-white text-sm">
+                          <h4 className="font-bold text-slate-900 text-sm">
                             {milestone.project_deliverable.title}
                           </h4>
-                          <p className="mt-1 text-xs leading-relaxed text-slate-400">
+                          <p className="mt-1 text-xs leading-relaxed text-slate-600">
                             {milestone.project_deliverable.description}
                           </p>
 
                           <div className="mt-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
-                              Evaluation Rubric:
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">
+                              Success Criteria:
                             </p>
-                            <ul className="space-y-1 text-[11px] text-slate-300">
+                            <ul className="space-y-1 text-[11px] text-slate-700">
                               {milestone.project_deliverable.rubric?.map((r, rIdx) => (
                                 <li key={rIdx} className="flex items-center gap-1.5">
-                                  <span className="h-1.5 w-1.5 rounded-full bg-unnati-saffron" />
+                                  <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
                                   {r}
                                 </li>
                               ))}
@@ -465,14 +476,14 @@ export default function RoadmapPage() {
                           </div>
                         </div>
 
-                        <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+                        <div className="mt-4 pt-3 border-t border-purple-100 flex items-center justify-between">
                           <Link href="/assessments">
-                            <Button size="sm" variant="glass" className="text-[11px] py-1 px-3">
-                              <Award className="h-3 w-3 mr-1 text-emerald-400" /> Verify Capability
+                            <Button size="sm" variant="outline" className="text-[11px] py-1 px-3 font-semibold text-slate-800 bg-white border-slate-200">
+                              <Award className="h-3 w-3 mr-1 text-emerald-600" /> Verify Capability
                             </Button>
                           </Link>
-                          <span className="text-[10px] text-purple-300 font-mono">
-                            GitHub Evaluation Ready
+                          <span className="text-[10px] text-purple-900 font-semibold">
+                            Portfolio Ready
                           </span>
                         </div>
                       </div>
@@ -484,32 +495,32 @@ export default function RoadmapPage() {
           </div>
         </section>
 
-        {/* Algorithm B: Skill Gap Matrix Table */}
+        {/* Skill Gap Matrix Table */}
         {gapData && gapData.skills_breakdown.length > 0 && viewMode === "matrix" && (
           <section className="mb-12">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-purple-400">Algorithmic Diagnostic</p>
-                <h2 className="font-heading text-xl font-bold text-white">Skill Gap Diagnostic Matrix</h2>
+                <p className="text-xs font-bold uppercase tracking-wider text-purple-700">Objective Diagnostic</p>
+                <h2 className="font-heading text-xl font-bold text-slate-900">Skill Gap Breakdown Matrix</h2>
               </div>
             </div>
 
-            <div className="overflow-hidden rounded-2xl border border-white/10 glass-panel">
+            <div className="overflow-hidden rounded-2xl border border-slate-200 clean-card">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-white/5 border-b border-white/10 text-slate-400 font-bold uppercase tracking-wider">
+                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
                     <tr>
                       <th className="px-5 py-3">Competency</th>
-                      <th className="px-4 py-3">Evidence State</th>
+                      <th className="px-4 py-3">Verification Tier</th>
                       <th className="px-4 py-3">Current vs Target</th>
-                      <th className="px-4 py-3">Algorithm B Gap</th>
+                      <th className="px-4 py-3">Gap Status</th>
                       <th className="px-4 py-3">Prerequisites</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/5">
+                  <tbody className="divide-y divide-slate-100">
                     {gapData.skills_breakdown.map((item) => (
-                      <tr key={item.skill_name} className="hover:bg-white/5 transition-colors">
-                        <td className="px-5 py-3 font-bold text-white">
+                      <tr key={item.skill_name} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="px-5 py-3 font-bold text-slate-900">
                           {item.skill_name}
                         </td>
                         <td className="px-4 py-3">
@@ -527,38 +538,46 @@ export default function RoadmapPage() {
                             }
                             className="text-[10px]"
                           >
-                            {item.state}
+                            {item.state === "CLAIMED"
+                              ? "Self-Reported"
+                              : item.state === "INFERRED"
+                              ? "Resume Extracted"
+                              : item.state === "ASSESSED"
+                              ? "Diagnostic Verified"
+                              : item.state === "VERIFIED"
+                              ? "Certified"
+                              : item.state}
                           </Badge>
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2 font-mono">
-                            <span className="font-semibold text-purple-300">
+                            <span className="font-semibold text-purple-900">
                               {Math.round(item.current_proficiency * 100)}%
                             </span>
-                            <span className="text-slate-500">/</span>
-                            <span className="text-slate-400">
+                            <span className="text-slate-400">/</span>
+                            <span className="text-slate-600">
                               {Math.round(item.target_proficiency * 100)}%
                             </span>
                           </div>
-                          <div className="mt-1 h-1 w-24 overflow-hidden rounded-full bg-slate-800">
+                          <div className="mt-1 h-1 w-24 overflow-hidden rounded-full bg-slate-200">
                             <div
-                              className="h-full bg-purple-500 rounded-full"
+                              className="h-full bg-purple-700 rounded-full"
                               style={{ width: `${Math.round(item.current_proficiency * 100)}%` }}
                             />
                           </div>
                         </td>
                         <td className="px-4 py-3">
                           {item.is_met ? (
-                            <span className="inline-flex items-center gap-1 font-bold text-emerald-400">
+                            <span className="inline-flex items-center gap-1 font-bold text-emerald-700">
                               <CheckCircle2 className="h-3.5 w-3.5" /> Met
                             </span>
                           ) : (
-                            <span className="font-bold text-orange-400 font-mono">
+                            <span className="font-bold text-orange-600 font-mono">
                               -{Math.round(item.gap * 100)}%
                             </span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-slate-400">
+                        <td className="px-4 py-3 text-slate-500">
                           {item.prerequisites.length > 0 ? item.prerequisites.join(", ") : "None (Foundational)"}
                         </td>
                       </tr>
@@ -571,6 +590,8 @@ export default function RoadmapPage() {
         )}
 
       </main>
+
+      <Footer />
 
       {/* Global AI Companion Drawer */}
       <CareerCompanionDrawer
