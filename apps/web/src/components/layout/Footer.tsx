@@ -196,6 +196,17 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <a 
+                  href="https://github.com/parth022002/UNNATI---Connect-learning-capability-and-opportunity." 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-slate-600 hover:text-unnati-indigo transition-colors flex items-center gap-1 font-medium"
+                >
+                  <span>Open Source Repository</span>
+                  <ArrowUpRight className="h-3 w-3" />
+                </a>
+              </li>
+              <li>
                 <a href="mailto:grievance@unnati.in" className="text-slate-600 hover:text-unnati-indigo transition-colors">
                   Contact Support
                 </a>

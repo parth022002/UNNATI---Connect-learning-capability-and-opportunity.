@@ -94,3 +94,4 @@
 | **Universal Persona Selector** | 6 persona tabs (All, Students, Business, Finance, Tech, Switchers) with 1-click starter questions. | ✅ Verified |
 | **Persistent Conversation Memory** | Mounted in `RootLayout`; chat conversation persists uninterrupted across route navigation. | ✅ Verified |
 | **Keyboard & Touch Accessibility** | `Esc` to minimize, `Enter` to send, 1-click copy to clipboard with checkmark confirmation. | ✅ Verified |
+

@@ -35,21 +35,45 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-8px)" }
         },
+        floatSlow: {
+          "0%, 100%": { transform: "translateY(0px) rotate(0deg)" },
+          "50%": { transform: "translateY(-14px) rotate(1.5deg)" }
+        },
+        ambientDrift1: {
+          "0%": { transform: "translate(0px, 0px) scale(1)" },
+          "33%": { transform: "translate(40px, -30px) scale(1.08)" },
+          "66%": { transform: "translate(-30px, 35px) scale(0.95)" },
+          "100%": { transform: "translate(0px, 0px) scale(1)" }
+        },
+        ambientDrift2: {
+          "0%": { transform: "translate(0px, 0px) scale(1)" },
+          "33%": { transform: "translate(-45px, 35px) scale(1.06)" },
+          "66%": { transform: "translate(35px, -25px) scale(0.94)" },
+          "100%": { transform: "translate(0px, 0px) scale(1)" }
+        },
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" }
         },
         pulseGlow: {
-          "0%, 100%": { opacity: "0.5", transform: "scale(1)" },
-          "50%": { opacity: "0.8", transform: "scale(1.05)" }
+          "0%, 100%": { opacity: "0.45", transform: "scale(1)" },
+          "50%": { opacity: "0.75", transform: "scale(1.04)" }
+        },
+        fadeUp: {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0px)" }
         }
       },
       animation: {
         float: "float 6s ease-in-out infinite",
         "float-delayed": "float 6s ease-in-out 3s infinite",
+        "float-slow": "floatSlow 9s ease-in-out infinite",
+        "ambient-drift-1": "ambientDrift1 26s ease-in-out infinite",
+        "ambient-drift-2": "ambientDrift2 32s ease-in-out infinite",
         "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "pulse-glow": "pulseGlow 5s ease-in-out infinite",
-        shimmer: "shimmer 3s linear infinite"
+        "pulse-glow": "pulseGlow 6s ease-in-out infinite",
+        shimmer: "shimmer 3.5s linear infinite",
+        "fade-up": "fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards"
       },
       boxShadow: {
         "soft-sm": "0 2px 4px 0 rgba(15, 23, 42, 0.04)",

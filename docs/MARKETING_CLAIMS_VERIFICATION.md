@@ -91,3 +91,4 @@
 | **Audience Pathway Routing** | ✅ **Resolved** | 4 audience cards now route with query params (`?persona=student`, `?persona=graduate`, `?persona=professional`, `?persona=switcher`) to existing wizard steps. |
 | **Floating AI Assistant Clearance** | ✅ **Resolved** | Bottom footer clearance added (`pb-24 sm:pb-8`, `sm:pr-32`) to guarantee the launcher button never blocks links. |
 | **Continuous Journey Loop** | ✅ **Resolved** | Replaced 5 static boxes with 6-stage continuous loop (*Discover &rarr; Ingest &rarr; Pinpoint &rarr; Build &rarr; Demonstrate &rarr; Grow &amp; Reassess*). |
+

@@ -30,9 +30,10 @@ All 13 routes compiled, prerendered, and tested with zero errors.
 ## 1. Brand Identity & High-Visibility Logo Implementation (100% Complete)
 
 - [x] **Prominent Logo Mark in Header (`Navbar.tsx`):**
-  - Upgraded logo container to `h-12 w-12` (48px &times; 48px) with 44px inner icon, vibrant saffron/indigo gradient backdrop, and high-visibility drop shadow.
-  - Paired with legible wordmark `UNNATI` and Devanagari script `(उन्नति)`.
-  - Added visible, high-contrast tagline `Your Growth Companion.`
+  - Master Navbar Redesign: 3-group layout (Brand, Navigation, Actions) with `h-[76px] sm:h-20` dimensions.
+  - Logo container set to `h-11 w-11 sm:h-12 sm:w-12` (48–52px) with 46px inner icon, vibrant saffron/indigo gradient backdrop, and high-visibility drop shadow.
+  - Paired with legible wordmark `UNNATI (उन्नति)` and visible, high-contrast tagline `Your Growth Companion.`
+  - Scroll-aware transition: frosted glass elevation (`isScrolled`) and full mobile overlay with `Escape` key support.
 - [x] **Prominent Logo Mark in Enterprise Footer (`Footer.tsx`):**
   - Integrated `h-14 w-14` (56px &times; 56px) logo container with 52px inner icon.
   - Positioned official campaign slogan: *Learn. Build. Grow. Succeed.*
