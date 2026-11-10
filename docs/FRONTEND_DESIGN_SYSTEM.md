@@ -86,4 +86,36 @@ UNNATI pairs **Poppins** (for friendly, authoritative, modern headings) with **I
 | *Multi-Modal Ingestion Pipeline* | **Build Your Profile from Your Resume** |
 | *Inspect Graph Nodes* | **View Study Modules & Projects** |
 | *Monolithic Tech Stack Focus* | **Paths for Tech, Business, Finance, Design & Analytics** |
+| *Required for 100% Readiness* | **Recommended Skills to Strengthen Your Profile** |
+
+---
+
+## 6. Global AI Career Companion Widget Standards
+
+- **Placement:** Docked persistently at `fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-40`.
+- **Launcher Badge:** Warm indigo-violet gradient pill with 24px logo, pulsing emerald beacon, and `Ask UNNATI AI` label.
+- **Universal Persona Selector:** 6 1-click persona tabs (`All Topics`, `Students & Freshers`, `Business & Marketing`, `Finance & Analytics`, `Tech & Design`, `Career Switchers`) to ensure any type of learner immediately receives relevant starter questions.
+- **Footer Clearance:** All page footers must enforce `pb-24 sm:pb-8` and right-hand clearance (`sm:pr-32`) to guarantee the launcher badge never obscures statutory links or text.
+
+---
+
+## 7. Continuous Growth Cycle Pattern
+
+Growth is designed not as a terminal test, but as a continuous 6-stage loop:
+$$\text{Discover} \longrightarrow \text{Understand} \longrightarrow \text{Build} \longrightarrow \text{Demonstrate} \longrightarrow \text{Grow} \longrightarrow \text{Reassess} \longrightarrow \text{Discover}$$
+
+1. **Discover Direction:** Explore 20+ validated career trajectories.
+2. **Understand Baseline:** Ingest resume, coursework, and claimed competencies.
+3. **Identify Gaps:** Evidence-weighted competency delta against industry benchmarks.
+4. **Build Roadmap:** 3-phase topological milestone plan tailored to weekly hours.
+5. **Demonstrate Capability:** Complete hands-on capstone projects and diagnostic practice checks.
+6. **Reassess & Level Up:** Live Bayesian updates promote skills to Verified; candidate loops to higher goals.
+
+---
+
+## 8. Responsible Metrics & Claims Standards
+
+- **Salary Figures:** Always distinguish between median and range (e.g. *Median: ₹18.0L CTC; Range: ₹12.0L – ₹24.0L CTC*). Never label a range as a median.
+- **Sample Disclaimers:** All sandbox calculators must carry the notice: *"\*Illustrative sample diagnostic based on curated labor market benchmarks."*
+- **No Artificial Guarantees:** UNNATI strictly provides formative capability enhancement, verifiable milestone evidence, and readiness scoring—never artificial placement guarantees.
 

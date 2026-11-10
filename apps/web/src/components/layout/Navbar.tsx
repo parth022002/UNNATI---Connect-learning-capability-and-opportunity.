@@ -39,6 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
   // Public visitor navigation items
   const publicLinks = [
     { href: "/#how-it-works", label: "How It Works", icon: Briefcase },
+    { href: "/#showcase", label: "Showcase", icon: LayoutDashboard },
     { href: "/explore", label: "Career Pathways", icon: Compass },
     { href: "/assessments", label: "Skills Check", icon: FileCheck2 },
     { href: "/#faq", label: "FAQ", icon: HelpCircle },

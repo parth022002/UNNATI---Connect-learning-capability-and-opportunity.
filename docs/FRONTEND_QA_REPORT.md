@@ -112,12 +112,15 @@ The application was validated across standard device breakpoints:
    - Navigation collapses cleanly with hamburger toggle.
    - Multi-column grids smoothly stack into single-column layouts.
    - Comparison modal and drawer maintain touch-friendly padding (`min-h-11` touch targets).
+   - Bottom-right AI Chatbot widget launcher scales cleanly and never overlaps footer links or copyright text due to `pb-24 sm:pb-8` clearance.
 2. **Tablet (768px – 1024px, iPad / Surface):**
    - 2-column card layouts in `/explore` and `/dashboard`.
    - Balanced spacing and touch-optimized chip selectors.
+   - Stepped hero product walkthrough and 5-tab showcase display comfortably with touch interactions.
 3. **Desktop (1280px – 1920px):**
    - 3-column card layouts with hover elevation effects (`hover:-translate-y-1`).
    - Max width capped at `max-w-7xl` with centered margins to prevent awkward ultra-wide stretching.
+   - AI Chatbot widget docks at `fixed bottom-6 right-6 z-40` as a sleek, non-intrusive floating card.
 
 ---
 

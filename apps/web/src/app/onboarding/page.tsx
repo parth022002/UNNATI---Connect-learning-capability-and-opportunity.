@@ -118,6 +118,19 @@ export default function OnboardingPage() {
   const [primaryGoal, setPrimaryGoal] = useState("Land a high-growth job or placement in my chosen domain");
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const personaParam = params.get("persona");
+      if (personaParam) {
+        if (personaParam === "student") setSelectedPersona("student");
+        else if (personaParam === "graduate") setSelectedPersona("student");
+        else if (personaParam === "professional") setSelectedPersona("working_pro");
+        else if (personaParam === "switcher") setSelectedPersona("career_switcher");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (user?.fullName && !headline) {
       setHeadline(`Aspiring ${targetRole}`);
     }

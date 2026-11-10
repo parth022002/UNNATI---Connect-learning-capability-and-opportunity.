@@ -100,7 +100,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
         {/* Section 4 */}
-        <section className="clean-card p-6 sm:p-8 rounded-3xl space-y-3">
+        <section id="erasure" className="clean-card p-6 sm:p-8 rounded-3xl space-y-3">
           <h2 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
             <span className="text-orange-600 font-mono">04.</span> Data Retention &amp; 72-Hour Crypto-Shredding Protocol
           </h2>
@@ -123,7 +123,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
         {/* Section 5 */}
-        <section className="clean-card p-6 sm:p-8 rounded-3xl space-y-4">
+        <section id="grievance" className="clean-card p-6 sm:p-8 rounded-3xl space-y-4">
           <h2 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
             <span className="text-orange-600 font-mono">05.</span> Grievance Redressal Officer (GRO) &amp; Redressal Mechanism
           </h2>
@@ -142,7 +142,7 @@ export default function PrivacyPolicyPage() {
               </div>
               <div>
                 <span className="text-slate-500 font-semibold text-[11px]">Official Redressal Email:</span>
-                <p className="font-bold text-purple-900 font-mono">privacy@unnati.example</p>
+                <p className="font-bold text-purple-900 font-mono">grievance@unnati.in</p>
               </div>
               <div>
                 <span className="text-slate-500 font-semibold text-[11px]">Statutory SLA:</span>
@@ -156,7 +156,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
         {/* Section 6 */}
-        <section className="clean-card p-6 sm:p-8 rounded-3xl space-y-4">
+        <section id="security" className="clean-card p-6 sm:p-8 rounded-3xl space-y-4">
           <h2 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
             <span className="text-orange-600 font-mono">06.</span> Technical Security &amp; Infrastructure Safeguards
           </h2>
