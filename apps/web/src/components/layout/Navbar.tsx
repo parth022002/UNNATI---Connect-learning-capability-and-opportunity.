@@ -56,28 +56,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         
         {/* Brand Logo & Wordmark (Large, High Visibility) */}
-        <Link href="/" className="group flex items-center gap-3.5 focus:outline-none">
-          <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-100 to-orange-50 p-1 border-2 border-purple-200/80 shadow-soft-md transition-all duration-300 group-hover:border-unnati-violet group-hover:shadow-glow-violet">
+        <Link href="/" className="group flex items-center gap-2.5 sm:gap-3.5 focus:outline-none shrink-0">
+          <div className="relative flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-100 to-orange-50 p-1 border-2 border-purple-200/80 shadow-soft-md transition-all duration-300 group-hover:border-unnati-violet group-hover:shadow-glow-violet shrink-0">
             <Image 
               src="/logo.png" 
               alt="UNNATI Official Logo" 
               width={44} 
               height={44} 
-              className="object-contain" 
+              className="h-8 w-8 sm:h-10 sm:w-10 object-contain" 
               priority
             />
           </div>
           <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <span className="font-heading text-2xl font-black tracking-tight text-unnati-indigo group-hover:text-unnati-violet transition-colors">
+            <div className="flex items-center gap-1 sm:gap-1.5 leading-none">
+              <span className="font-heading text-xl sm:text-2xl font-black tracking-tight text-unnati-indigo group-hover:text-unnati-violet transition-colors">
                 UNNATI
               </span>
-              <span className="text-xs font-semibold text-slate-400 font-sans">
+              <span className="text-[10px] sm:text-xs font-semibold text-purple-700 font-sans">
                 (उन्नति)
               </span>
-              <span className="inline-block h-2 w-2 rounded-full bg-unnati-saffron animate-pulse" />
+              <span className="inline-block h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-unnati-saffron animate-pulse" />
             </div>
-            <span className="text-[11px] font-semibold tracking-wide text-slate-500 uppercase">
+            <span className="text-[9px] sm:text-[11px] font-semibold tracking-wide text-slate-500 uppercase mt-0.5">
               Your Growth Companion
             </span>
           </div>
@@ -133,16 +133,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
               />
             </div>
           ) : isLoaded && !isSignedIn ? (
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               <Link href="/sign-in">
                 <Button variant="ghost" size="sm" className="hidden sm:inline-flex text-xs font-bold">
                   Sign In
                 </Button>
               </Link>
               <Link href="/onboarding">
-                <Button variant="saffron" size="sm" className="btn-shimmer text-xs py-2 px-4 shadow-soft-sm font-bold">
-                  Start Your Journey
-                  <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                <Button variant="saffron" size="sm" className="btn-shimmer text-xs py-2 px-3 sm:px-4 shadow-soft-sm font-bold whitespace-nowrap">
+                  <span>Start Journey</span>
+                  <ArrowRight className="h-3.5 w-3.5 ml-1 hidden xs:inline" />
                 </Button>
               </Link>
             </div>

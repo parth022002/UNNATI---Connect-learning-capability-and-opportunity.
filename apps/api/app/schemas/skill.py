@@ -21,6 +21,12 @@ class CandidateSkillClaim(BaseModel):
     category: Optional[str] = "technical"
     proficiency: float = Field(default=0.5, ge=0.0, le=1.0)
 
+class CandidateSkillAssessRequest(BaseModel):
+    skill_name: str = Field(..., min_length=1)
+    category: Optional[str] = "general"
+    score: float = Field(default=0.8, ge=0.0, le=1.0)
+    assessment_type: Optional[str] = "DIAGNOSTIC"
+
 class CandidateSkillResponse(BaseModel):
     id: uuid.UUID
     skill_name: str

@@ -9,9 +9,10 @@ from app.api.routes.users import get_db_user
 from app.schemas.skill import (
     CanonicalSkillResponse,
     CandidateSkillClaim,
+    CandidateSkillAssessRequest,
     CandidateSkillResponse
 )
-from app.services.skill_service import claim_candidate_skill
+from app.services.skill_service import claim_candidate_skill, assess_candidate_skill
 
 router = APIRouter(prefix="/api/v1/skills", tags=["skills"])
 
@@ -75,4 +76,33 @@ def claim_skill(
         evidence_count=cs.evidence_count,
         last_evidence_at=cs.last_evidence_at
     )
+
+@router.post("/me/assess", response_model=CandidateSkillResponse)
+def assess_skill(
+    assess_in: CandidateSkillAssessRequest,
+    user: User = Depends(get_db_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Records an assessment diagnostic result and advances skill state
+    (e.g. CLAIMED / INFERRED -> ASSESSED) with Bayesian calibration.
+    """
+    cs = assess_candidate_skill(
+        db=db,
+        user=user,
+        skill_name=assess_in.skill_name,
+        category=assess_in.category or "general",
+        score=assess_in.score
+    )
+    return CandidateSkillResponse(
+        id=cs.id,
+        skill_name=cs.canonical_skill.name,
+        category=cs.canonical_skill.category,
+        state=cs.state,
+        proficiency=cs.proficiency,
+        confidence=cs.confidence,
+        evidence_count=cs.evidence_count,
+        last_evidence_at=cs.last_evidence_at
+    )
+
 

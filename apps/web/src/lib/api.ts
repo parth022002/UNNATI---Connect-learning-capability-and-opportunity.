@@ -333,6 +333,24 @@ export const api = {
     );
   },
 
+  async assessSkill(
+    token: string,
+    data: {
+      skill_name: string;
+      category?: string;
+      score: number;
+    }
+  ): Promise<CandidateSkill> {
+    return request<CandidateSkill>(
+      "/api/v1/skills/me/assess",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
   // Document Management & Resume Parsing
   async uploadDocument(
     token: string,

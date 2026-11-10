@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from typing import List, Optional
+from datetime import datetime, timezone
 import re
 from app.models.skill import CanonicalSkill, SkillAlias, CandidateSkill
 from app.models.user import User
@@ -78,4 +79,50 @@ def claim_candidate_skill(
     db.commit()
     db.refresh(cs)
     return cs
+
+def assess_candidate_skill(
+    db: Session,
+    user: User,
+    skill_name: str,
+    category: str = "general",
+    score: float = 0.8
+) -> CandidateSkill:
+    """
+    Evaluates and records an assessment result, transitioning the skill state to ASSESSED
+    and updating Bayesian proficiency and confidence.
+    """
+    canonical_skill = get_or_create_canonical_skill(db, skill_name, category)
+    cs = db.scalar(
+        select(CandidateSkill).where(
+            CandidateSkill.user_id == user.id,
+            CandidateSkill.canonical_skill_id == canonical_skill.id
+        )
+    )
+
+    now = datetime.now(timezone.utc)
+    if cs:
+        # Bayesian state transition: promote to ASSESSED if currently CLAIMED or INFERRED
+        if cs.state in ["CLAIMED", "INFERRED"]:
+            cs.state = "ASSESSED"
+        # Bayesian weighted proficiency calibration
+        cs.proficiency = round((cs.proficiency * cs.evidence_count + score) / (cs.evidence_count + 1), 2)
+        cs.confidence = min(0.95, round(cs.confidence + 0.20, 2))
+        cs.evidence_count += 1
+        cs.last_evidence_at = now
+    else:
+        cs = CandidateSkill(
+            user_id=user.id,
+            canonical_skill_id=canonical_skill.id,
+            state="ASSESSED",
+            proficiency=score,
+            confidence=0.85,
+            evidence_count=1,
+            last_evidence_at=now
+        )
+        db.add(cs)
+
+    db.commit()
+    db.refresh(cs)
+    return cs
+
 

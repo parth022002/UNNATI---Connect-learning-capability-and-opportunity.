@@ -123,6 +123,14 @@ The application was validated across standard device breakpoints:
 
 ## 7. Security, Trust & DPDP Act Compliance
 
+- **HTTP Security Headers Hardened (`next.config.ts`):**
+  - `Content-Security-Policy`: Strict CSP with Clerk OIDC script, connect, and style directives.
+  - `Strict-Transport-Security`: `max-age=63072000; includeSubDomains; preload` (HSTS).
+  - `X-Frame-Options`: `SAMEORIGIN` (prevents clickjacking attacks).
+  - `X-Content-Type-Options`: `nosniff` (prevents MIME confusion attacks).
+  - `Referrer-Policy`: `strict-origin-when-cross-origin`.
+  - `Permissions-Policy`: `camera=(), microphone=(), geolocation=(), browsing-topics=()`.
+  - `Cache-Control`: 1-year immutable caching on static image and icon assets (`public, max-age=31536000, immutable`).
 - **Statutory Transparency:** Public Privacy Policy (`/privacy`) and footer links clearly state UNNATI's operation under the **Digital Personal Data Protection (DPDP) Act, 2025/2026 (India)**.
 - **Non-High-Risk AI Formative Mentorship:** Clearly establishes alignment with EU AI Act formative development guidelines (non-evaluative, non-exclusionary).
 - **Grievance Redressal:** Designated Grievance Redressal Officer (GRO) contact email and 24-hour SLA published.

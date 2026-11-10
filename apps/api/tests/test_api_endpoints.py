@@ -36,3 +36,10 @@ def test_clerk_webhook_missing_headers_rejected():
     # Either 400 Bad Request (missing headers) or 200 (if dev mode without secret)
     assert response.status_code in [200, 400]
 
+def test_canonical_skills_endpoint():
+    """Validates public canonical skills search endpoint."""
+    response = client.get("/api/v1/skills/canonical?limit=10")
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+
+

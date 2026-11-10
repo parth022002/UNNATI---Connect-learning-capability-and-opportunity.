@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { BackgroundAtmosphere } from "@/components/layout/BackgroundAtmosphere";
@@ -9,6 +10,7 @@ import { CareerCompanionDrawer } from "@/components/companion/CareerCompanionDra
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { api, getClerkApiToken } from "@/lib/api";
 import { 
   CheckCircle2, 
   XCircle, 
@@ -113,6 +115,7 @@ const ASSESSMENT_QUESTIONS: Question[] = [
 ];
 
 export default function AssessmentTakingPage() {
+  const { isSignedIn, getToken } = useAuth();
   const [selectedTrack, setSelectedTrack] = useState<"all" | "business" | "data" | "tech">("all");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -149,11 +152,27 @@ export default function AssessmentTakingPage() {
     setSelectedOption(optionId);
   };
 
-  const handleSubmitAnswer = () => {
+  const handleSubmitAnswer = async () => {
     if (!selectedOption) return;
     setHasSubmittedAnswer(true);
-    if (selectedOption === currentQ.correctOptionId) {
+    const isCorrect = selectedOption === currentQ.correctOptionId;
+    if (isCorrect) {
       setUserScore((prev) => prev + 1);
+    }
+
+    if (isSignedIn) {
+      try {
+        const token = await getClerkApiToken(getToken);
+        if (token) {
+          api.assessSkill(token, {
+            skill_name: currentQ.skill,
+            category: currentQ.track,
+            score: isCorrect ? 0.9 : 0.6,
+          }).catch((err) => console.warn("Background skill assessment sync:", err));
+        }
+      } catch (err) {
+        console.warn("Auth token for assessment sync:", err);
+      }
     }
   };
 
