@@ -82,3 +82,4 @@ def downgrade() -> None:
         op.execute(f"ALTER TABLE {table} DISABLE ROW LEVEL SECURITY;")
 
     op.drop_table('audit_events')
+

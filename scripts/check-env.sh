@@ -83,3 +83,4 @@ if [ "$ALL_PASSED" = true ]; then
 else
     echo -e "${RED}Some required tools are missing. Please review the output above.${NC}"
 fi
+

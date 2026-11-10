@@ -15,3 +15,4 @@ We selected **Clerk** as our centralized Identity Provider (IdP):
 ## Consequences
 - Zero password storage liability under Indian DPDP and global privacy frameworks.
 - Webhook endpoint requires publicly accessible URL and signature verification.
+

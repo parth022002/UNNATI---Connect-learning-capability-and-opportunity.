@@ -120,3 +120,4 @@ pytest -v tests/
   - `fix(scope): brief description`
   - `docs(scope): brief description`
 * **Security Rule:** ⚠️ **Never commit `.env` files, private keys, or API tokens.** Pre-commit secret scanning will reject commits containing credentials.
+

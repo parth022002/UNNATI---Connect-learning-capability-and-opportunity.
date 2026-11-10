@@ -105,3 +105,4 @@ def verify_audit_chain(db: Session) -> Dict[str, Any]:
         "latest_hash": expected_prev,
         "message": "Cryptographic audit chain intact. Zero tampering detected."
     }
+

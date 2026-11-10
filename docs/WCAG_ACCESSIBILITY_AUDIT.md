@@ -49,3 +49,4 @@
 * **Focus Trap Prevention:** Modals (including DPDP `ConsentModal` and resume upload review) properly release focus upon dismissal.
 * **Screen Reader Announcer:** Profile completeness percentage and roadmap readiness score expose semantic `aria-valuenow`, `aria-valuemin="0"`, and `aria-valuemax="100"`.
 * **Motion & Animation:** Smooth transitions utilize standard CSS cubic-bezier easing with `prefers-reduced-motion` compliance.
+

@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
-import { 
-  UserButton, 
-  OrganizationSwitcher 
-} from "@clerk/nextjs";
+import { Navbar } from "@/components/layout/Navbar";
+import { BackgroundAtmosphere } from "@/components/layout/BackgroundAtmosphere";
+import { CareerCompanionDrawer } from "@/components/companion/CareerCompanionDrawer";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { 
   Award, 
   BookOpen, 
@@ -25,7 +27,13 @@ import {
   Zap,
   AlertCircle,
   FileCheck2,
-  ExternalLink
+  ExternalLink,
+  Target,
+  ArrowRight,
+  ShieldCheck,
+  Cpu,
+  MapPin,
+  X
 } from "lucide-react";
 import { 
   api, 
@@ -37,26 +45,30 @@ import {
   CanonicalSkill
 } from "@/lib/api";
 
-const SKILL_STATE_CONFIG: Record<string, { label: string; badgeClass: string; desc: string }> = {
+const SKILL_STATE_CONFIG: Record<string, { label: string; variant: "default" | "sky" | "violet" | "success"; desc: string; weight: number }> = {
   CLAIMED: {
     label: "Claimed",
-    badgeClass: "bg-slate-100 text-slate-700 border-slate-200",
+    variant: "default",
     desc: "Self-reported baseline",
+    weight: 0.45
   },
   INFERRED: {
     label: "Inferred",
-    badgeClass: "bg-blue-50 text-blue-700 border-blue-200",
-    desc: "Evidence-backed by resume/projects",
+    variant: "sky",
+    desc: "Extracted via Gemini 2.5 from Resume",
+    weight: 0.65
   },
   ASSESSED: {
     label: "Assessed",
-    badgeClass: "bg-purple-50 text-purple-700 border-purple-200",
-    desc: "Verified through diagnostic evaluation",
+    variant: "violet",
+    desc: "Evaluated via IRT Diagnostic",
+    weight: 0.85
   },
   VERIFIED: {
     label: "Verified",
-    badgeClass: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    desc: "Institutional or credential backed",
+    variant: "success",
+    desc: "Production / Credential Validated",
+    weight: 1.00
   },
 };
 
@@ -69,6 +81,7 @@ export default function DashboardPage() {
   const [documents, setDocuments] = useState<CandidateDocumentSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isCompanionOpen, setIsCompanionOpen] = useState(false);
 
   // Resume Upload State
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -91,17 +104,14 @@ export default function DashboardPage() {
       const token = await getClerkApiToken(getToken);
       if (!token) return;
 
-      // 1. Sync / fetch user
       const user = await api.getCurrentUser(token).catch(async () => {
         return await api.syncUser(token, "student");
       });
       setUserData(user);
 
-      // 2. Fetch skills
       const mySkills = await api.getMySkills(token).catch(() => []);
       setSkills(mySkills);
 
-      // 3. Fetch documents
       const docs = await api.getMyDocuments(token).catch(() => []);
       setDocuments(docs);
     } catch (err: any) {
@@ -120,7 +130,6 @@ export default function DashboardPage() {
     }
   }, [isLoaded, isSignedIn]);
 
-  // Skill search
   useEffect(() => {
     if (skillQuery.trim().length > 1) {
       api.searchCanonicalSkills(skillQuery)
@@ -145,7 +154,6 @@ export default function DashboardPage() {
       const parsedDoc = await api.uploadDocument(token, file, "RESUME");
       setActiveParsedDoc(parsedDoc);
       setShowDocModal(true);
-      // Refresh documents
       await fetchDashboardData();
     } catch (err: any) {
       console.error("Upload error:", err);
@@ -206,10 +214,11 @@ export default function DashboardPage() {
 
   if (!isLoaded || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-unnati-violet border-t-transparent" />
-          <p className="text-sm font-semibold text-slate-500">Loading your Growth Dashboard...</p>
+      <div className="flex min-h-screen items-center justify-center bg-slate-950 text-slate-100">
+        <BackgroundAtmosphere />
+        <div className="relative z-10 flex flex-col items-center gap-3">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-unnati-violet border-t-transparent shadow-glow-violet" />
+          <p className="text-sm font-semibold text-purple-200">Synchronizing Growth Companion...</p>
         </div>
       </div>
     );
@@ -217,15 +226,20 @@ export default function DashboardPage() {
 
   if (!isSignedIn) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6 text-center">
-        <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl max-w-md">
-          <h1 className="text-2xl font-black text-unnati-indigo">Sign in to UNNATI</h1>
-          <p className="mt-2 text-sm text-slate-600">Access your personalized growth roadmaps, skill assessments, and career companion.</p>
-          <Link
-            href="/sign-in"
-            className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-unnati-indigo py-3 text-sm font-bold text-white shadow-md hover:bg-unnati-violet"
-          >
-            Sign In Now
+      <div className="relative flex min-h-screen flex-col items-center justify-center bg-slate-950 px-6 text-center text-slate-100 selection:bg-purple-500 selection:text-white">
+        <BackgroundAtmosphere />
+        <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/15 bg-slate-900/80 p-8 shadow-2xl backdrop-blur-2xl">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-700 to-unnati-saffron p-2.5 shadow-lg shadow-purple-950/50">
+            <Image src="/logo.png" alt="UNNATI" width={40} height={40} className="object-contain" priority />
+          </div>
+          <h1 className="font-heading text-2xl font-black text-white">Sign in to UNNATI</h1>
+          <p className="mt-2 text-xs text-slate-400 leading-relaxed">
+            Access your personalized learning roadmap, Bayesian skill inventory, and AI Career Companion.
+          </p>
+          <Link href="/sign-in" className="mt-6 block">
+            <Button variant="saffron" size="lg" className="btn-shimmer w-full text-xs font-bold">
+              Sign In Now <ArrowRight className="h-4 w-4 ml-1" />
+            </Button>
           </Link>
         </div>
       </div>
@@ -234,85 +248,58 @@ export default function DashboardPage() {
 
   const profile = userData?.profile;
   const completeness = profile?.profile_completeness_score || 0;
-  const targetRole = profile?.target_role || "Full-Stack Software Engineer";
+  const targetRole = profile?.target_role || "Senior Full-Stack & AI Systems";
 
   return (
-    <div className="min-h-screen bg-slate-50 text-unnati-midnight">
-      {/* Top Navigation */}
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2 text-xl font-black tracking-tight text-unnati-indigo">
-              <Image src="/logo.png" alt="UNNATI" width={30} height={30} className="rounded-lg shadow-xs" priority />
-              <span>UNNATI<span className="text-unnati-saffron">.</span></span>
-            </Link>
-            <nav className="hidden items-center gap-6 text-sm font-semibold text-slate-600 md:flex">
-              <Link href="/dashboard" className="text-unnati-indigo font-bold">
-                Dashboard
-              </Link>
-              <Link href="/roadmap" className="hover:text-unnati-violet transition">
-                Career Roadmap
-              </Link>
-              <a href="#skills" className="hover:text-unnati-violet transition">
-                Skills & Inventory
-              </a>
-              <a href="#documents" className="hover:text-unnati-violet transition">
-                Resume & Documents
-              </a>
-              <a href="#actions" className="hover:text-unnati-violet transition">
-                Next Actions
-              </a>
-            </nav>
-          </div>
+    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-purple-500 selection:text-white">
+      <BackgroundAtmosphere />
+      <Navbar onOpenCompanion={() => setIsCompanionOpen(true)} />
 
-          <div className="flex items-center gap-4">
-            <OrganizationSwitcher
-              afterCreateOrganizationUrl="/dashboard"
-              afterLeaveOrganizationUrl="/dashboard"
-              afterSelectOrganizationUrl="/dashboard"
-            />
-            <UserButton />
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-6 py-8">
+      <main className="relative z-10 flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Error Alert */}
         {error && (
-          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-800">
-            <AlertCircle className="h-5 w-5 shrink-0 text-red-600" />
-            <span>{error}</span>
-            <button onClick={() => setError(null)} className="ml-auto text-xs font-bold underline">
+          <div className="mb-6 flex items-center justify-between rounded-2xl border border-rose-500/40 bg-rose-950/40 p-4 text-xs font-medium text-rose-200 backdrop-blur-md animate-in slide-in-from-top duration-300">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4 text-rose-400 shrink-0" />
+              <span>{error}</span>
+            </div>
+            <button onClick={() => setError(null)} className="text-xs font-bold underline hover:text-white">
               Dismiss
             </button>
           </div>
         )}
 
-        {/* Welcome Banner & Profile Completeness */}
-        <section className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-          <div className="rounded-[2rem] border border-violet-100 bg-gradient-to-br from-unnati-indigo to-unnati-violet p-8 text-white shadow-xl shadow-violet-100">
-            <div className="flex items-center gap-2">
-              <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
+        {/* Top Hero & Profile Completeness Grid */}
+        <section className="grid gap-6 lg:grid-cols-[1.5fr_1fr] mb-8">
+          
+          {/* Welcome Banner */}
+          <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-slate-900/90 via-purple-950/50 to-slate-900/90 p-6 sm:p-8 backdrop-blur-2xl shadow-xl shadow-purple-950/30">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="rounded-full bg-purple-500/20 border border-purple-500/30 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-purple-300">
                 {userData?.role?.toUpperCase() || "CANDIDATE"}
               </span>
-              <span className="text-xs text-violet-200">Growth Companion Active</span>
+              <span className="text-xs text-emerald-400 flex items-center gap-1 font-mono">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Growth Companion Active
+              </span>
             </div>
 
-            <h1 className="mt-4 text-3xl font-black tracking-tight md:text-4xl">
+            <h1 className="font-heading text-2xl sm:text-3xl font-black text-white tracking-tight">
               Welcome back, {clerkUser?.firstName || userData?.full_name || "Learner"}!
             </h1>
-            <p className="mt-2 text-violet-100 max-w-xl text-sm leading-relaxed">
-              Target Direction: <strong className="text-white">{targetRole}</strong>. UNNATI is tracking your skill readiness, prerequisite gap, and evidence-backed capability.
+            <p className="mt-2 text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
+              Target Direction: <strong className="text-purple-200">{targetRole}</strong>. UNNATI is tracking your skill state transitions, prerequisite gaps, and evidence-weighted readiness.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
-                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-xs font-black text-unnati-indigo shadow-md hover:bg-violet-50 transition"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-unnati-saffron px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-orange-950/40 hover:brightness-110 transition cursor-pointer"
               >
                 <UploadCloud className="h-4 w-4" />
-                {uploading ? "Analyzing Resume..." : "Upload / Refresh Resume"}
+                {uploading ? "Extracting with Gemini..." : "Upload / Refresh Resume"}
               </button>
               <input
                 ref={fileInputRef}
@@ -323,48 +310,55 @@ export default function DashboardPage() {
               />
               <button
                 onClick={() => setShowSkillModal(true)}
-                className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-xs font-bold text-white hover:bg-white/20 transition"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 px-4 py-2.5 text-xs font-semibold text-slate-200 transition cursor-pointer"
               >
-                <Plus className="h-4 w-4" />
-                Claim New Skill
+                <Plus className="h-4 w-4 text-purple-400" />
+                Claim Skill Manually
               </button>
+              <Link href="/roadmap">
+                <button className="inline-flex items-center gap-2 rounded-xl border border-purple-500/30 bg-purple-950/40 hover:bg-purple-900/50 px-4 py-2.5 text-xs font-semibold text-purple-200 transition cursor-pointer">
+                  <MapPin className="h-4 w-4 text-orange-400" />
+                  View Roadmap
+                </button>
+              </Link>
             </div>
           </div>
 
-          {/* Completeness Card */}
-          <div className="flex flex-col justify-between rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm">
+          {/* Profile Completeness Ring Card */}
+          <div className="glass-panel rounded-3xl p-6 sm:p-7 border border-white/10 flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
                   Profile Completeness
                 </span>
-                <span className="text-xl font-black text-unnati-indigo">{completeness}%</span>
+                <span className="text-xl font-extrabold text-white font-mono">{completeness}%</span>
               </div>
 
-              {/* Progress bar */}
-              <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
+              {/* Progress Bar */}
+              <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-unnati-indigo via-unnati-violet to-unnati-saffron transition-all duration-500"
+                  className="h-full rounded-full bg-gradient-to-r from-purple-600 via-unnati-violet to-unnati-saffron transition-all duration-500"
                   style={{ width: `${completeness}%` }}
                 />
               </div>
 
-              <div className="mt-4 space-y-2 text-xs">
-                <div className="flex items-center gap-2 text-slate-700">
-                  <CheckCircle2 className={`h-4 w-4 ${profile?.target_role ? "text-emerald-500" : "text-slate-300"}`} />
-                  <span>Target Career Role Specified</span>
+              {/* Completeness Checklist */}
+              <div className="mt-5 space-y-2 text-xs">
+                <div className="flex items-center gap-2 text-slate-300">
+                  <CheckCircle2 className={`h-4 w-4 ${profile?.target_role ? "text-emerald-400" : "text-slate-600"}`} />
+                  <span>Target Role Configured</span>
                 </div>
-                <div className="flex items-center gap-2 text-slate-700">
-                  <CheckCircle2 className={`h-4 w-4 ${userData?.education_records?.length ? "text-emerald-500" : "text-slate-300"}`} />
-                  <span>Academic Education Added</span>
+                <div className="flex items-center gap-2 text-slate-300">
+                  <CheckCircle2 className={`h-4 w-4 ${userData?.education_records?.length ? "text-emerald-400" : "text-slate-600"}`} />
+                  <span>Education &amp; Credentials Added</span>
                 </div>
-                <div className="flex items-center gap-2 text-slate-700">
-                  <CheckCircle2 className={`h-4 w-4 ${documents.length > 0 ? "text-emerald-500" : "text-slate-300"}`} />
-                  <span>Resume Ingested for AI Parsing</span>
+                <div className="flex items-center gap-2 text-slate-300">
+                  <CheckCircle2 className={`h-4 w-4 ${documents.length > 0 ? "text-emerald-400" : "text-slate-600"}`} />
+                  <span>Resume Ingested for AI Extraction</span>
                 </div>
-                <div className="flex items-center gap-2 text-slate-700">
-                  <CheckCircle2 className={`h-4 w-4 ${skills.length >= 5 ? "text-emerald-500" : "text-slate-300"}`} />
-                  <span>5+ Core Skills Mapped ({skills.length}/5)</span>
+                <div className="flex items-center gap-2 text-slate-300">
+                  <CheckCircle2 className={`h-4 w-4 ${skills.length >= 5 ? "text-emerald-400" : "text-slate-600"}`} />
+                  <span>5+ Core Capabilities Mapped ({skills.length}/5)</span>
                 </div>
               </div>
             </div>
@@ -372,7 +366,7 @@ export default function DashboardPage() {
             {completeness < 100 && (
               <Link
                 href="/onboarding"
-                className="mt-4 inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 transition"
+                className="mt-4 inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2 text-xs font-semibold text-purple-200 hover:bg-white/10 transition"
               >
                 Complete Remaining Details
                 <ChevronRight className="h-3.5 w-3.5" />
@@ -381,174 +375,187 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* Stats Row */}
-        <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between text-slate-500">
-              <span className="text-xs font-bold uppercase tracking-wider">Total Skills</span>
-              <Layers className="h-4 w-4 text-unnati-violet" />
+        {/* Metric Cards Row */}
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+          <Card hoverEffect className="p-5 glass-panel border-white/10">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-[11px] font-bold uppercase tracking-wider">Total Capabilities</span>
+              <Layers className="h-4 w-4 text-purple-400" />
             </div>
-            <p className="mt-2 text-2xl font-black text-unnati-midnight">{skills.length}</p>
-            <p className="mt-1 text-xs text-slate-500">Across {new Set(skills.map(s => s.category)).size} categories</p>
-          </div>
+            <p className="mt-2 text-2xl font-black text-white font-mono">{skills.length}</p>
+            <p className="mt-1 text-[11px] text-slate-400">Across {new Set(skills.map(s => s.category)).size} domains</p>
+          </Card>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between text-slate-500">
-              <span className="text-xs font-bold uppercase tracking-wider">Evidence Backed</span>
-              <FileCheck2 className="h-4 w-4 text-blue-600" />
+          <Card hoverEffect className="p-5 glass-panel border-white/10">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-[11px] font-bold uppercase tracking-wider">Evidence Backed</span>
+              <FileCheck2 className="h-4 w-4 text-sky-400" />
             </div>
-            <p className="mt-2 text-2xl font-black text-blue-600">
+            <p className="mt-2 text-2xl font-black text-sky-400 font-mono">
               {skills.filter(s => s.state !== "CLAIMED").length}
             </p>
-            <p className="mt-1 text-xs text-slate-500">Inferred or Assessed skills</p>
-          </div>
+            <p className="mt-1 text-[11px] text-slate-400">Inferred or Assessed skills</p>
+          </Card>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between text-slate-500">
-              <span className="text-xs font-bold uppercase tracking-wider">Estimated Readiness</span>
-              <TrendingUp className="h-4 w-4 text-emerald-600" />
+          <Card hoverEffect className="p-5 glass-panel border-white/10">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-[11px] font-bold uppercase tracking-wider">Estimated Readiness</span>
+              <TrendingUp className="h-4 w-4 text-emerald-400" />
             </div>
-            <p className="mt-2 text-2xl font-black text-emerald-600">
+            <p className="mt-2 text-2xl font-black text-emerald-400 font-mono">
               {skills.length > 0 ? Math.min(95, Math.round((skills.length / 10) * 80)) : 20}%
             </p>
-            <p className="mt-1 text-xs text-slate-500">Against {targetRole}</p>
-          </div>
+            <p className="mt-1 text-[11px] text-slate-400">Benchmark against target role</p>
+          </Card>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between text-slate-500">
-              <span className="text-xs font-bold uppercase tracking-wider">Documents Ingested</span>
+          <Card hoverEffect className="p-5 glass-panel border-white/10">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-[11px] font-bold uppercase tracking-wider">Documents Ingested</span>
               <FileText className="h-4 w-4 text-unnati-saffron" />
             </div>
-            <p className="mt-2 text-2xl font-black text-unnati-midnight">{documents.length}</p>
-            <p className="mt-1 text-xs text-slate-500">Verified by parsing engine</p>
-          </div>
+            <p className="mt-2 text-2xl font-black text-white font-mono">{documents.length}</p>
+            <p className="mt-1 text-[11px] text-slate-400">Verified by parsing engine</p>
+          </Card>
         </section>
 
-        {/* Skills Inventory Section */}
-        <section id="skills" className="mt-10">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+        {/* Bayesian Skills Inventory Section */}
+        <section id="skills" className="mb-12">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-unnati-violet">Evidence-Weighted Capability</p>
-              <h2 className="text-2xl font-black text-unnati-midnight">Your Skills Inventory</h2>
+              <div className="flex items-center gap-2 mb-1">
+                <Badge variant="violet" className="text-[10px]">
+                  Algorithm A Belief State Machine
+                </Badge>
+                <span className="text-xs text-slate-400 font-mono">
+                  Bayesian 4-Tier Progression
+                </span>
+              </div>
+              <h2 className="font-heading text-2xl font-bold text-white">Your Skills Inventory</h2>
             </div>
-            <button
+            <Button
+              variant="primary"
+              size="sm"
               onClick={() => setShowSkillModal(true)}
-              className="inline-flex items-center gap-2 rounded-full bg-unnati-indigo px-4 py-2 text-xs font-bold text-white hover:bg-unnati-violet transition"
+              className="text-xs"
             >
-              <Plus className="h-3.5 w-3.5" />
-              Add Skill
-            </button>
+              <Plus className="h-3.5 w-3.5 mr-1" /> Add Capability
+            </Button>
           </div>
 
           {skills.length === 0 ? (
-            <div className="mt-6 rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center">
-              <Zap className="mx-auto h-8 w-8 text-unnati-violet" />
-              <h3 className="mt-3 text-lg font-bold text-slate-800">No skills mapped yet</h3>
-              <p className="mx-auto mt-1 max-w-sm text-sm text-slate-500">
-                Upload your resume or claim your baseline skills to unlock gap analysis and tailored learning roadmaps.
+            <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 p-12 text-center backdrop-blur-md">
+              <Zap className="mx-auto h-8 w-8 text-unnati-saffron animate-bounce" />
+              <h3 className="mt-3 text-lg font-bold text-white">No Capabilities Mapped Yet</h3>
+              <p className="mx-auto mt-1 max-w-sm text-xs text-slate-400 leading-relaxed">
+                Upload your resume or claim your baseline competencies to activate Algorithm B gap analysis and custom learning roadmaps.
               </p>
               <div className="mt-6 flex justify-center gap-3">
-                <button
+                <Button
+                  variant="saffron"
+                  size="sm"
                   onClick={() => fileInputRef.current?.click()}
-                  className="rounded-full bg-unnati-indigo px-5 py-2.5 text-xs font-bold text-white hover:bg-unnati-violet"
+                  className="text-xs"
                 >
-                  Upload Resume (Fastest)
-                </button>
-                <button
+                  <UploadCloud className="h-3.5 w-3.5 mr-1" /> Upload Resume (Fastest)
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => setShowSkillModal(true)}
-                  className="rounded-full border border-slate-300 bg-white px-5 py-2.5 text-xs font-bold text-slate-700 hover:border-slate-400"
+                  className="text-xs"
                 >
                   Claim Manually
-                </button>
+                </Button>
               </div>
             </div>
           ) : (
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {skills.map((s) => {
                 const tier = SKILL_STATE_CONFIG[s.state] || SKILL_STATE_CONFIG.CLAIMED;
                 const profPercent = Math.round(s.proficiency * 100);
                 return (
-                  <div
+                  <Card
                     key={s.id}
-                    className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-violet-200 hover:shadow-md"
+                    hoverEffect
+                    className="p-5 glass-panel border-white/10 flex flex-col justify-between"
                   >
                     <div>
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-slate-900 text-base">{s.skill_name}</span>
-                        <span className={`rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${tier.badgeClass}`}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-bold text-white text-sm">{s.skill_name}</span>
+                        <Badge variant={tier.variant} className="text-[10px]">
                           {tier.label}
-                        </span>
+                        </Badge>
                       </div>
-                      <p className="mt-1 text-xs text-slate-400 capitalize">{s.category}</p>
+                      <p className="text-[11px] text-slate-400 capitalize">{s.category}</p>
                     </div>
 
                     <div className="mt-5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-semibold text-slate-600">Proficiency</span>
-                        <span className="font-bold text-unnati-indigo">{profPercent}%</span>
+                      <div className="flex items-center justify-between text-xs mb-1.5">
+                        <span className="text-slate-400">Proficiency</span>
+                        <span className="font-bold text-purple-300 font-mono">{profPercent}%</span>
                       </div>
-                      <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
                         <div
-                          className="h-full rounded-full bg-unnati-violet"
+                          className="h-full rounded-full bg-gradient-to-r from-purple-500 to-unnati-violet"
                           style={{ width: `${profPercent}%` }}
                         />
                       </div>
-                      <div className="mt-3 flex items-center justify-between text-[11px] text-slate-400">
+                      <div className="mt-3 flex items-center justify-between text-[10px] text-slate-500 font-mono">
                         <span>Confidence: {Math.round(s.confidence * 100)}%</span>
-                        <span>Evidence: {s.evidence_count} source{s.evidence_count > 1 ? "s" : ""}</span>
+                        <span>{s.evidence_count} source{s.evidence_count !== 1 ? "s" : ""}</span>
                       </div>
                     </div>
-                  </div>
+                  </Card>
                 );
               })}
             </div>
           )}
         </section>
 
-        {/* Resume & Documents Hub */}
-        <section id="documents" className="mt-12">
-          <div className="flex items-center justify-between">
+        {/* Documents Ingestion Hub */}
+        <section id="documents" className="mb-12">
+          <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-unnati-violet">Evidence Verification</p>
-              <h2 className="text-2xl font-black text-unnati-midnight">Ingested Documents & Resumes</h2>
+              <p className="text-xs font-bold uppercase tracking-wider text-purple-400">Evidence Verification Hub</p>
+              <h2 className="font-heading text-xl font-bold text-white">Ingested Documents &amp; Resumes</h2>
             </div>
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:border-unnati-violet transition"
+              className="text-xs"
             >
-              <UploadCloud className="h-3.5 w-3.5 text-unnati-violet" />
+              <UploadCloud className="h-3.5 w-3.5 mr-1 text-purple-400" />
               Upload PDF
-            </button>
+            </Button>
           </div>
 
-          <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-5">
+          <div className="glass-panel rounded-2xl border border-white/10 p-5">
             {documents.length === 0 ? (
-              <p className="text-center py-6 text-sm text-slate-500">
+              <p className="text-center py-6 text-xs text-slate-400">
                 No documents uploaded yet. Upload a resume to automatically extract verified skills, education, and experience.
               </p>
             ) : (
-              <div className="divide-y divide-slate-100">
+              <div className="divide-y divide-white/5">
                 {documents.map((doc) => (
                   <div key={doc.id} className="flex items-center justify-between py-3">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-unnati-violet font-bold">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-300 font-bold border border-purple-500/20">
                         <FileText className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="font-semibold text-slate-900 text-sm">{doc.filename}</p>
-                        <p className="text-xs text-slate-400">
-                          {Math.round(doc.file_size_bytes / 1024)} KB • Uploaded {new Date(doc.created_at).toLocaleDateString()}
+                        <p className="font-semibold text-white text-xs">{doc.filename}</p>
+                        <p className="text-[11px] text-slate-400">
+                          {Math.round(doc.file_size_bytes / 1024)} KB • Ingested {new Date(doc.created_at).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
-                        doc.status === "PARSED" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"
-                      }`}>
+                      <Badge variant={doc.status === "PARSED" ? "success" : "warning"} className="text-[10px]">
                         {doc.status}
-                      </span>
+                      </Badge>
                       <button
                         onClick={async () => {
                           const token = await getClerkApiToken(getToken);
@@ -558,7 +565,7 @@ export default function DashboardPage() {
                             setShowDocModal(true);
                           }
                         }}
-                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-slate-300"
+                        className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition cursor-pointer"
                       >
                         Inspect AI Extraction
                       </button>
@@ -570,81 +577,93 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* Actionable Next Steps (Agentic Guidance) */}
-        <section id="actions" className="mt-12 pb-16">
-          <p className="text-xs font-bold uppercase tracking-wider text-unnati-saffron">Personalized Recommendation</p>
-          <h2 className="text-2xl font-black text-unnati-midnight">Recommended Next Actions</h2>
+        {/* Recommended Actions Row */}
+        <section className="mb-12">
+          <p className="text-xs font-bold uppercase tracking-wider text-unnati-saffron">Actionable Guidance</p>
+          <h2 className="font-heading text-xl font-bold text-white mb-6">Recommended Next Steps</h2>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100 text-unnati-saffron">
-                <Zap className="h-5 w-5" />
+          <div className="grid gap-4 md:grid-cols-3">
+            <Card hoverEffect className="p-6 glass-panel border-white/10 flex flex-col justify-between">
+              <div>
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/10 text-unnati-saffron border border-orange-500/20">
+                  <Zap className="h-5 w-5" />
+                </div>
+                <h3 className="mt-4 font-bold text-white text-sm">Prerequisite Gap Analysis</h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                  Compare your {skills.length} claimed/inferred capabilities against market requirements for {targetRole}.
+                </p>
               </div>
-              <h3 className="mt-4 font-bold text-slate-900">Run Prerequisite Gap Analysis</h3>
-              <p className="mt-2 text-xs leading-relaxed text-slate-500">
-                Compare your {skills.length} claimed/inferred capabilities against market requirements for {targetRole}.
-              </p>
-              <Link href="/roadmap" className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-unnati-violet hover:underline">
+              <Link href="/roadmap" className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-orange-400 hover:text-orange-300">
                 Analyze Skill Gaps <ChevronRight className="h-3.5 w-3.5" />
               </Link>
-            </div>
+            </Card>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-unnati-violet">
-                <BookOpen className="h-5 w-5" />
+            <Card hoverEffect className="p-6 glass-panel border-white/10 flex flex-col justify-between">
+              <div>
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                  <BookOpen className="h-5 w-5" />
+                </div>
+                <h3 className="mt-4 font-bold text-white text-sm">Topological Roadmap</h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                  Synthesize an optimized milestone DAG with curated learning modules, milestones, and project sprints.
+                </p>
               </div>
-              <h3 className="mt-4 font-bold text-slate-900">Generate Milestone Roadmap</h3>
-              <p className="mt-2 text-xs leading-relaxed text-slate-500">
-                Synthesize a topological roadmap with curated learning modules, milestones, and project sprints.
-              </p>
-              <Link href="/roadmap" className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-unnati-violet hover:underline">
-                View Milestone Roadmap <ChevronRight className="h-3.5 w-3.5" />
+              <Link href="/roadmap" className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-purple-300 hover:text-purple-200">
+                View Roadmap <ChevronRight className="h-3.5 w-3.5" />
               </Link>
-            </div>
+            </Card>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
-                <Award className="h-5 w-5" />
+            <Card hoverEffect className="p-6 glass-panel border-white/10 flex flex-col justify-between">
+              <div>
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <Award className="h-5 w-5" />
+                </div>
+                <h3 className="mt-4 font-bold text-white text-sm">Diagnostic Assessment</h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                  Upgrade your skills from CLAIMED to ASSESSED through formative non-evaluative skill challenges.
+                </p>
               </div>
-              <h3 className="mt-4 font-bold text-slate-900">Diagnostic Assessment</h3>
-              <p className="mt-2 text-xs leading-relaxed text-slate-500">
-                Upgrade your skills from CLAIMED to ASSESSED through formative non-evaluative skill challenges.
-              </p>
-              <button className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-unnati-violet hover:underline">
-                Start Quick Assessment <ChevronRight className="h-3.5 w-3.5" />
-              </button>
-            </div>
+              <Link href="/assessments" className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 hover:text-emerald-300">
+                Start Practice Quiz <ChevronRight className="h-3.5 w-3.5" />
+              </Link>
+            </Card>
           </div>
         </section>
+
       </main>
 
-      {/* MODAL 1: Claim Skill */}
+      {/* Claim Skill Modal */}
       {showSkillModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
-            <h3 className="text-xl font-black text-unnati-indigo">Claim a Capability</h3>
-            <p className="mt-1 text-xs text-slate-500">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="w-full max-w-md rounded-3xl bg-slate-950 border border-white/15 p-6 shadow-2xl backdrop-blur-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <h3 className="font-heading text-lg font-bold text-white">Claim a Capability</h3>
+              <button onClick={() => setShowSkillModal(false)} className="text-slate-400 hover:text-white">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <p className="mt-2 text-xs text-slate-400 leading-relaxed">
               Add a skill to your baseline inventory with your self-rated proficiency.
             </p>
 
             <div className="mt-4 space-y-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Search or Enter Skill Name
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
+                  Skill Name
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Python, Docker, Next.js"
+                  placeholder="e.g. Next.js, Python, PostgreSQL, Docker..."
                   value={skillQuery}
                   onChange={(e) => {
                     setSkillQuery(e.target.value);
                     setSelectedSkillName(e.target.value);
                   }}
-                  className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-unnati-violet"
+                  className="w-full rounded-xl glass-input px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none"
                 />
 
                 {searchResults.length > 0 && (
-                  <div className="mt-1 max-h-40 overflow-y-auto rounded-xl border border-slate-200 bg-white p-1 shadow-md">
+                  <div className="mt-1 max-h-40 overflow-y-auto rounded-xl border border-white/10 bg-slate-900 p-1 shadow-lg">
                     {searchResults.map((item) => (
                       <button
                         key={item.id}
@@ -654,9 +673,9 @@ export default function DashboardPage() {
                           setSkillQuery(item.name);
                           setSearchResults([]);
                         }}
-                        className="flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-left text-xs hover:bg-violet-50"
+                        className="flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-left text-xs hover:bg-white/10 text-slate-200"
                       >
-                        <span className="font-semibold text-slate-800">{item.name}</span>
+                        <span className="font-semibold">{item.name}</span>
                         <span className="text-[10px] text-slate-400 capitalize">{item.category}</span>
                       </button>
                     ))}
@@ -665,7 +684,7 @@ export default function DashboardPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
                   Proficiency Level ({Math.round(selectedProficiency * 100)}%)
                 </label>
                 <div className="flex gap-2">
@@ -678,10 +697,10 @@ export default function DashboardPage() {
                       key={tier.label}
                       type="button"
                       onClick={() => setSelectedProficiency(tier.val)}
-                      className={`flex-1 rounded-xl py-2 text-xs font-bold transition ${
+                      className={`flex-1 rounded-xl py-2 text-xs font-bold transition cursor-pointer ${
                         Math.abs(selectedProficiency - tier.val) < 0.1
-                          ? "bg-unnati-violet text-white"
-                          : "border border-slate-200 bg-slate-50 text-slate-700"
+                          ? "bg-purple-600 text-white shadow-glow-violet"
+                          : "border border-white/10 bg-white/5 text-slate-400 hover:text-white"
                       }`}
                     >
                       {tier.label}
@@ -691,60 +710,62 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="mt-6 flex justify-end gap-3">
-              <button
-                type="button"
+            <div className="mt-6 flex justify-end gap-3 pt-3 border-t border-white/10">
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => setShowSkillModal(false)}
-                className="rounded-full px-5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100"
+                className="text-xs"
               >
                 Cancel
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="saffron"
+                size="sm"
                 disabled={!selectedSkillName.trim() || claiming}
                 onClick={handleClaimSkill}
-                className="rounded-full bg-unnati-indigo px-6 py-2 text-xs font-bold text-white hover:bg-unnati-violet disabled:opacity-50"
+                className="text-xs"
               >
                 {claiming ? "Saving..." : "Add to Inventory"}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
       )}
 
-      {/* MODAL 2: Parsed Resume Inspection & Ingestion */}
+      {/* Parsed Resume Modal */}
       {showDocModal && activeParsedDoc && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-slate-950 border border-white/15 p-6 shadow-2xl backdrop-blur-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
-                <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
-                  AI Extraction Verified
-                </span>
-                <h3 className="mt-1 text-xl font-black text-unnati-indigo">{activeParsedDoc.filename}</h3>
+                <Badge variant="success" className="text-[10px] mb-1">
+                  Gemini 2.5 Flash Extraction Verified
+                </Badge>
+                <h3 className="font-heading text-lg font-bold text-white">{activeParsedDoc.filename}</h3>
               </div>
               <button
                 onClick={() => setShowDocModal(false)}
-                className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                className="p-1.5 text-slate-400 hover:text-white rounded-lg"
               >
-                ✕
+                <X className="h-5 w-5" />
               </button>
             </div>
 
             <div className="mt-4 space-y-4 text-xs">
               {activeParsedDoc.parsed_payload?.headline && (
                 <div>
-                  <strong className="block text-slate-700 uppercase font-bold">Detected Headline</strong>
-                  <p className="text-slate-600">{activeParsedDoc.parsed_payload.headline}</p>
+                  <strong className="block text-slate-400 uppercase font-bold text-[10px]">Detected Headline</strong>
+                  <p className="text-white mt-0.5">{activeParsedDoc.parsed_payload.headline}</p>
                 </div>
               )}
 
               {activeParsedDoc.parsed_payload?.education && activeParsedDoc.parsed_payload.education.length > 0 && (
                 <div>
-                  <strong className="block text-slate-700 uppercase font-bold mb-1">Education Detected</strong>
-                  <div className="space-y-1">
+                  <strong className="block text-slate-400 uppercase font-bold text-[10px] mb-1">Education Detected</strong>
+                  <div className="space-y-1.5">
                     {activeParsedDoc.parsed_payload.education.map((edu, idx) => (
-                      <div key={idx} className="rounded-lg bg-slate-50 p-2 text-slate-800">
+                      <div key={idx} className="rounded-xl bg-white/5 border border-white/5 p-2.5 text-slate-200">
                         <strong>{edu.institution_name}</strong> — {edu.degree} ({edu.field_of_study || "General"})
                       </div>
                     ))}
@@ -754,12 +775,12 @@ export default function DashboardPage() {
 
               {activeParsedDoc.parsed_payload?.skills && activeParsedDoc.parsed_payload.skills.length > 0 && (
                 <div>
-                  <strong className="block text-slate-700 uppercase font-bold mb-1">
+                  <strong className="block text-slate-400 uppercase font-bold text-[10px] mb-1.5">
                     Inferred Skills ({activeParsedDoc.parsed_payload.skills.length})
                   </strong>
                   <div className="flex flex-wrap gap-1.5">
                     {activeParsedDoc.parsed_payload.skills.map((sk, idx) => (
-                      <span key={idx} className="rounded-md bg-blue-50 border border-blue-200 px-2 py-0.5 text-blue-700 font-semibold">
+                      <span key={idx} className="rounded-md bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 text-purple-300 font-semibold text-[11px]">
                         {sk.name}
                       </span>
                     ))}
@@ -768,31 +789,39 @@ export default function DashboardPage() {
               )}
             </div>
 
-            <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
-              <span className="text-xs text-slate-500">
-                Applying updates will upgrade skills to <strong>INFERRED</strong> tier.
+            <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
+              <span className="text-[11px] text-slate-400">
+                Applying updates will promote skills to <strong>INFERRED (0.65)</strong> tier.
               </span>
               <div className="flex gap-2">
-                <button
-                  type="button"
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => setShowDocModal(false)}
-                  className="rounded-full px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100"
+                  className="text-xs"
                 >
                   Close
-                </button>
-                <button
-                  type="button"
+                </Button>
+                <Button
+                  variant="saffron"
+                  size="sm"
                   disabled={applyingDoc}
                   onClick={handleApplyDocument}
-                  className="rounded-full bg-unnati-indigo px-5 py-2 text-xs font-bold text-white hover:bg-unnati-violet disabled:opacity-50"
+                  className="text-xs"
                 >
                   {applyingDoc ? "Applying..." : "Apply to Profile & Inventory"}
-                </button>
+                </Button>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* Global AI Companion Drawer */}
+      <CareerCompanionDrawer
+        isOpen={isCompanionOpen}
+        onClose={() => setIsCompanionOpen(false)}
+      />
     </div>
   );
 }

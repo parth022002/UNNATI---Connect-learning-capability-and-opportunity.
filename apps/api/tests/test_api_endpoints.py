@@ -35,3 +35,4 @@ def test_clerk_webhook_missing_headers_rejected():
     response = client.post("/api/v1/webhooks/clerk", json={"type": "user.created"})
     # Either 400 Bad Request (missing headers) or 200 (if dev mode without secret)
     assert response.status_code in [200, 400]
+

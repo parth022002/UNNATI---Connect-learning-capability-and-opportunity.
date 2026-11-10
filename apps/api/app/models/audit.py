@@ -34,3 +34,4 @@ class AuditEvent(Base, UUIDPrimaryKeyMixin):
     __table_args__ = (
         Index("ix_audit_events_created_at_id", "created_at", "id"),
     )
+

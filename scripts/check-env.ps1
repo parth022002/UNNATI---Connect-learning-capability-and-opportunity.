@@ -1,4 +1,4 @@
-﻿# ==============================================================================
+# ==============================================================================
 # UNNATI — Developer Environment Validation Script (PowerShell)
 # Verifies all local prerequisites for frontend, backend, and infrastructure.
 # ==============================================================================
@@ -87,3 +87,4 @@ if ($AllPassed) {
 } else {
     Write-Host "Some required tools are missing. Please install the marked items above." -ForegroundColor Red
 }
+

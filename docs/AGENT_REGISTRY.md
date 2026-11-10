@@ -46,3 +46,4 @@
 | **AGT-29** | `FailoverRouterAgent` | AI Acceleration | **L4** | Provider 429/500 Exception | Gemini &rarr; Groq &rarr; OpenRouter Fallback |
 | **AGT-30** | `ReadinessForecastAgent` | Analytics | **L1** | Milestone Trajectory | Estimated Weeks to Job-Ready Milestone |
 | **AGT-31** | `GrievanceRoutingAgent` | Regulatory Ethics | **L0** | Candidate Complaint | Ticket Dispatched to GRO (`gro@unnati.dev`) |
+

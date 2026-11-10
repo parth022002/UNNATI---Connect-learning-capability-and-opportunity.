@@ -16,3 +16,4 @@ We selected **Cloudflare R2** with standard S3 API compatibility (`boto3`):
 ## Consequences
 - Requires valid AWS/R2 S3 access keys in Render backend environment.
 - Graceful fallback to local secure storage if S3 credentials are not configured.
+

@@ -10,3 +10,4 @@ cd "$SCRIPT_DIR/../apps/api"
 echo "Applying pending Alembic schema revisions to head..."
 alembic upgrade head
 echo "SUCCESS: Database migrations applied cleanly!"
+

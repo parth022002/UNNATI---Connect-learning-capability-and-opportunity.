@@ -1,7 +1,7 @@
 import React from "react";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: "default" | "success" | "warning" | "error" | "violet" | "saffron" | "outline";
+  variant?: "default" | "success" | "warning" | "error" | "violet" | "saffron" | "sky" | "outline";
 }
 
 export const Badge: React.FC<BadgeProps> = ({
@@ -10,16 +10,17 @@ export const Badge: React.FC<BadgeProps> = ({
   className = "",
   ...props
 }) => {
-  const baseStyles = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide border";
+  const baseStyles = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium tracking-wide border backdrop-blur-sm transition-colors";
 
   const variantStyles = {
-    default: "bg-slate-100 text-slate-700 border-slate-200",
-    success: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    warning: "bg-amber-50 text-amber-700 border-amber-200",
-    error: "bg-rose-50 text-rose-700 border-rose-200",
-    violet: "bg-violet-50 text-unnati-indigo border-violet-200",
-    saffron: "bg-orange-50 text-orange-800 border-orange-200",
-    outline: "border-slate-300 text-slate-700 bg-transparent",
+    default: "bg-slate-800/80 text-slate-300 border-white/10",
+    success: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+    warning: "bg-amber-500/10 text-amber-300 border-amber-500/30",
+    error: "bg-rose-500/10 text-rose-300 border-rose-500/30",
+    violet: "bg-purple-500/15 text-purple-300 border-purple-500/30",
+    saffron: "bg-orange-500/15 text-orange-300 border-orange-500/30",
+    sky: "bg-sky-500/15 text-sky-300 border-sky-500/30",
+    outline: "border-white/20 text-slate-300 bg-transparent hover:bg-white/5",
   };
 
   return (

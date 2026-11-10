@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ShieldCheck, CheckSquare, Square, Globe, Lock } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 
 interface ConsentModalProps {
   onConsentGiven?: () => void;
@@ -40,122 +43,163 @@ export default function ConsentModal({ onConsentGiven, forceShow = false }: Cons
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="relative w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl border border-violet-100 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl rounded-3xl bg-slate-950/95 border border-white/15 p-6 sm:p-7 shadow-2xl backdrop-blur-2xl max-h-[90vh] overflow-y-auto text-slate-200">
+        
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-          <div className="flex items-center space-x-2.5">
-            <Image src="/logo.png" alt="UNNATI" width={32} height={32} className="rounded-lg shadow-xs" priority />
+        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-900/60 p-1.5 ring-1 ring-white/20">
+              <Image src="/logo.png" alt="UNNATI" width={28} height={28} className="object-contain" priority />
+            </div>
             <div>
-              <h2 className="text-lg font-bold text-gray-900">
-                {lang === "en" ? "Data Protection & Privacy Notice" : "डेटा सुरक्षा एवं गोपनीयता सूचना"}
-              </h2>
-              <p className="text-xs text-gray-500">
-                DPDP Act (India) 2025 & EU AI Act Formative Guidance Compliance
+              <div className="flex items-center gap-2">
+                <h2 className="text-base sm:text-lg font-bold text-white font-heading">
+                  {lang === "en" ? "Data Protection & Privacy Notice" : "डेटा सुरक्षा एवं गोपनीयता सूचना"}
+                </h2>
+                <Badge variant="violet" className="text-[10px] py-0">DPDP 2026</Badge>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                Digital Personal Data Protection Act (India) &amp; EU AI Act Formative Guidance
               </p>
             </div>
           </div>
+
           {/* Language Toggle */}
-          <div className="flex rounded-lg bg-gray-100 p-1 text-xs font-semibold">
+          <div className="flex rounded-xl bg-white/5 border border-white/10 p-0.5 text-xs font-semibold">
             <button
               onClick={() => setLang("en")}
-              className={`rounded-md px-2.5 py-1 transition ${lang === "en" ? "bg-white text-violet-900 shadow-sm" : "text-gray-600 hover:text-black"}`}
+              className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
+                lang === "en" ? "bg-purple-600 text-white shadow-xs" : "text-slate-400 hover:text-white"
+              }`}
             >
-              English
+              EN
             </button>
             <button
               onClick={() => setLang("hi")}
-              className={`rounded-md px-2.5 py-1 transition ${lang === "hi" ? "bg-white text-violet-900 shadow-sm" : "text-gray-600 hover:text-black"}`}
+              className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
+                lang === "hi" ? "bg-purple-600 text-white shadow-xs" : "text-slate-400 hover:text-white"
+              }`}
             >
               हिन्दी
             </button>
           </div>
         </div>
 
-        {/* Content Body */}
-        <div className="py-4 space-y-4 text-sm text-gray-700 leading-relaxed">
+        {/* Notice Body */}
+        <div className="mt-4 space-y-3.5 text-xs text-slate-300 leading-relaxed">
           {lang === "en" ? (
             <>
               <p>
-                Welcome to <strong>UNNATI (उन्नति)</strong> — <em>Your Growth Companion</em>. Pursuant to Section 5 of the Digital Personal Data Protection (DPDP) Act, India, we provide you with this prior notice regarding how your data is handled:
+                Welcome to <strong>UNNATI (उन्नति) — Your Growth Companion</strong>. We respect your autonomy and privacy rights under the <em>Digital Personal Data Protection (DPDP) Act, 2025/2026 (India)</em>.
               </p>
-              <div className="rounded-xl bg-violet-50/60 p-3.5 border border-violet-100/80 space-y-2 text-xs text-gray-800">
-                <p><strong>🎯 Specified Purpose:</strong> Your academic records, resume, and skills are processed strictly for formative career guidance, skill evaluation diagnostics, and topological roadmap generation. We do <em>not</em> sell or rent your personal data to third-party brokers.</p>
-                <p><strong>🛡️ 72-Hour Right-to-Erasure:</strong> You retain the statutory right to withdraw consent or request complete erasure of your profile and uploaded resumes at any time. When requested, all files are permanently crypto-shredded from private storage.</p>
-                <p><strong>⏳ 2-Year Retention:</strong> Inactive candidate accounts are retained for a rolling period of 2 years from last activity before automated archiving.</p>
-                <p><strong>⚖️ Grievance Redressal:</strong> Grievance Redressal Officer (GRO) reachable at <span className="text-violet-900 font-mono font-medium">gro@unnati.dev</span> (24h acknowledgement SLA, 15-day statutory resolution).</p>
+              
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+                <h4 className="font-bold text-purple-200 text-xs flex items-center gap-1.5">
+                  <ShieldCheck className="h-4 w-4 text-emerald-400" />
+                  Purpose-Specific Data Fiduciary Notice
+                </h4>
+                <ul className="list-disc pl-4 space-y-1 text-slate-300 text-[11px]">
+                  <li><strong>Formative Use Only:</strong> Data is utilized solely to compute skill gap diagnostics, generate learning roadmaps, and power formative mentoring.</li>
+                  <li><strong>Non-Annex III Status:</strong> UNNATI does not perform automated employment filtering or punitive ranking.</li>
+                  <li><strong>Cryptographic Shredding:</strong> You maintain the unconditional right to erasure. Profile deletions trigger automated 72-hour crypto-shredding across all Neon DB records and Cloudflare R2 files.</li>
+                </ul>
               </div>
+
+              <p className="text-[11px] text-slate-400">
+                Grievance Redressal Officer (GRO): <strong className="text-slate-300">privacy@unnati.example</strong> (72-hour statutory response window).
+              </p>
             </>
           ) : (
             <>
               <p>
-                <strong>UNNATI (उन्नति)</strong> में आपका स्वागत है। डिजिटल व्यक्तिगत डेटा संरक्षण (DPDP) अधिनियम, भारत की धारा 5 के अनुसार, हम आपके व्यक्तिगत डेटा के उपयोग के संबंध में यह स्पष्ट पूर्व-सूचना प्रदान करते हैं:
+                <strong>UNNATI (उन्नति) — आपके विकास का साथी</strong> में आपका स्वागत है। हम <em>डिजिटल व्यक्तिगत डेटा संरक्षण (DPDP) अधिनियम, 2025/2026 (भारत)</em> के तहत आपकी स्वायत्तता और गोपनीयता का सम्मान करते हैं।
               </p>
-              <div className="rounded-xl bg-violet-50/60 p-3.5 border border-violet-100/80 space-y-2 text-xs text-gray-800">
-                <p><strong>🎯 निर्दिष्ट उद्देश्य:</strong> आपके शैक्षणिक विवरण, रिज्यूमे और कौशलों का उपयोग केवल करियर मार्गदर्शन, कौशल विश्लेषण और व्यक्तिगत अध्ययन रोडमैप तैयार करने के लिए किया जाता है। हम आपका डेटा किसी भी तीसरे पक्ष को नहीं बेचते हैं।</p>
-                <p><strong>🛡️ 72-घंटे में डेटा मिटाने का अधिकार:</strong> आपको किसी भी समय अपनी सहमति वापस लेने और अपना खाता व अपलोड किए गए दस्तावेज़ पूर्णतः हटाने का कानूनी अधिकार है। अनुरोध पर सभी फाइलें सुरक्षित रूप से स्थायी रूप से हटा दी जाती हैं।</p>
-                <p><strong>⏳ 2-वर्षीय डेटा अवधि:</strong> 2 वर्ष तक निष्क्रिय रहने वाले खातों को स्वचालित रूप से संग्रहीत अथवा सुरक्षित रूप से हटा दिया जाता है।</p>
-                <p><strong>⚖️ शिकायत निवारण अधिकारी (GRO):</strong> आप शिकायत हेतु <span className="text-violet-900 font-mono font-medium">gro@unnati.dev</span> पर संपर्क कर सकते हैं (24 घंटे में प्राप्ति सूचना, 15 दिनों में समाधान)।</p>
+
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+                <h4 className="font-bold text-purple-200 text-xs flex items-center gap-1.5">
+                  <ShieldCheck className="h-4 w-4 text-emerald-400" />
+                  उद्देश्य-विशिष्ट डेटा ट्रस्टी सूचना
+                </h4>
+                <ul className="list-disc pl-4 space-y-1 text-slate-300 text-[11px]">
+                  <li><strong>केवल विकासात्मक उपयोग:</strong> आपका डेटा केवल कौशल अंतर विश्लेषण, शिक्षण रोडमैप निर्माण और करियर मार्गदर्शन हेतु प्रयुक्त होता है।</li>
+                  <li><strong>गैर-दंडात्मक प्रणाली:</strong> UNNATI किसी भी प्रकार की स्वचालित भर्ती अस्वीकृति या रोजगार प्रतिबंध नहीं लगाता है।</li>
+                  <li><strong>डेटा विलोपन का अधिकार:</strong> खाता हटाने पर 72 घंटों के भीतर आपके सभी डेटा और दस्तावेजों का क्रिप्टोग्राफ़िक विलोपन सुनिश्चित किया जाता है।</li>
+                </ul>
               </div>
+
+              <p className="text-[11px] text-slate-400">
+                शिकायत निवारण अधिकारी (GRO): <strong className="text-slate-300">privacy@unnati.example</strong> (72 घंटे में समाधान)।
+              </p>
             </>
           )}
+        </div>
 
-          {/* Consent Checkboxes */}
-          <div className="space-y-3 pt-2">
-            <label className="flex items-start space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={purposeConsent}
-                onChange={(e) => setPurposeConsent(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-violet-800 focus:ring-violet-700"
-              />
-              <span className="text-xs text-gray-800">
-                {lang === "en"
-                  ? "I hereby grant explicit, affirmative consent to UNNATI to process my academic, resume, and skill data solely for formative career roadmap and skill gap evaluation."
-                  : "मैं एतद्द्वारा UNNATI को केवल करियर रोडमैप और कौशल मूल्यांकन के लिए मेरे शैक्षणिक और रिज्यूमे डेटा को संसाधित करने हेतु स्पष्ट सहमति देता/देती हूँ।"}
-              </span>
-            </label>
+        {/* Affirmations */}
+        <div className="mt-5 space-y-2.5 pt-4 border-t border-white/10 text-xs">
+          <label className="flex items-start gap-2.5 cursor-pointer group">
+            <button
+              type="button"
+              onClick={() => setPurposeConsent(!purposeConsent)}
+              className="mt-0.5 text-purple-400 hover:text-purple-300"
+            >
+              {purposeConsent ? (
+                <CheckSquare className="h-4 w-4 text-emerald-400" />
+              ) : (
+                <Square className="h-4 w-4 text-slate-500" />
+              )}
+            </button>
+            <span className="text-slate-300 group-hover:text-white leading-snug">
+              {lang === "en"
+                ? "I consent to the collection and processing of my academic, resume, and skill data exclusively for formative growth guidance."
+                : "मैं अपने शैक्षणिक, बायोडाटा और कौशल डेटा के विकासात्मक उपयोग हेतु सहमति देता/देती हूँ।"}
+            </span>
+          </label>
 
-            <label className="flex items-start space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={ageAffirmation}
-                onChange={(e) => setAgeAffirmation(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-violet-800 focus:ring-violet-700"
-              />
-              <span className="text-xs text-gray-800">
-                {lang === "en"
-                  ? "I confirm that I am at least 18 years of age (or registering under lawful guardian supervision) and acknowledge my statutory right to withdraw consent at any time."
-                  : "मैं पुष्टि करता/करती हूँ कि मेरी आयु कम से कम 18 वर्ष है (अथवा अभिभावक के मार्गदर्शन में पंजीकृत हूँ) तथा अपनी सहमति कभी भी वापस लेने के अधिकार से अवगत हूँ।"}
-              </span>
-            </label>
+          <label className="flex items-start gap-2.5 cursor-pointer group">
+            <button
+              type="button"
+              onClick={() => setAgeAffirmation(!ageAffirmation)}
+              className="mt-0.5 text-purple-400 hover:text-purple-300"
+            >
+              {ageAffirmation ? (
+                <CheckSquare className="h-4 w-4 text-emerald-400" />
+              ) : (
+                <Square className="h-4 w-4 text-slate-500" />
+              )}
+            </button>
+            <span className="text-slate-300 group-hover:text-white leading-snug">
+              {lang === "en"
+                ? "I affirm that I am 18 years of age or older (or have verified parental/guardian authorization under DPDP Act provisions)."
+                : "मैं पुष्टि करता/करती हूँ कि मेरी आयु 18 वर्ष या उससे अधिक है (या अभिभावक की अनुमति प्राप्त है)।"}
+            </span>
+          </label>
+        </div>
+
+        {/* Actions */}
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-white/10">
+          <Link
+            href="/privacy"
+            onClick={() => setIsOpen(false)}
+            className="text-[11px] text-purple-300 hover:text-purple-200 underline"
+          >
+            {lang === "en" ? "Read Complete DPDP Privacy Policy" : "संपूर्ण DPDP गोपनीयता नीति पढ़ें"}
+          </Link>
+
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <Button
+              variant="saffron"
+              size="md"
+              disabled={!purposeConsent || !ageAffirmation}
+              onClick={handleAccept}
+              className="btn-shimmer w-full sm:w-auto text-xs font-bold"
+            >
+              {lang === "en" ? "Accept & Continue" : "स्वीकार करें और आगे बढ़ें"}
+            </Button>
           </div>
         </div>
 
-        {/* Footer Actions */}
-        <div className="flex items-center justify-between border-t border-gray-100 pt-4">
-          <Link
-            href="/privacy"
-            target="_blank"
-            className="text-xs text-violet-800 hover:text-violet-950 underline font-medium"
-          >
-            {lang === "en" ? "Read Full Privacy Policy & Rights →" : "पूर्ण गोपनीयता नीति पढ़ें →"}
-          </Link>
-
-          <button
-            onClick={handleAccept}
-            disabled={!purposeConsent || !ageAffirmation}
-            className={`rounded-xl px-5 py-2.5 text-xs font-semibold text-white transition ${
-              purposeConsent && ageAffirmation
-                ? "bg-gradient-to-r from-violet-900 to-violet-700 hover:from-violet-800 hover:to-violet-600 shadow-md shadow-violet-900/20"
-                : "bg-gray-300 cursor-not-allowed text-gray-500"
-            }`}
-          >
-            {lang === "en" ? "Confirm & Proceed" : "सहमति दें और आगे बढ़ें"}
-          </button>
-        </div>
       </div>
     </div>
   );
 }
-

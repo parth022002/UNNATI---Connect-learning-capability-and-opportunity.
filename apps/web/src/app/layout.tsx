@@ -19,13 +19,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body>
-        <ClerkProvider>
+    <ClerkProvider>
+      <html lang="en">
+        <body>
           {children}
           <ConsentModal />
-        </ClerkProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

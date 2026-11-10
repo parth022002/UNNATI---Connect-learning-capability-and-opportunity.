@@ -1,10 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
+import { BackgroundAtmosphere } from "@/components/layout/BackgroundAtmosphere";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { 
   Compass, 
   GraduationCap, 
@@ -24,9 +28,9 @@ import { api, getClerkApiToken, CanonicalSkill } from "@/lib/api";
 const PERSONAS = [
   {
     id: "student",
-    title: "Student",
-    subtitle: "Undergraduate, Postgraduate, or School",
-    description: "Explore career paths, understand market readiness, build real-world projects, and secure placements.",
+    title: "Student / Graduate",
+    subtitle: "Undergraduate, Postgraduate, or Fresher",
+    description: "Explore career paths, understand market readiness, build real-world projects, and secure top-tier placements.",
     icon: GraduationCap,
   },
   {
@@ -40,27 +44,25 @@ const PERSONAS = [
     id: "working_pro",
     title: "Working Professional",
     subtitle: "3+ years experience",
-    description: "Upskill in cutting-edge technologies (AI, Cloud, System Architecture), lead teams, or earn certifications.",
+    description: "Upskill in cutting-edge technologies (AI, Cloud, System Architecture), lead teams, or earn advanced credentials.",
     icon: Compass,
   },
   {
     id: "career_switcher",
     title: "Career Switcher",
     subtitle: "Transitioning disciplines",
-    description: "Map your transferable skills, pinpoint prerequisite bridges, and pivot confidently into tech or product.",
+    description: "Map your transferable skills, pinpoint prerequisite bridges, and pivot confidently into tech or data engineering.",
     icon: Sparkles,
   },
 ];
 
 const TARGET_ROLES = [
-  "Full-Stack Software Engineer",
-  "AI / Machine Learning Engineer",
-  "Frontend Engineer (React/Next.js)",
-  "Backend Systems Engineer (Python/Go)",
-  "Data Scientist & Analytics Engineer",
-  "Cloud & DevOps Engineer",
-  "Product Manager (Tech)",
-  "Cybersecurity Analyst",
+  "Senior Full-Stack Engineer",
+  "Generative AI & Agentic Systems Engineer",
+  "Modern Data Platform Engineer",
+  "Cloud & Platform Infrastructure Engineer",
+  "Cloud Security & DevSecOps Specialist",
+  "Cross-Platform Mobile Engineer",
 ];
 
 const POPULAR_SKILLS = [
@@ -70,12 +72,10 @@ const POPULAR_SKILLS = [
   { name: "React", category: "frontend" },
   { name: "Next.js", category: "frontend" },
   { name: "FastAPI", category: "backend" },
-  { name: "Node.js", category: "backend" },
   { name: "PostgreSQL", category: "database" },
   { name: "Docker", category: "devops" },
-  { name: "Machine Learning", category: "ai" },
   { name: "Data Structures & Algorithms", category: "core" },
-  { name: "System Design & Architecture", category: "core" },
+  { name: "System Design", category: "core" },
 ];
 
 export default function OnboardingPage() {
@@ -107,16 +107,14 @@ export default function OnboardingPage() {
   const [canonicalResults, setCanonicalResults] = useState<CanonicalSkill[]>([]);
 
   const [weeklyCommitmentHours, setWeeklyCommitmentHours] = useState(10);
-  const [primaryGoal, setPrimaryGoal] = useState("Land a high-impact internship or job");
+  const [primaryGoal, setPrimaryGoal] = useState("Land a high-impact engineering placement");
 
-  // Sync initial user details when signed in
   useEffect(() => {
     if (user?.fullName && !headline) {
       setHeadline(`Aspiring ${targetRole}`);
     }
   }, [user, targetRole, headline]);
 
-  // Skill search
   useEffect(() => {
     if (skillSearchQuery.trim().length > 1) {
       api.searchCanonicalSkills(skillSearchQuery)
@@ -158,10 +156,8 @@ export default function OnboardingPage() {
 
       const finalTargetRole = customTargetRole.trim() || targetRole;
 
-      // 1. Sync User with role
       await api.syncUser(token, selectedPersona);
 
-      // 2. Update Profile
       await api.updateProfile(token, {
         headline: headline.trim() || `Aspiring ${finalTargetRole}`,
         target_role: finalTargetRole,
@@ -169,7 +165,6 @@ export default function OnboardingPage() {
         bio: `${selectedPersona.toUpperCase()} actively preparing for ${finalTargetRole} opportunities through UNNATI.`,
       });
 
-      // 3. Add Education if provided
       if (institutionName.trim()) {
         await api.addEducation(token, {
           institution_name: institutionName.trim(),
@@ -180,7 +175,6 @@ export default function OnboardingPage() {
         });
       }
 
-      // 4. Claim Skills
       for (const sk of selectedSkills) {
         await api.claimSkill(token, {
           skill_name: sk.name,
@@ -189,7 +183,6 @@ export default function OnboardingPage() {
         });
       }
 
-      // Redirect to dashboard
       router.push("/dashboard");
     } catch (err: any) {
       console.error("Onboarding failed:", err);
@@ -200,58 +193,68 @@ export default function OnboardingPage() {
 
   if (!isLoaded) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-unnati-cloud">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-unnati-violet border-t-transparent" />
+      <div className="flex min-h-screen items-center justify-center bg-slate-950 text-slate-100">
+        <BackgroundAtmosphere />
+        <div className="relative z-10 flex flex-col items-center gap-3">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-unnati-violet border-t-transparent shadow-glow-violet" />
+          <p className="text-sm font-semibold text-purple-200">Preparing Onboarding Journey...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-unnati-midnight">
+    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-purple-500 selection:text-white">
+      <BackgroundAtmosphere />
+
       {/* Header */}
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2 text-xl font-black tracking-tight text-unnati-indigo">
-            <Image src="/logo.png" alt="UNNATI" width={30} height={30} className="rounded-lg shadow-xs" priority />
-            <span>UNNATI<span className="text-unnati-saffron">.</span></span>
+      <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-slate-950/75 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-900/60 p-1 ring-1 ring-white/20">
+              <Image src="/logo.png" alt="UNNATI" width={28} height={28} className="object-contain" priority />
+            </div>
+            <span className="font-heading font-black text-lg text-white">
+              UNNATI<span className="text-unnati-saffron">.</span>
+            </span>
           </Link>
-          <div className="text-sm font-semibold text-slate-500">
-            Step {step} of 5
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono font-bold text-purple-300">
+              Step {step} of 5
+            </span>
+            <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-purple-500 to-unnati-saffron transition-all duration-300"
+                style={{ width: `${(step / 5) * 100}%` }}
+              />
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Progress Bar */}
-      <div className="h-1.5 w-full bg-slate-200">
-        <div
-          className="h-full bg-gradient-to-r from-unnati-indigo via-unnati-violet to-unnati-saffron transition-all duration-300"
-          style={{ width: `${(step / 5) * 100}%` }}
-        />
-      </div>
-
-      <main className="mx-auto max-w-3xl px-6 py-10">
+      <main className="relative z-10 flex-1 mx-auto max-w-3xl w-full px-4 sm:px-6 py-10">
         {error && (
-          <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-800">
+          <div className="mb-6 rounded-2xl border border-rose-500/40 bg-rose-950/40 p-4 text-xs font-medium text-rose-200 backdrop-blur-md">
             {error}
           </div>
         )}
 
         {/* STEP 1: Persona Selection */}
         {step === 1 && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-in fade-in duration-300">
             <div>
-              <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-unnati-violet">
-                Step 1: Your Profile
-              </span>
-              <h1 className="mt-2 text-3xl font-black tracking-tight text-unnati-midnight">
+              <Badge variant="violet" className="text-xs mb-2">
+                Step 1: Profile Classification
+              </Badge>
+              <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Which persona best describes you?
               </h1>
-              <p className="mt-1 text-slate-600">
+              <p className="mt-1 text-xs sm:text-sm text-slate-400 leading-relaxed">
                 UNNATI personalizes your learning journey, skill assessments, and career recommendations based on your background.
               </p>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               {PERSONAS.map((p) => {
                 const Icon = p.icon;
                 const isSelected = selectedPersona === p.id;
@@ -260,21 +263,23 @@ export default function OnboardingPage() {
                     key={p.id}
                     type="button"
                     onClick={() => setSelectedPersona(p.id)}
-                    className={`flex flex-col text-left rounded-2xl border-2 p-5 transition-all ${
+                    className={`flex flex-col text-left rounded-3xl border p-5 transition-all cursor-pointer ${
                       isSelected
-                        ? "border-unnati-violet bg-violet-50/50 shadow-md shadow-violet-100 ring-2 ring-violet-500/20"
-                        : "border-slate-200 bg-white hover:border-slate-300"
+                        ? "border-purple-500 bg-purple-950/40 shadow-glow-violet ring-1 ring-purple-500"
+                        : "border-white/10 bg-slate-900/60 hover:border-white/20 hover:bg-slate-900/80"
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${isSelected ? "bg-unnati-violet text-white" : "bg-slate-100 text-slate-600"}`}>
-                        <Icon className="h-6 w-6" />
+                    <div className="flex items-center justify-between mb-3">
+                      <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ${
+                        isSelected ? "bg-purple-600 text-white" : "bg-white/5 text-purple-300 border border-white/5"
+                      }`}>
+                        <Icon className="h-5 w-5" />
                       </div>
-                      {isSelected && <CheckCircle2 className="h-6 w-6 text-unnati-violet" />}
+                      {isSelected && <CheckCircle2 className="h-5 w-5 text-emerald-400" />}
                     </div>
-                    <h3 className="mt-4 font-bold text-unnati-indigo text-lg">{p.title}</h3>
-                    <p className="text-xs font-semibold text-unnati-saffron">{p.subtitle}</p>
-                    <p className="mt-2 text-xs leading-relaxed text-slate-600">{p.description}</p>
+                    <h3 className="font-heading font-bold text-white text-base">{p.title}</h3>
+                    <p className="text-[11px] font-semibold text-orange-400 mt-0.5">{p.subtitle}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-slate-400">{p.description}</p>
                   </button>
                 );
               })}
@@ -282,24 +287,24 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* STEP 2: Career Direction & Role */}
+        {/* STEP 2: Career Direction & Target Role */}
         {step === 2 && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-in fade-in duration-300">
             <div>
-              <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-unnati-violet">
-                Step 2: Direction
-              </span>
-              <h1 className="mt-2 text-3xl font-black tracking-tight text-unnati-midnight">
+              <Badge variant="violet" className="text-xs mb-2">
+                Step 2: Target Trajectory
+              </Badge>
+              <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 What is your target career direction?
               </h1>
-              <p className="mt-1 text-slate-600">
-                Choose the role you want to aim for. We will analyze your prerequisite gap and build your personalized roadmap.
+              <p className="mt-1 text-xs sm:text-sm text-slate-400 leading-relaxed">
+                Choose the target trajectory you want to master. We will analyze your prerequisite gaps and build your personalized milestone roadmap.
               </p>
             </div>
 
             <div className="space-y-4">
-              <label className="block text-sm font-bold text-slate-700">Target Role</label>
-              <div className="grid gap-2 sm:grid-cols-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-400">Select Target Role</label>
+              <div className="grid gap-2.5 sm:grid-cols-2">
                 {TARGET_ROLES.map((role) => (
                   <button
                     key={role}
@@ -308,10 +313,10 @@ export default function OnboardingPage() {
                       setTargetRole(role);
                       setCustomTargetRole("");
                     }}
-                    className={`rounded-xl border px-4 py-3 text-left text-sm font-semibold transition ${
+                    className={`rounded-2xl border px-4 py-3 text-left text-xs sm:text-sm font-semibold transition cursor-pointer ${
                       targetRole === role && !customTargetRole
-                        ? "border-unnati-violet bg-violet-50 text-unnati-violet font-bold"
-                        : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+                        ? "border-purple-500 bg-purple-950/40 text-purple-200 shadow-glow-violet font-bold"
+                        : "border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/20"
                     }`}
                   >
                     {role}
@@ -320,35 +325,35 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-500 mb-1">Or enter a custom role title</label>
+                <label className="block text-xs font-semibold text-slate-400 mb-1">Or enter a custom role title</label>
                 <input
                   type="text"
                   placeholder="e.g. MLOps Engineer, Quantitative Analyst"
                   value={customTargetRole}
                   onChange={(e) => setCustomTargetRole(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-unnati-violet"
+                  className="w-full rounded-xl glass-input px-4 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none"
                 />
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2 pt-2">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1">Headline</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Headline</label>
                   <input
                     type="text"
                     value={headline}
                     onChange={(e) => setHeadline(e.target.value)}
                     placeholder="e.g. Aspiring Full-Stack Engineer"
-                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-unnati-violet"
+                    className="w-full rounded-xl glass-input px-4 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1">Location</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Location</label>
                   <input
                     type="text"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     placeholder="e.g. Bengaluru, India or Remote"
-                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-unnati-violet"
+                    className="w-full rounded-xl glass-input px-4 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none"
                   />
                 </div>
               </div>
@@ -356,74 +361,73 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* STEP 3: Education Background */}
+        {/* STEP 3: Academic Background */}
         {step === 3 && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-in fade-in duration-300">
             <div>
-              <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-unnati-violet">
-                Step 3: Academic Background
-              </span>
-              <h1 className="mt-2 text-3xl font-black tracking-tight text-unnati-midnight">
+              <Badge variant="violet" className="text-xs mb-2">
+                Step 3: Academic Foundations
+              </Badge>
+              <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Tell us about your education
               </h1>
-              <p className="mt-1 text-slate-600">
+              <p className="mt-1 text-xs sm:text-sm text-slate-400 leading-relaxed">
                 Helps us evaluate curriculum alignment and match verified university programs.
               </p>
             </div>
 
-            <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6">
+            <div className="space-y-4 rounded-3xl border border-white/10 glass-panel p-6 sm:p-7">
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">College / University Name</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">College / University Name</label>
                 <input
                   type="text"
                   value={institutionName}
                   onChange={(e) => setInstitutionName(e.target.value)}
                   placeholder="e.g. Indian Institute of Technology or Delhi University"
-                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-unnati-violet"
+                  className="w-full rounded-xl glass-input px-4 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none"
                 />
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1">Degree</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Degree</label>
                   <select
                     value={degree}
                     onChange={(e) => setDegree(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-unnati-violet"
+                    className="w-full rounded-xl glass-input px-4 py-2.5 text-xs text-white focus:outline-none"
                   >
-                    <option value="B.Tech / B.E.">B.Tech / B.E.</option>
-                    <option value="B.S. / B.Sc">B.S. / B.Sc</option>
-                    <option value="BCA">BCA</option>
-                    <option value="M.Tech / M.E.">M.Tech / M.E.</option>
-                    <option value="M.S. / M.Sc">M.S. / M.Sc</option>
-                    <option value="MCA">MCA</option>
-                    <option value="MBA">MBA</option>
-                    <option value="High School">High School (12th)</option>
-                    <option value="Other">Other</option>
+                    <option value="B.Tech / B.E." className="bg-slate-900">B.Tech / B.E.</option>
+                    <option value="B.S. / B.Sc" className="bg-slate-900">B.S. / B.Sc</option>
+                    <option value="BCA" className="bg-slate-900">BCA</option>
+                    <option value="M.Tech / M.E." className="bg-slate-900">M.Tech / M.E.</option>
+                    <option value="M.S. / M.Sc" className="bg-slate-900">M.S. / M.Sc</option>
+                    <option value="MCA" className="bg-slate-900">MCA</option>
+                    <option value="MBA" className="bg-slate-900">MBA</option>
+                    <option value="Other" className="bg-slate-900">Other</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1">Field of Study</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Field of Study</label>
                   <input
                     type="text"
                     value={fieldOfStudy}
                     onChange={(e) => setFieldOfStudy(e.target.value)}
                     placeholder="e.g. Computer Science, Information Technology"
-                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-unnati-violet"
+                    className="w-full rounded-xl glass-input px-4 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">Graduation Year</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Graduation Year</label>
                 <select
                   value={gradYear}
                   onChange={(e) => setGradYear(Number(e.target.value))}
-                  className="w-full sm:w-1/2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-unnati-violet"
+                  className="w-full sm:w-1/2 rounded-xl glass-input px-4 py-2.5 text-xs text-white focus:outline-none"
                 >
                   {[2028, 2027, 2026, 2025, 2024, 2023, 2022, 2021, 2020].map((yr) => (
-                    <option key={yr} value={yr}>{yr}</option>
+                    <option key={yr} value={yr} className="bg-slate-900">{yr}</option>
                   ))}
                 </select>
               </div>
@@ -433,56 +437,53 @@ export default function OnboardingPage() {
 
         {/* STEP 4: Initial Skills Inventory */}
         {step === 4 && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-in fade-in duration-300">
             <div>
-              <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-unnati-violet">
+              <Badge variant="violet" className="text-xs mb-2">
                 Step 4: Skill Mapping
-              </span>
-              <h1 className="mt-2 text-3xl font-black tracking-tight text-unnati-midnight">
-                Select your existing skills
+              </Badge>
+              <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                Select your existing capabilities
               </h1>
-              <p className="mt-1 text-slate-600">
-                Claim what you currently know. These will form your baseline inventory for gap analysis.
+              <p className="mt-1 text-xs sm:text-sm text-slate-400 leading-relaxed">
+                Claim what you currently know. These will form your baseline inventory for Algorithm B gap diagnostics.
               </p>
             </div>
 
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search canonical skills (e.g. Python, React, Docker)..."
                 value={skillSearchQuery}
                 onChange={(e) => setSkillSearchQuery(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-sm outline-none focus:border-unnati-violet"
+                className="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl glass-input text-white placeholder-slate-400 focus:outline-none"
               />
               {canonicalResults.length > 0 && (
-                <div className="absolute z-10 mt-1 max-h-56 w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
-                  {canonicalResults.map((skill) => {
-                    const isSelected = selectedSkills.some((s) => s.name.toLowerCase() === skill.name.toLowerCase());
-                    return (
-                      <button
-                        key={skill.id}
-                        type="button"
-                        onClick={() => {
-                          toggleSkill(skill.name, skill.category);
-                          setSkillSearchQuery("");
-                        }}
-                        className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm hover:bg-violet-50"
-                      >
-                        <span className="font-semibold text-slate-800">{skill.name}</span>
-                        <span className="text-xs text-slate-400">{skill.category}</span>
-                      </button>
-                    );
-                  })}
+                <div className="absolute z-10 mt-1 max-h-56 w-full overflow-y-auto rounded-xl border border-white/10 bg-slate-900 p-2 shadow-xl">
+                  {canonicalResults.map((skill) => (
+                    <button
+                      key={skill.id}
+                      type="button"
+                      onClick={() => {
+                        toggleSkill(skill.name, skill.category);
+                        setSkillSearchQuery("");
+                      }}
+                      className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs hover:bg-white/10 text-slate-200"
+                    >
+                      <span className="font-semibold">{skill.name}</span>
+                      <span className="text-[10px] text-slate-400">{skill.category}</span>
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
 
             {/* Popular Skills Quick-Pills */}
             <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Suggested Skills</p>
-              <div className="flex flex-wrap gap-2">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">Suggested Skills</p>
+              <div className="flex flex-wrap gap-1.5">
                 {POPULAR_SKILLS.map((item) => {
                   const isSelected = selectedSkills.some((s) => s.name.toLowerCase() === item.name.toLowerCase());
                   return (
@@ -490,13 +491,13 @@ export default function OnboardingPage() {
                       key={item.name}
                       type="button"
                       onClick={() => toggleSkill(item.name, item.category)}
-                      className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
+                      className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
                         isSelected
-                          ? "bg-unnati-indigo text-white shadow-sm"
-                          : "border border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+                          ? "bg-purple-600 text-white shadow-glow-violet border border-purple-400/40"
+                          : "border border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/20"
                       }`}
                     >
-                      {isSelected ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
+                      {isSelected ? <CheckCircle2 className="h-3 w-3" /> : <Plus className="h-3 w-3" />}
                       {item.name}
                     </button>
                   );
@@ -506,40 +507,40 @@ export default function OnboardingPage() {
 
             {/* Selected Skills List with Proficiency */}
             {selectedSkills.length > 0 && (
-              <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                <h3 className="font-bold text-unnati-indigo text-sm mb-3">
-                  Selected Skills ({selectedSkills.length}) — Rate your proficiency:
+              <div className="rounded-3xl border border-white/10 glass-panel p-5">
+                <h3 className="font-bold text-white text-xs uppercase tracking-wider mb-3">
+                  Selected Capabilities ({selectedSkills.length}) — Rate your proficiency:
                 </h3>
                 <div className="space-y-3">
                   {selectedSkills.map((sk) => (
-                    <div key={sk.name} className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-2">
+                    <div key={sk.name} className="flex flex-wrap items-center justify-between gap-3 border-b border-white/5 pb-2.5">
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
                           onClick={() => toggleSkill(sk.name)}
-                          className="text-slate-400 hover:text-red-500"
+                          className="text-slate-400 hover:text-rose-400 cursor-pointer"
                         >
-                          <X className="h-4 w-4" />
+                          <X className="h-3.5 w-3.5" />
                         </button>
-                        <span className="font-semibold text-slate-800 text-sm">{sk.name}</span>
-                        <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] uppercase font-bold text-slate-500">
+                        <span className="font-semibold text-white text-xs">{sk.name}</span>
+                        <span className="rounded bg-white/5 border border-white/10 px-1.5 py-0.5 text-[9px] uppercase font-bold text-slate-400">
                           {sk.category}
                         </span>
                       </div>
-                      <div className="flex items-center gap-1 text-xs">
+                      <div className="flex items-center gap-1 text-[11px]">
                         {[
                           { label: "Beginner", val: 0.3 },
                           { label: "Intermediate", val: 0.6 },
-                          { label: "Proficient", val: 0.85 },
+                          { label: "Advanced", val: 0.85 },
                         ].map((tier) => (
                           <button
                             key={tier.label}
                             type="button"
                             onClick={() => updateSkillProficiency(sk.name, tier.val)}
-                            className={`rounded-full px-2.5 py-1 font-semibold transition ${
+                            className={`rounded-lg px-2.5 py-1 font-semibold transition cursor-pointer ${
                               Math.abs(sk.proficiency - tier.val) < 0.1
-                                ? "bg-unnati-violet text-white"
-                                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                                ? "bg-purple-600 text-white shadow-sm"
+                                : "bg-white/5 text-slate-400 hover:text-white"
                             }`}
                           >
                             {tier.label}
@@ -556,23 +557,23 @@ export default function OnboardingPage() {
 
         {/* STEP 5: Commitment & Goals */}
         {step === 5 && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-in fade-in duration-300">
             <div>
-              <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-unnati-violet">
+              <Badge variant="violet" className="text-xs mb-2">
                 Step 5: Execution Plan
-              </span>
-              <h1 className="mt-2 text-3xl font-black tracking-tight text-unnati-midnight">
+              </Badge>
+              <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Set your commitment pace
               </h1>
-              <p className="mt-1 text-slate-600">
+              <p className="mt-1 text-xs sm:text-sm text-slate-400 leading-relaxed">
                 UNNATI calibrates roadmap milestones, weekly targets, and reminders to match your available time.
               </p>
             </div>
 
-            <div className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6">
+            <div className="space-y-5 rounded-3xl border border-white/10 glass-panel p-6 sm:p-7">
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-unnati-violet" />
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-purple-400" />
                   Weekly Time Commitment
                 </label>
                 <div className="grid gap-3 sm:grid-cols-3">
@@ -585,27 +586,27 @@ export default function OnboardingPage() {
                       key={tier.hrs}
                       type="button"
                       onClick={() => setWeeklyCommitmentHours(tier.hrs)}
-                      className={`rounded-xl border p-4 text-left transition ${
+                      className={`rounded-2xl border p-4 text-left transition cursor-pointer ${
                         weeklyCommitmentHours === tier.hrs
-                          ? "border-unnati-violet bg-violet-50 font-bold"
-                          : "border-slate-200 hover:border-slate-300"
+                          ? "border-purple-500 bg-purple-950/40 shadow-glow-violet text-white font-bold"
+                          : "border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/20"
                       }`}
                     >
-                      <p className="text-sm font-bold text-unnati-indigo">{tier.label}</p>
-                      <p className="text-xs text-slate-500 mt-1">{tier.desc}</p>
+                      <p className="text-xs font-bold text-white">{tier.label}</p>
+                      <p className="text-[11px] text-slate-400 mt-1">{tier.desc}</p>
                     </button>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                  <Target className="h-4 w-4 text-unnati-saffron" />
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-2">
+                  <Target className="h-4 w-4 text-orange-400" />
                   Primary Milestone Objective
                 </label>
                 <div className="space-y-2">
                   {[
-                    "Land a high-impact internship or job",
+                    "Land a high-impact engineering placement or job",
                     "Build an industry-grade portfolio of full-stack projects",
                     "Upskill for promotion or transition to a senior role",
                     "Prepare for technical interviews (DSA & System Design)",
@@ -614,10 +615,10 @@ export default function OnboardingPage() {
                       key={goal}
                       type="button"
                       onClick={() => setPrimaryGoal(goal)}
-                      className={`w-full rounded-xl border px-4 py-3 text-left text-sm font-medium transition ${
+                      className={`w-full rounded-2xl border px-4 py-3 text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
                         primaryGoal === goal
-                          ? "border-unnati-saffron bg-orange-50/50 font-bold text-slate-900"
-                          : "border-slate-200 bg-white hover:border-slate-300"
+                          ? "border-orange-500 bg-orange-950/40 shadow-glow-saffron font-bold text-white"
+                          : "border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/20"
                       }`}
                     >
                       {goal}
@@ -630,57 +631,54 @@ export default function OnboardingPage() {
         )}
 
         {/* Navigation Buttons */}
-        <div className="mt-8 flex items-center justify-between border-t border-slate-200 pt-6">
+        <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-6">
           {step > 1 ? (
-            <button
-              type="button"
+            <Button
+              variant="outline"
+              size="md"
               onClick={() => setStep(step - 1)}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              className="text-xs"
             >
-              <ArrowLeft className="h-4 w-4" />
-              Back
-            </button>
+              <ArrowLeft className="h-3.5 w-3.5 mr-1" /> Back
+            </Button>
           ) : (
-            <Link
-              href="/"
-              className="text-sm font-semibold text-slate-500 hover:text-slate-800"
-            >
+            <Link href="/" className="text-xs text-slate-400 hover:text-white">
               Cancel
             </Link>
           )}
 
           {step < 5 ? (
-            <button
-              type="button"
+            <Button
+              variant="primary"
+              size="md"
               onClick={() => setStep(step + 1)}
-              className="inline-flex items-center gap-2 rounded-full bg-unnati-indigo px-6 py-2.5 text-sm font-bold text-white shadow-md shadow-violet-200 hover:bg-unnati-violet"
+              className="text-xs font-bold"
             >
-              Next Step
-              <ArrowRight className="h-4 w-4" />
-            </button>
+              Next Step <ArrowRight className="h-3.5 w-3.5 ml-1" />
+            </Button>
           ) : (
-            <button
-              type="button"
+            <Button
+              variant="saffron"
+              size="lg"
               disabled={loading}
               onClick={handleComplete}
-              className="inline-flex items-center gap-2 rounded-full bg-unnati-saffron px-8 py-3 text-sm font-black text-white shadow-lg shadow-orange-200 hover:brightness-95 disabled:opacity-50"
+              className="btn-shimmer text-xs font-bold shadow-glow-saffron"
             >
               {loading ? (
                 <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  Generating Your Growth Path...
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent mr-2" />
+                  Synthesizing Roadmap...
                 </>
               ) : (
                 <>
-                  Complete & Open Dashboard
-                  <Sparkles className="h-4 w-4" />
+                  Complete &amp; Launch Dashboard
+                  <Sparkles className="h-3.5 w-3.5 ml-1.5" />
                 </>
               )}
-            </button>
+            </Button>
           )}
         </div>
       </main>
     </div>
   );
 }
-

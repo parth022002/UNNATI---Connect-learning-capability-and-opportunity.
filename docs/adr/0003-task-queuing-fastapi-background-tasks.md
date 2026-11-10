@@ -14,3 +14,4 @@ We decommissioned Celery in favor of:
 ## Consequences
 - Dramatically reduced memory footprint (< 120MB per API container).
 - Zero RabbitMQ or Celery broker maintenance overhead.
+

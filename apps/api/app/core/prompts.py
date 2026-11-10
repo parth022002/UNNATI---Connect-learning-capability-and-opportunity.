@@ -108,3 +108,4 @@ def format_prompt(prompt_key: str, **kwargs) -> str:
     if not template:
         raise KeyError(f"Prompt template '{prompt_key}' not found in registry.")
     return template.user_template.format(**kwargs)
+

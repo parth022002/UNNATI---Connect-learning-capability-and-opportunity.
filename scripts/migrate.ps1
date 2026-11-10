@@ -1,4 +1,4 @@
-﻿# ==============================================================================
+# ==============================================================================
 # UNNATI — Database Migration Execution Step (PowerShell) (OPS-004)
 # ==============================================================================
 $ErrorActionPreference = "Stop"
@@ -25,3 +25,4 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "FAILURE: Database migration failed with exit code $LASTEXITCODE" -ForegroundColor Red
     exit 1
 }
+

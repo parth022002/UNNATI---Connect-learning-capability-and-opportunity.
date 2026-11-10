@@ -1,7 +1,7 @@
 import React from "react";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "saffron";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "saffron" | "glass";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
 }
@@ -15,20 +15,21 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  const baseStyles = "inline-flex items-center justify-center font-semibold rounded-xl transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+  const baseStyles = "inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
 
   const sizeStyles = {
-    sm: "px-3 py-1.5 text-xs",
-    md: "px-5 py-2.5 text-sm",
-    lg: "px-7 py-3.5 text-base",
+    sm: "px-3 py-1.5 text-xs gap-1.5",
+    md: "px-5 py-2.5 text-sm gap-2",
+    lg: "px-6 py-3.5 text-base gap-2.5",
   };
 
   const variantStyles = {
-    primary: "bg-unnati-indigo text-white hover:bg-unnati-violet focus:ring-unnati-indigo shadow-sm shadow-violet-900/20",
-    secondary: "bg-violet-100 text-unnati-indigo hover:bg-violet-200 focus:ring-unnati-violet",
-    outline: "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:ring-slate-400",
-    ghost: "text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:ring-slate-300",
-    saffron: "bg-unnati-saffron text-white hover:brightness-95 focus:ring-orange-500 shadow-md shadow-orange-300/30",
+    primary: "bg-gradient-to-r from-unnati-indigo to-unnati-violet text-white hover:from-purple-700 hover:to-unnati-violet-light focus:ring-unnati-violet shadow-lg shadow-purple-950/40 border border-purple-500/30",
+    secondary: "bg-slate-800/80 hover:bg-slate-700/80 text-purple-200 border border-purple-500/20 focus:ring-purple-400",
+    outline: "border border-white/15 hover:border-white/30 bg-white/5 hover:bg-white/10 text-slate-200 focus:ring-slate-400 backdrop-blur-sm",
+    ghost: "text-slate-300 hover:text-white hover:bg-white/5 focus:ring-slate-500",
+    saffron: "bg-gradient-to-r from-orange-500 to-unnati-saffron text-white hover:brightness-110 focus:ring-orange-500 shadow-lg shadow-orange-950/30 border border-orange-400/30",
+    glass: "glass-card text-white hover:bg-white/10 focus:ring-purple-500 border border-white/10 shadow-sm"
   };
 
   return (

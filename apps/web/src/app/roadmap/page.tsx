@@ -1,9 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
+import { Navbar } from "@/components/layout/Navbar";
+import { BackgroundAtmosphere } from "@/components/layout/BackgroundAtmosphere";
+import { CareerCompanionDrawer } from "@/components/companion/CareerCompanionDrawer";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { 
   ArrowLeft, 
   CheckCircle2, 
@@ -19,7 +25,12 @@ import {
   BookOpen,
   ChevronRight,
   ShieldCheck,
-  Target
+  Target,
+  Radar,
+  BarChart3,
+  CheckSquare,
+  Square,
+  Award
 } from "lucide-react";
 import { 
   api, 
@@ -45,6 +56,9 @@ export default function RoadmapPage() {
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isCompanionOpen, setIsCompanionOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"radar" | "matrix">("matrix");
+  const [completedTasks, setCompletedTasks] = useState<Record<string, boolean>>({});
 
   const fetchRoadmapAndGaps = async (role: string) => {
     if (!isSignedIn) return;
@@ -55,14 +69,11 @@ export default function RoadmapPage() {
       const token = await getClerkApiToken(getToken);
       if (!token) throw new Error("Authentication token required.");
 
-      // 1. Fetch Gap Analysis
       const gaps = await api.getGapAnalysis(token, role);
       setGapData(gaps);
 
-      // 2. Fetch Active Roadmap
       let roadmap = await api.getMyActiveRoadmap(token);
       if (!roadmap || roadmap.target_role !== role) {
-        // Auto-generate if none exists for this role
         roadmap = await api.generateRoadmap(token, { target_role: role, weekly_hours: 10 });
       }
       setActiveRoadmap(roadmap);
@@ -95,7 +106,6 @@ export default function RoadmapPage() {
       });
       setActiveRoadmap(newRoadmap);
 
-      // Re-fetch gaps
       const gaps = await api.getGapAnalysis(token, selectedRole);
       setGapData(gaps);
     } catch (err: any) {
@@ -106,12 +116,17 @@ export default function RoadmapPage() {
     }
   };
 
+  const toggleTask = (taskKey: string) => {
+    setCompletedTasks((prev) => ({ ...prev, [taskKey]: !prev[taskKey] }));
+  };
+
   if (!isLoaded || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-unnati-violet border-t-transparent" />
-          <p className="text-sm font-semibold text-slate-500">Synthesizing Topological Career Roadmap...</p>
+      <div className="flex min-h-screen items-center justify-center bg-slate-950 text-slate-100">
+        <BackgroundAtmosphere />
+        <div className="relative z-10 flex flex-col items-center gap-3">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-unnati-violet border-t-transparent shadow-glow-violet" />
+          <p className="text-sm font-semibold text-purple-200">Synthesizing Topological Milestone DAG...</p>
         </div>
       </div>
     );
@@ -119,15 +134,15 @@ export default function RoadmapPage() {
 
   if (!isSignedIn) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6 text-center">
-        <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl max-w-md">
-          <h1 className="text-2xl font-black text-unnati-indigo">Sign in to UNNATI</h1>
-          <p className="mt-2 text-sm text-slate-600">Access your personalized learning roadmaps and gap analytics.</p>
-          <Link
-            href="/sign-in"
-            className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-unnati-indigo py-3 text-sm font-bold text-white shadow-md hover:bg-unnati-violet"
-          >
-            Sign In Now
+      <div className="relative flex min-h-screen flex-col items-center justify-center bg-slate-950 px-6 text-center text-slate-100 selection:bg-purple-500 selection:text-white">
+        <BackgroundAtmosphere />
+        <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/15 bg-slate-900/80 p-8 shadow-2xl backdrop-blur-2xl">
+          <h1 className="font-heading text-2xl font-black text-white">Sign in to UNNATI</h1>
+          <p className="mt-2 text-xs text-slate-400">Access your personalized learning roadmaps and Algorithm B gap analytics.</p>
+          <Link href="/sign-in" className="mt-6 block">
+            <Button variant="saffron" size="lg" className="w-full text-xs font-bold">
+              Sign In Now
+            </Button>
           </Link>
         </div>
       </div>
@@ -137,61 +152,41 @@ export default function RoadmapPage() {
   const readiness = gapData?.readiness_score || activeRoadmap?.overall_readiness_score || 0;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-unnati-midnight">
-      {/* Top Header */}
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3.5 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-100"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Dashboard
-            </Link>
-            <div className="h-4 w-px bg-slate-200" />
-            <Link href="/" className="flex items-center gap-2 text-lg font-black tracking-tight text-unnati-indigo">
-              <Image src="/logo.png" alt="UNNATI" width={28} height={28} className="rounded-md shadow-xs" priority />
-              <span>UNNATI<span className="text-unnati-saffron">.</span></span>
-            </Link>
-          </div>
+    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-purple-500 selection:text-white">
+      <BackgroundAtmosphere />
+      <Navbar onOpenCompanion={() => setIsCompanionOpen(true)} />
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleRegenerate}
-              disabled={generating}
-              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-bold text-slate-700 hover:border-unnati-violet transition"
-            >
-              <RefreshCw className={`h-3.5 w-3.5 text-unnati-violet ${generating ? "animate-spin" : ""}`} />
-              {generating ? "Recalibrating..." : "Recalibrate Roadmap"}
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Container */}
-      <main className="mx-auto max-w-7xl px-6 py-8">
+      <main className="relative z-10 flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Error Alert */}
         {error && (
-          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-800">
-            <AlertCircle className="h-5 w-5 shrink-0 text-red-600" />
-            <span>{error}</span>
+          <div className="mb-6 flex items-center justify-between rounded-2xl border border-rose-500/40 bg-rose-950/40 p-4 text-xs font-medium text-rose-200 backdrop-blur-md">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4 text-rose-400 shrink-0" />
+              <span>{error}</span>
+            </div>
+            <button onClick={() => setError(null)} className="text-xs font-bold underline hover:text-white">
+              Dismiss
+            </button>
           </div>
         )}
 
-        {/* Hero Banner: Role & Readiness Gauge */}
-        <section className="rounded-[2rem] border border-violet-100 bg-white p-8 shadow-sm">
+        {/* Top Hero Banner */}
+        <section className="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 mb-8">
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-unnati-violet">
-                  Topological Career Synthesis
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="violet" className="text-[10px]">
+                  Algorithm C Topological Synthesis
+                </Badge>
+                <span className="text-xs text-slate-400 font-mono">
+                  Cycle-Free Prerequisite Graph
                 </span>
-                <span className="text-xs font-semibold text-slate-400">Algorithm B & C Grounded</span>
               </div>
-              <h1 className="mt-3 text-3xl font-black text-unnati-midnight md:text-4xl">
+              <h1 className="font-heading text-2xl sm:text-3xl font-black text-white tracking-tight">
                 {activeRoadmap?.title || `${selectedRole} Roadmap`}
               </h1>
-              <p className="mt-2 text-sm text-slate-600 max-w-2xl">
+              <p className="mt-2 text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
                 {activeRoadmap?.description || "Structured learning sequence based on evidence-weighted prerequisite gap analysis."}
               </p>
 
@@ -202,10 +197,10 @@ export default function RoadmapPage() {
                     key={role}
                     type="button"
                     onClick={() => setSelectedRole(role)}
-                    className={`rounded-full px-3.5 py-1.5 text-xs font-bold transition ${
+                    className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
                       selectedRole === role
-                        ? "bg-unnati-indigo text-white shadow-sm"
-                        : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                        ? "bg-purple-600 text-white shadow-glow-violet border border-purple-400/40"
+                        : "border border-white/10 bg-white/5 text-slate-400 hover:text-white"
                     }`}
                   >
                     {role}
@@ -215,35 +210,118 @@ export default function RoadmapPage() {
             </div>
 
             {/* Readiness Gauge Card */}
-            <div className="flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-violet-50 to-orange-50 border border-violet-100 p-6 text-center min-w-[200px]">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Role Readiness</span>
-              <div className="mt-2 text-4xl font-black text-unnati-indigo">{readiness}%</div>
-              <p className="mt-1 text-xs text-slate-600">
+            <div className="flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-purple-950/60 to-slate-900 border border-purple-500/30 p-6 text-center min-w-[200px] shadow-lg">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Target Readiness</span>
+              <div className="mt-1 text-4xl font-black text-emerald-400 font-mono">{readiness}%</div>
+              <p className="mt-1 text-xs text-slate-300">
                 {gapData ? `${gapData.skills_met_count} of ${gapData.total_skills_required} skills met` : "Calculating..."}
               </p>
               <div className="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-unnati-saffron">
                 <TrendingUp className="h-3.5 w-3.5" />
-                Evidence Weighted
+                Evidence-Weighted
               </div>
             </div>
           </div>
+
+          <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setViewMode("matrix")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                  viewMode === "matrix" ? "bg-white/15 text-white" : "text-slate-400 hover:text-white"
+                }`}
+              >
+                <BarChart3 className="h-3.5 w-3.5" /> Gap Breakdown
+              </button>
+              <button
+                onClick={() => setViewMode("radar")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                  viewMode === "radar" ? "bg-white/15 text-white" : "text-slate-400 hover:text-white"
+                }`}
+              >
+                <Radar className="h-3.5 w-3.5" /> Diagnostic Radar
+              </button>
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRegenerate}
+              disabled={generating}
+              className="text-xs"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 mr-1 text-purple-400 ${generating ? "animate-spin" : ""}`} />
+              {generating ? "Recalibrating..." : "Recalibrate Roadmap"}
+            </Button>
+          </div>
         </section>
 
-        {/* Milestone Phases: Algorithm C Topological Roadmap */}
-        <section className="mt-10">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-unnati-violet">Structured Learning Path</p>
-              <h2 className="text-2xl font-black text-unnati-midnight">Milestone Execution Phases</h2>
+        {/* Diagnostic Radar / Matrix View Mode */}
+        {viewMode === "radar" && gapData && (
+          <section className="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 mb-8 animate-in fade-in duration-300">
+            <h3 className="font-heading text-lg font-bold text-white mb-2">
+              Competency Radar Diagnostic (Algorithm B)
+            </h3>
+            <p className="text-xs text-slate-400 mb-6">
+              Compares your evidence-weighted capability against industry benchmark expectations.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {gapData.skills_breakdown.map((item) => {
+                const currentPct = Math.round(item.current_proficiency * 100);
+                const targetPct = Math.round(item.target_proficiency * 100);
+                return (
+                  <div key={item.skill_name} className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-bold text-white text-xs">{item.skill_name}</span>
+                      <Badge variant={item.is_met ? "success" : "saffron"} className="text-[10px]">
+                        {item.is_met ? "Met" : `-${Math.round(item.gap * 100)}%`}
+                      </Badge>
+                    </div>
+
+                    {/* Comparative Dual Bar */}
+                    <div className="space-y-1.5 text-[10px]">
+                      <div>
+                        <div className="flex justify-between text-slate-400">
+                          <span>Your Level:</span>
+                          <span className="font-mono text-purple-300 font-bold">{currentPct}%</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden mt-0.5">
+                          <div className="h-full bg-purple-500 rounded-full" style={{ width: `${currentPct}%` }} />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-slate-400">
+                          <span>Market Benchmark:</span>
+                          <span className="font-mono text-slate-300">{targetPct}%</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden mt-0.5">
+                          <div className="h-full bg-orange-500/80 rounded-full" style={{ width: `${targetPct}%` }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+          </section>
+        )}
+
+        {/* Milestone Phases: Algorithm C Topological Roadmap */}
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-purple-400">Topological Learning DAG</p>
+              <h2 className="font-heading text-2xl font-bold text-white">Milestone Execution Sequence</h2>
+            </div>
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 font-mono">
               <Clock className="h-4 w-4 text-unnati-saffron" />
-              <span>{activeRoadmap?.total_estimated_weeks || 12} Weeks • {activeRoadmap?.weekly_hours || 10} hrs/week</span>
+              <span>{activeRoadmap?.total_estimated_weeks || 12} Weeks • {activeRoadmap?.weekly_hours || 10}h/wk</span>
             </div>
           </div>
 
-          <div className="mt-6 space-y-6">
-            {activeRoadmap?.milestones?.map((milestone) => {
+          <div className="space-y-6">
+            {activeRoadmap?.milestones?.map((milestone, mIdx) => {
               const isLocked = milestone.status === "LOCKED";
               const isInProgress = milestone.status === "IN_PROGRESS";
               const isCompleted = milestone.status === "COMPLETED";
@@ -251,69 +329,64 @@ export default function RoadmapPage() {
               return (
                 <div
                   key={milestone.id}
-                  className={`rounded-3xl border p-6 transition-all ${
+                  className={`glass-panel rounded-3xl p-6 sm:p-7 border transition-all duration-300 relative ${
                     isInProgress
-                      ? "border-unnati-violet bg-white shadow-md shadow-violet-100 ring-2 ring-violet-500/10"
+                      ? "border-purple-500/60 shadow-glow-violet bg-slate-900/80"
                       : isCompleted
-                      ? "border-emerald-200 bg-white"
-                      : "border-slate-200 bg-slate-50/70 opacity-90"
+                      ? "border-emerald-500/40 bg-slate-900/60"
+                      : "border-white/10 bg-slate-900/40 opacity-85"
                   }`}
                 >
-                  <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
                     <div className="flex items-center gap-3">
                       <div
-                        className={`flex h-11 w-11 items-center justify-center rounded-2xl font-black text-sm ${
+                        className={`flex h-11 w-11 items-center justify-center rounded-2xl font-bold text-sm ${
                           isCompleted
-                            ? "bg-emerald-100 text-emerald-700"
+                            ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                             : isInProgress
-                            ? "bg-unnati-indigo text-white shadow-md shadow-violet-200"
-                            : "bg-slate-200 text-slate-500"
+                            ? "bg-gradient-to-tr from-purple-700 to-unnati-violet text-white shadow-md shadow-purple-950"
+                            : "bg-white/5 text-slate-500 border border-white/5"
                         }`}
                       >
                         {isCompleted ? <CheckCircle2 className="h-6 w-6" /> : isLocked ? <Lock className="h-5 w-5" /> : `P${milestone.phase_number}`}
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-bold uppercase tracking-wider text-unnati-saffron">
+                          <span className="text-xs font-bold uppercase tracking-wider text-orange-400 font-mono">
                             Phase {milestone.phase_number} • {milestone.estimated_weeks} Weeks
                           </span>
-                          <span
-                            className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                              isCompleted
-                                ? "bg-emerald-50 text-emerald-700"
-                                : isInProgress
-                                ? "bg-violet-100 text-unnati-violet"
-                                : "bg-slate-200 text-slate-600"
-                            }`}
+                          <Badge
+                            variant={isCompleted ? "success" : isInProgress ? "violet" : "default"}
+                            className="text-[10px]"
                           >
                             {milestone.status.replace("_", " ")}
-                          </span>
+                          </Badge>
                         </div>
-                        <h3 className="text-lg font-bold text-slate-900 mt-0.5">{milestone.title}</h3>
+                        <h3 className="text-base sm:text-lg font-bold text-white mt-0.5">{milestone.title}</h3>
                       </div>
                     </div>
 
                     {isInProgress && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-50 px-3 py-1 text-xs font-bold text-unnati-violet">
-                        <Play className="h-3 w-3 fill-current" /> Active Milestone
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-500/20 border border-purple-500/30 px-3 py-1 text-xs font-bold text-purple-200">
+                        <Play className="h-3 w-3 fill-current text-unnati-saffron" /> Active Phase
                       </span>
                     )}
                   </div>
 
-                  <p className="mt-3 text-xs leading-relaxed text-slate-600 max-w-3xl">
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl mb-4">
                     {milestone.description}
                   </p>
 
                   {/* Target Skills in this Phase */}
-                  <div className="mt-4">
-                    <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                  <div className="mb-5">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
                       Target Competencies:
                     </p>
                     <div className="flex flex-wrap gap-1.5">
                       {milestone.target_skills.map((sk) => (
                         <span
                           key={sk}
-                          className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-800 shadow-2xs"
+                          className="rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-purple-200"
                         >
                           {sk}
                         </span>
@@ -322,52 +395,85 @@ export default function RoadmapPage() {
                   </div>
 
                   {/* Modules & Deliverable Grid */}
-                  <div className="mt-5 grid gap-4 lg:grid-cols-[1.2fr_1fr]">
-                    {/* Learning Modules */}
-                    <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-4">
-                      <p className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5 mb-2">
-                        <BookOpen className="h-3.5 w-3.5 text-unnati-violet" />
+                  <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
+                    {/* Learning Modules with Checkbox Trackers */}
+                    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+                      <p className="text-xs font-bold uppercase tracking-wider text-purple-300 flex items-center gap-1.5 mb-3">
+                        <BookOpen className="h-3.5 w-3.5 text-unnati-saffron" />
                         Curated Learning Modules
                       </p>
                       <div className="space-y-2">
-                        {milestone.learning_modules.map((mod, idx) => (
-                          <div
-                            key={idx}
-                            className="flex items-center justify-between rounded-xl bg-white border border-slate-100 px-3 py-2 text-xs"
-                          >
-                            <span className="font-semibold text-slate-800">{mod.title}</span>
-                            <span className="text-slate-400 font-medium">{mod.duration_hours} hrs • {mod.type}</span>
-                          </div>
-                        ))}
+                        {milestone.learning_modules.map((mod, idx) => {
+                          const taskKey = `${milestone.id}-mod-${idx}`;
+                          const isDone = completedTasks[taskKey] || isCompleted;
+                          return (
+                            <div
+                              key={idx}
+                              onClick={() => toggleTask(taskKey)}
+                              className={`flex items-center justify-between rounded-xl border p-2.5 text-xs transition cursor-pointer ${
+                                isDone
+                                  ? "border-emerald-500/30 bg-emerald-950/20 text-slate-300"
+                                  : "border-white/5 bg-white/5 text-slate-200 hover:bg-white/10"
+                              }`}
+                            >
+                              <div className="flex items-center gap-2.5">
+                                {isDone ? (
+                                  <CheckSquare className="h-4 w-4 text-emerald-400 shrink-0" />
+                                ) : (
+                                  <Square className="h-4 w-4 text-slate-500 shrink-0" />
+                                )}
+                                <span className={isDone ? "line-through text-slate-400" : "font-medium"}>
+                                  {mod.title}
+                                </span>
+                              </div>
+                              <span className="text-[10px] text-slate-400 font-mono">
+                                {mod.duration_hours}h • {mod.type}
+                              </span>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
 
                     {/* Capstone Project Deliverable */}
                     {milestone.project_deliverable && (
-                      <div className="rounded-2xl border border-violet-100 bg-violet-50/40 p-4">
-                        <p className="text-xs font-bold uppercase tracking-wider text-unnati-indigo flex items-center gap-1.5 mb-2">
-                          <FolderGit2 className="h-3.5 w-3.5 text-unnati-violet" />
-                          Practical Milestone Project
-                        </p>
-                        <h4 className="font-bold text-slate-900 text-sm">
-                          {milestone.project_deliverable.title}
-                        </h4>
-                        <p className="mt-1 text-xs leading-relaxed text-slate-600">
-                          {milestone.project_deliverable.description}
-                        </p>
-
-                        <div className="mt-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
-                            Evaluation Rubric:
+                      <div className="rounded-2xl border border-purple-500/20 bg-purple-950/20 p-4 flex flex-col justify-between">
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-wider text-orange-400 flex items-center gap-1.5 mb-2">
+                            <FolderGit2 className="h-3.5 w-3.5 text-orange-400" />
+                            Milestone Project Sprint
                           </p>
-                          <ul className="space-y-0.5 text-[11px] text-slate-600">
-                            {milestone.project_deliverable.rubric?.map((r, rIdx) => (
-                              <li key={rIdx} className="flex items-center gap-1.5">
-                                <span className="h-1.5 w-1.5 rounded-full bg-unnati-violet" />
-                                {r}
-                              </li>
-                            ))}
-                          </ul>
+                          <h4 className="font-bold text-white text-sm">
+                            {milestone.project_deliverable.title}
+                          </h4>
+                          <p className="mt-1 text-xs leading-relaxed text-slate-400">
+                            {milestone.project_deliverable.description}
+                          </p>
+
+                          <div className="mt-3">
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                              Evaluation Rubric:
+                            </p>
+                            <ul className="space-y-1 text-[11px] text-slate-300">
+                              {milestone.project_deliverable.rubric?.map((r, rIdx) => (
+                                <li key={rIdx} className="flex items-center gap-1.5">
+                                  <span className="h-1.5 w-1.5 rounded-full bg-unnati-saffron" />
+                                  {r}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+                          <Link href="/assessments">
+                            <Button size="sm" variant="glass" className="text-[11px] py-1 px-3">
+                              <Award className="h-3 w-3 mr-1 text-emerald-400" /> Verify Capability
+                            </Button>
+                          </Link>
+                          <span className="text-[10px] text-purple-300 font-mono">
+                            GitHub Evaluation Ready
+                          </span>
                         </div>
                       </div>
                     )}
@@ -379,79 +485,80 @@ export default function RoadmapPage() {
         </section>
 
         {/* Algorithm B: Skill Gap Matrix Table */}
-        {gapData && gapData.skills_breakdown.length > 0 && (
-          <section className="mt-12 pb-16">
-            <div className="flex items-center justify-between">
+        {gapData && gapData.skills_breakdown.length > 0 && viewMode === "matrix" && (
+          <section className="mb-12">
+            <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-unnati-violet">Prerequisite Diagnostic</p>
-                <h2 className="text-2xl font-black text-unnati-midnight">Evidence-Weighted Skill Gap Matrix</h2>
+                <p className="text-xs font-bold uppercase tracking-wider text-purple-400">Algorithmic Diagnostic</p>
+                <h2 className="font-heading text-xl font-bold text-white">Skill Gap Diagnostic Matrix</h2>
               </div>
             </div>
 
-            <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div className="overflow-hidden rounded-2xl border border-white/10 glass-panel">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider">
+                  <thead className="bg-white/5 border-b border-white/10 text-slate-400 font-bold uppercase tracking-wider">
                     <tr>
                       <th className="px-5 py-3">Competency</th>
-                      <th className="px-4 py-3">State / Evidence Tier</th>
+                      <th className="px-4 py-3">Evidence State</th>
                       <th className="px-4 py-3">Current vs Target</th>
-                      <th className="px-4 py-3">Calculated Gap</th>
+                      <th className="px-4 py-3">Algorithm B Gap</th>
                       <th className="px-4 py-3">Prerequisites</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-white/5">
                     {gapData.skills_breakdown.map((item) => (
-                      <tr key={item.skill_name} className="hover:bg-slate-50/50">
-                        <td className="px-5 py-3 font-bold text-slate-900">
+                      <tr key={item.skill_name} className="hover:bg-white/5 transition-colors">
+                        <td className="px-5 py-3 font-bold text-white">
                           {item.skill_name}
                         </td>
                         <td className="px-4 py-3">
-                          <span
-                            className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                          <Badge
+                            variant={
                               item.state === "CLAIMED"
-                                ? "bg-slate-100 text-slate-700"
+                                ? "default"
                                 : item.state === "INFERRED"
-                                ? "bg-blue-50 text-blue-700"
+                                ? "sky"
                                 : item.state === "ASSESSED"
-                                ? "bg-purple-50 text-purple-700"
+                                ? "violet"
                                 : item.state === "VERIFIED"
-                                ? "bg-emerald-50 text-emerald-700"
-                                : "bg-red-50 text-red-700"
-                            }`}
+                                ? "success"
+                                : "error"
+                            }
+                            className="text-[10px]"
                           >
                             {item.state}
-                          </span>
+                          </Badge>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="flex items-center gap-2">
-                            <span className="font-semibold text-slate-800">
+                          <div className="flex items-center gap-2 font-mono">
+                            <span className="font-semibold text-purple-300">
                               {Math.round(item.current_proficiency * 100)}%
                             </span>
-                            <span className="text-slate-400">/</span>
-                            <span className="text-slate-500">
+                            <span className="text-slate-500">/</span>
+                            <span className="text-slate-400">
                               {Math.round(item.target_proficiency * 100)}%
                             </span>
                           </div>
-                          <div className="mt-1 h-1 w-24 overflow-hidden rounded-full bg-slate-100">
+                          <div className="mt-1 h-1 w-24 overflow-hidden rounded-full bg-slate-800">
                             <div
-                              className="h-full bg-unnati-violet rounded-full"
+                              className="h-full bg-purple-500 rounded-full"
                               style={{ width: `${Math.round(item.current_proficiency * 100)}%` }}
                             />
                           </div>
                         </td>
                         <td className="px-4 py-3">
                           {item.is_met ? (
-                            <span className="inline-flex items-center gap-1 font-bold text-emerald-600">
+                            <span className="inline-flex items-center gap-1 font-bold text-emerald-400">
                               <CheckCircle2 className="h-3.5 w-3.5" /> Met
                             </span>
                           ) : (
-                            <span className="font-bold text-amber-600">
-                              -{Math.round(item.gap * 100)}% gap
+                            <span className="font-bold text-orange-400 font-mono">
+                              -{Math.round(item.gap * 100)}%
                             </span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-slate-500">
+                        <td className="px-4 py-3 text-slate-400">
                           {item.prerequisites.length > 0 ? item.prerequisites.join(", ") : "None (Foundational)"}
                         </td>
                       </tr>
@@ -462,8 +569,14 @@ export default function RoadmapPage() {
             </div>
           </section>
         )}
+
       </main>
+
+      {/* Global AI Companion Drawer */}
+      <CareerCompanionDrawer
+        isOpen={isCompanionOpen}
+        onClose={() => setIsCompanionOpen(false)}
+      />
     </div>
   );
 }
-

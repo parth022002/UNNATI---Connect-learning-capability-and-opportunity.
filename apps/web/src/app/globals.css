@@ -2,12 +2,176 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light; }
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+:root {
+  color-scheme: dark;
+  --bg-primary: #080B14;
+  --bg-secondary: #0D1322;
+  --bg-card: rgba(19, 28, 49, 0.7);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(109, 40, 217, 0.3);
+  --accent-saffron: #EA580C;
+  --accent-violet: #6D28D9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
-  background: #F8FAFC;
-  color: #17152D;
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #080B14;
+  color: #F1F5F9;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Background Atmosphere Patterns */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+.bg-grid-fine {
+  background-size: 20px 20px;
+  background-image: 
+    linear-gradient(to right, rgba(109, 40, 217, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(109, 40, 217, 0.08) 1px, transparent 1px);
+}
+
+.bg-dot-pattern {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Radial Glow & Lighting Effects */
+.hero-glow {
+  background: radial-gradient(circle at 50% 20%, rgba(109, 40, 217, 0.28) 0%, rgba(234, 88, 12, 0.12) 40%, transparent 70%);
+}
+
+.glow-orb-violet {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.35) 0%, rgba(76, 29, 149, 0.1) 60%, transparent 80%);
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+.glow-orb-saffron {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(234, 88, 12, 0.28) 0%, rgba(255, 138, 0, 0.08) 60%, transparent 80%);
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-elevated {
+  background: rgba(19, 28, 49, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+}
+
+.glass-card {
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(22, 33, 62, 0.7);
+  border-color: rgba(124, 58, 237, 0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px -10px rgba(109, 40, 217, 0.25);
+}
+
+.glass-input {
+  background: rgba(10, 14, 26, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #F8FAFC;
+  transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+  border-color: #7C3AED;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25);
+}
+
+/* Gradient Text */
+.text-gradient-primary {
+  background: linear-gradient(135deg, #FFFFFF 20%, #C4B5FD 70%, #FDBA74 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-saffron {
+  background: linear-gradient(135deg, #FF8A00 0%, #EA580C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-violet {
+  background: linear-gradient(135deg, #C4B5FD 0%, #8B5CF6 50%, #6D28D9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animated Shimmer Button */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 70%
+  );
+  transform: rotate(30deg);
+  animation: shimmer 4s infinite;
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080B14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
 }

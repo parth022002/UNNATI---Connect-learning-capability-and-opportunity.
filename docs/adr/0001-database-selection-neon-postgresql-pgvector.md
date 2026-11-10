@@ -15,3 +15,4 @@ We chose **Neon Serverless PostgreSQL** with the `pgvector` and `pgcrypto` exten
 ## Consequences
 - Requires dual connection strings: `DATABASE_URL` (pooled, port 6543) for runtime API queries, and `DATABASE_DIRECT_URL` (direct, port 5432) for Alembic DDL migrations.
 - High availability and automated PITR point-in-time recovery are handled natively by Neon AWS infrastructure.
+
