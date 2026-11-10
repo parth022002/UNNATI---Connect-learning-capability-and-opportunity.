@@ -21,7 +21,7 @@
 | **Primary AI Engine** | Google Gemini (2.5 Flash) | ✅ **COMPLETED** | PDF resume parsing, schema extraction, Algorithm C topological roadmaps |
 | **Fast Inference AI** | Groq (`llama-3.3-70b`) | ✅ **COMPLETED** | Sub-400ms conversational inference fallback |
 | **Gateway Fallback AI** | OpenRouter | ✅ **COMPLETED** | Secondary upstream redundancy |
-| **Distributed Caching** | Upstash Redis | ⏳ **PENDING** | Rate limiting (60 req/min), taxonomy caching. *(Currently running with in-memory fallback)* |
+| **Distributed Caching** | Upstash Redis | ✅ **COMPLETED** | `capable-tetra-139975.upstash.io:6379`, TLS `rediss://`, rate limiting & caching verified |
 | **Private Object Storage** | Cloudflare R2 / S3 | ⏳ **PENDING** | Private document bucket for candidate PDFs. *(Currently running with local storage fallback)* |
 | **Transactional Email** | Resend API | ⏳ **PENDING** | Welcome emails, milestone celebration notifications (`mail.unnati.in`) |
 | **Custom Domain & DNS** | Cloudflare (`unnati.in`) | ⏳ **PENDING** | Apex `unnati.in` & `api.unnati.in` custom domain cutover |
@@ -67,23 +67,23 @@
 * **Fast Inference (Groq):** API key provisioned, active for low-latency conversational queries.
 * **Fallback Gateway (OpenRouter):** API key provisioned for upstream failover.
 
+### 2.5 Distributed Caching & Rate Limiting (Upstash Redis)
+* **Cluster Host:** `capable-tetra-139975.upstash.io:6379`
+* **Protocol & Security:** `rediss://` (TLS 1.3 encrypted cluster)
+* **Status:** Verified live (`GET /health/redis` &rarr; `ping: True`, latency: ~290ms)
+* **Features Configured:**
+  * Sliding-window rate limiting (60 requests/min per IP, 120 requests/min per user)
+  * Default key TTL: 3,600s (1 hour)
+  * Taxonomy cache TTL: 86,400s (24 hours)
+  * Resilient connection pooling with graceful in-memory fallback.
+
 ---
 
 ## 3. Pending Requirements & Action Items (What Needs Your Input)
 
 The following items are the remaining inputs required before general public rollout:
 
-### 3.1 Shared Caching & Rate Limiting (Upstash Redis)
-* **Why it's needed:** Prevents API abuse (enforces 60 req/min per IP, 120 req/min per user) and caches heavy LLM taxonomy results with 24-hour TTL.
-* **Action Required:**
-  1. Go to [Upstash Console](https://console.upstash.com/).
-  2. Click **Create Database** &rarr; Name: `unnati-cache-prod`.
-  3. Select region `ap-southeast-1` or `ap-south-1`.
-  4. Enable **TLS**.
-  5. Copy the standard Redis connection string (`rediss://default:...@...upstash.io:6379`).
-  6. Add to Render & `.env`: `REDIS_URL=rediss://default:...`
-
-### 3.2 Private Object Storage (Cloudflare R2 / AWS S3)
+### 3.1 Private Object Storage (Cloudflare R2 / AWS S3)
 * **Why it's needed:** Production storage for candidate resumes, transcripts, and certificates with zero public read access and 15-minute presigned upload URLs.
 * **Action Required:**
   1. In [Cloudflare Dashboard](https://dash.cloudflare.com/) &rarr; **R2 Object Storage**.
@@ -138,7 +138,7 @@ The following items are the remaining inputs required before general public roll
 | **DEC-04** | Clerk Auth & Webhooks (Svix) | User Identity & Sync | **P0** | Tech Lead | `[x] Provisioned & Verified (200 OK)` | Phase 0 |
 | **DEC-05** | Groq API Key (Low-Latency LLM) | Fast Agent Inference | **P1** | Project Owner | `[x] Provisioned & Verified` | Phase 0 |
 | **DEC-06** | OpenRouter API Key (Gateway Failover) | Upstream LLM Fallback | **P2** | Project Owner | `[x] Provisioned & Verified` | Phase 0 |
-| **DEC-07** | Upstash Redis TLS Cluster | Distributed Rate Limiting & Cache | **P0** | DevOps / Owner | `[ ] Pending Provisioning` | Phase 1 |
+| **DEC-07** | Upstash Redis TLS Cluster | Distributed Rate Limiting & Cache | **P0** | DevOps / Owner | `[x] Provisioned & Verified (Upstash TLS)` | Phase 0 |
 | **DEC-08** | Cloudflare R2 Private Bucket | Candidate Document Storage | **P0** | DevOps / Owner | `[ ] Pending Provisioning` | Phase 1 |
 | **DEC-09** | Resend Transactional Email Key | Automated Email Delivery | **P1** | Project Owner | `[ ] Pending Provisioning` | Phase 1 |
 | **DEC-10** | Custom Apex Domain Setup (`unnati.in`) | Production Domain Cutover | **P1** | Project Owner | `[ ] Pending DNS Registration` | Phase 1 |
@@ -167,6 +167,8 @@ The following table summarizes all environment variables currently in effect acr
 | `OPENROUTER_API_KEY` | API | Yes | Configured in local `.env` | **YES** |
 | `PYTHONUNBUFFERED` | API | Yes | `"1"` (Render container runtime) | No |
 | `CORS_ORIGINS` | API | Yes | `http://localhost:3000` (+ `https://*.vercel.app` auto-regex) | No |
-| `REDIS_URL` | API | *Pending* | Default: in-memory / local fallback | **YES** |
+| `REDIS_URL` | API | Yes | Configured in Render & `.env` (`rediss://...upstash.io:6379`) | **YES** |
+| `REDIS_ENABLED` | API | Yes | `"true"` | No |
+| `RATE_LIMIT_ENABLED` | API | Yes | `"true"` | No |
 | `S3_BUCKET` / `S3_KEY` | API | *Pending* | Default: local storage (`storage/uploads`) | **YES** |
 | `RESEND_API_KEY` | API | *Pending* | Default: console logger | **YES** |

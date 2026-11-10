@@ -22,6 +22,12 @@ services:
         value: "5"
       - key: DATABASE_URL
         sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: REDIS_ENABLED
+        value: "true"
+      - key: RATE_LIMIT_ENABLED
+        value: "true"
       - key: CLERK_WEBHOOK_SECRET
         sync: false
       - key: GEMINI_API_KEY

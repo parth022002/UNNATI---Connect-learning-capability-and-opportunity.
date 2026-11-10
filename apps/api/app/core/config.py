@@ -16,8 +16,16 @@ class Settings(BaseSettings):
     db_pool_size: int = 10
     db_max_overflow: int = 20
 
-    # Redis Caching
+    # Redis Caching (Upstash Serverless Redis)
     redis_url: str = "redis://localhost:6379/0"
+    redis_enabled: bool = True
+    redis_default_ttl: int = 3600
+    redis_taxonomy_cache_ttl: int = 86400
+
+    # API Rate Limiting
+    rate_limit_enabled: bool = True
+    rate_limit_ip_per_minute: int = 60
+    rate_limit_user_per_minute: int = 120
 
     # Authentication (Clerk)
     next_public_clerk_publishable_key: Optional[str] = None

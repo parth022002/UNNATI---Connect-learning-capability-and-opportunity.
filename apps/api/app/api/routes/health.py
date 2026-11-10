@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy import text
 import psycopg
+import time
 from app.core.config import settings
 from app.core.security import get_current_user
+from app.core.redis_client import get_redis_client
 
 router = APIRouter(tags=["system"])
 
@@ -32,6 +34,32 @@ def health_db():
             "database": "Neon PostgreSQL",
             "version": pg_ver.split(",")[0],
             "extensions": extensions
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
+
+@router.get("/health/redis")
+def health_redis():
+    client = get_redis_client()
+    if not client:
+        return {
+            "status": "disconnected",
+            "message": "Redis is disabled or unreachable. Using in-memory fallback.",
+            "enabled": settings.redis_enabled
+        }
+    try:
+        start = time.perf_counter()
+        pong = client.ping()
+        latency_ms = round((time.perf_counter() - start) * 1000, 2)
+        return {
+            "status": "connected",
+            "provider": "Upstash Serverless Redis",
+            "tls": settings.redis_url.startswith("rediss://"),
+            "ping": pong,
+            "latency_ms": latency_ms
         }
     except Exception as e:
         return {
