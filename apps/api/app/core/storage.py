@@ -94,3 +94,4 @@ def generate_presigned_upload_url(key: str, content_type: str = "application/pdf
     except Exception as e:
         logger.error(f"Failed to generate presigned upload URL for key {key}: {e}")
         return None
+

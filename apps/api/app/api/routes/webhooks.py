@@ -10,6 +10,7 @@ from app.core.config import settings
 from app.db.session import get_db
 from app.models.user import User, UserProfile, ClerkWebhookEvent
 from app.services.user_service import calculate_completeness
+from app.core.email import send_welcome_email
 
 logger = logging.getLogger(__name__)
 
@@ -95,6 +96,10 @@ async def handle_clerk_webhook(
             logger.info(f"Webhook event already processed: {event_id}. Skipping.")
             return {"status": "already_processed", "event_id": event_id, "event_type": event_type}
 
+    is_new_user = False
+    candidate_email = None
+    candidate_name = None
+
     try:
         # 1. User Created (Upsert)
         if event_type == "user.created":
@@ -123,6 +128,9 @@ async def handle_clerk_webhook(
                         profile_completeness_score=20
                     )
                     db.add(profile)
+                    is_new_user = True
+                    candidate_email = primary_email
+                    candidate_name = full_name or "Learner"
                     logger.info(f"Created new candidate user in DB from webhook: {clerk_id} ({primary_email})")
                 else:
                     existing_user.email = primary_email
@@ -188,6 +196,14 @@ async def handle_clerk_webhook(
 
         # Commit event record and entity changes atomically
         db.commit()
+
+        # Send welcome email defensively for newly created candidate accounts
+        if is_new_user and candidate_email:
+            try:
+                send_welcome_email(candidate_email, candidate_name or "Learner")
+                logger.info(f"Dispatched welcome email to {candidate_email}")
+            except Exception as mail_err:
+                logger.warning(f"Failed to dispatch welcome email to {candidate_email}: {mail_err}")
 
     except Exception as e:
         db.rollback()

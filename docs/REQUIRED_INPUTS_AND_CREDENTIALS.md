@@ -23,7 +23,7 @@
 | **Gateway Fallback AI** | OpenRouter | ✅ **COMPLETED** | Secondary upstream redundancy |
 | **Distributed Caching** | Upstash Redis | ✅ **COMPLETED** | `capable-tetra-139975.upstash.io:6379`, TLS `rediss://`, rate limiting & caching verified |
 | **Private Object Storage** | Cloudflare R2 / S3 | ✅ **COMPLETED** | `unnati-private-documents`, S3 API endpoint active, presigned URLs & storage verified |
-| **Transactional Email** | Resend API | ⏳ **PENDING** | Welcome emails, milestone celebration notifications (`mail.unnati.in`) |
+| **Transactional Email** | Resend API | ✅ **COMPLETED** | `re_2V1Q...`, welcome emails, health probe at `/health/email` |
 | **Custom Domain & DNS** | Cloudflare (`unnati.in`) | ⏳ **PENDING** | Apex `unnati.in` & `api.unnati.in` custom domain cutover |
 | **Legal & DPDP Compliance** | Consent Modal & Policy | ⏳ **PENDING** | Bilingual consent wording & Grievance Redressal Officer (GRO) appointment |
 
@@ -88,25 +88,21 @@
   * Candidate resumes and transcripts stored under `uploads/{user_id}/{doc_id}_{filename}`
   * Resilient local filesystem fallback if S3 is ever unreachable.
 
+### 2.7 Transactional Email Delivery (Resend)
+* **Status:** Verified (`GET /health/email` &rarr; `status: connected`, provider: Resend)
+* **Sender Address (`EMAIL_FROM`):** `UNNATI <onboarding@resend.dev>`
+* **Features Configured:**
+  * Automated welcome email dispatched upon Clerk `user.created` webhook event.
+  * Milestone & roadmap ready notification templates (`send_roadmap_ready_email`).
+  * Non-blocking defensive sending with fallback mock logger.
+
 ---
 
 ## 3. Pending Requirements & Action Items (What Needs Your Input)
 
 The following items are the remaining inputs required before general public rollout:
 
-### 3.1 Transactional Email Sending (Resend)
-* **Why it's needed:** Automated welcome emails, assessment score summaries, and milestone achievements.
-* **Action Required:**
-  1. Go to [Resend Dashboard](https://resend.com/).
-  2. Add sending domain (e.g. `mail.unnati.in` or `unnati.in`).
-  3. Generate an API Key (`re_...`).
-  4. Add to Render & `.env`:
-     ```bash
-     RESEND_API_KEY=re_...
-     EMAIL_FROM="UNNATI <notifications@unnati.in>"
-     ```
-
-### 3.4 Production Domain & DNS Cutover (`unnati.in`)
+### 3.1 Custom Domain & DNS Cutover (`unnati.in`)
 * **Why it's needed:** Replaces Vercel default domain and Render `onrender.com` domain with your official branded apex domain.
 * **Target DNS Mapping (via Cloudflare DNS):**
   * Apex `unnati.in` &rarr; CNAME to Vercel (`cname.vercel-dns.com`)
@@ -134,7 +130,7 @@ The following items are the remaining inputs required before general public roll
 | **DEC-06** | OpenRouter API Key (Gateway Failover) | Upstream LLM Fallback | **P2** | Project Owner | `[x] Provisioned & Verified` | Phase 0 |
 | **DEC-07** | Upstash Redis TLS Cluster | Distributed Rate Limiting & Cache | **P0** | DevOps / Owner | `[x] Provisioned & Verified (Upstash TLS)` | Phase 0 |
 | **DEC-08** | Cloudflare R2 Private Bucket | Candidate Document Storage | **P0** | DevOps / Owner | `[x] Provisioned & Verified (Cloudflare R2)` | Phase 0 |
-| **DEC-09** | Resend Transactional Email Key | Automated Email Delivery | **P1** | Project Owner | `[ ] Pending Provisioning` | Phase 1 |
+| **DEC-09** | Resend Transactional Email Key | Automated Email Delivery | **P1** | Project Owner | `[x] Provisioned & Verified (Resend API)` | Phase 1 |
 | **DEC-10** | Custom Apex Domain Setup (`unnati.in`) | Production Domain Cutover | **P1** | Project Owner | `[ ] Pending DNS Registration` | Phase 1 |
 | **DEC-11** | DPDP Privacy Policy & GRO Nomination | India Regulatory Compliance | **P0** | Legal / Owner | `[ ] Pending Sign-Off` | Phase 1 |
 
@@ -169,4 +165,5 @@ The following table summarizes all environment variables currently in effect acr
 | `S3_BUCKET` | API | Yes | `unnati-private-documents` | No |
 | `S3_ACCESS_KEY_ID` | API | Yes | Configured in Render & `.env` | **YES** |
 | `S3_SECRET_ACCESS_KEY` | API | Yes | Configured in Render & `.env` | **YES** |
-| `RESEND_API_KEY` | API | *Pending* | Default: console logger | **YES** |
+| `RESEND_API_KEY` | API | Yes | Configured in Render & `.env` (`re_2V1Q...`) | **YES** |
+| `EMAIL_FROM` | API | Yes | `UNNATI <onboarding@resend.dev>` | No |

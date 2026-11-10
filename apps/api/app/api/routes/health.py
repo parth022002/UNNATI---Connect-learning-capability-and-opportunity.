@@ -6,6 +6,7 @@ from app.core.config import settings
 from app.core.security import get_current_user
 from app.core.redis_client import get_redis_client
 from app.core.storage import get_s3_client
+from app.core.email import is_email_configured
 
 router = APIRouter(tags=["system"])
 
@@ -96,6 +97,16 @@ def health_redis():
             "status": "error",
             "message": str(e)
         }
+
+@router.get("/health/email")
+def health_email():
+    configured = is_email_configured()
+    return {
+        "status": "connected" if configured else "mock",
+        "provider": "Resend",
+        "configured": configured,
+        "from_address": settings.email_from
+    }
 
 @router.get("/health/auth-check")
 async def health_auth_check(current_user: dict = Depends(get_current_user)):

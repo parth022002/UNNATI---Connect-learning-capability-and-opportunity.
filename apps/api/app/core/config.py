@@ -100,6 +100,10 @@ class Settings(BaseSettings):
     s3_presigned_download_ttl: int = 900
     s3_public_access: bool = False
 
+    # Transactional Email (Resend)
+    resend_api_key: Optional[str] = None
+    email_from: str = "UNNATI <onboarding@resend.dev>"
+
     # Logging
     log_level: str = "INFO"
 
