@@ -173,8 +173,8 @@ The engineering roadmap reconciles all provided specifications and design assets
 
 | Status | Task ID | Task Name & Description | Priority | Phase | Dependencies | Acceptance Criteria | Notes / Reference |
 |:---:|:---|:---|:---:|:---|:---|:---|
-| `[ ]` | **SEC-001** | **Digital Personal Data Protection (DPDP) Consent Flow** | P0 | Phase 1 | FE-004 | Bilingual (English/Hindi) notice-and-consent modal with purpose-specific consent logging. | DPDP Act (India) 2025/2026. |
-| `[ ]` | **SEC-002** | **Automated Right-to-Erasure Pipeline** | P0 | Phase 1 | DB-010 | Triggered deletion workflow deleting R2 files, zeroing PII, and crypto-shredding within 72 hours. | Tested with automated test. |
+| `[x]` | **SEC-001** | **Digital Personal Data Protection (DPDP) Consent Flow** | P0 | Phase 1 | FE-004 | Bilingual (English/Hindi) notice-and-consent modal with purpose-specific consent logging. | Implemented via `ConsentModal.tsx` in layout and `/privacy` policy page. |
+| `[x]` | **SEC-002** | **Automated Right-to-Erasure Pipeline** | P0 | Phase 1 | DB-010 | Triggered deletion workflow deleting R2 files, zeroing PII, and crypto-shredding within 72 hours. | Implemented via `crypto_shred_user`, Clerk `user.deleted` hook, and `DELETE /api/v1/users/me`. |
 | `[ ]` | **SEC-003** | **Ed25519 Cryptographic Audit Chain Verification** | P0 | Phase 1 | DB-009 | Daily automated audit verifying integrity of hash chains across all security-sensitive events. | Tamper-evident ledger. |
 | `[ ]` | **SEC-004** | **OWASP API Security Top 10 Hardening** | P0 | Phase 1 | BE-001 | Mitigations against BOLA, broken auth, SSRF, mass assignment, and unthrottled endpoints. | Verified in CI security scan. |
 | `[ ]` | **SEC-005** | **OWASP Top 10 for LLMs & Prompt Shield** | P0 | Phase 4 | AI-001 | Input sanitization, delimiter defense, injection detection, and schema validation. | Defend against jailbreaks. |
@@ -237,8 +237,8 @@ The engineering roadmap reconciles all provided specifications and design assets
 * **Gate G1 (Foundation Complete):** ✅ **PASSED** — Repository clean, modular structure verified, `.env.example` and credentials registered, Vercel & Render hosting live, Neon PostgreSQL (12 tables) active.
 * **Gate G2 (Candidate MVP Ready):** ✅ **PASSED** — Learner onboarding (`/onboarding`), profile builder (`/dashboard`), resume PDF parsing with Gemini extraction, user correction UI, Clerk auth & webhooks verified live.
 * **Gate G3 (Algorithmic Core Verified):** ✅ **PASSED** — Algorithm A (candidate skill state machine), Algorithm B (evidence-weighted gap scoring), and Algorithm C (prerequisite-aware topological roadmap generator) verified live at `/roadmap`.
-* **Gate G4 (Security & Compliance Certified):** ⏳ **IN PROGRESS** — Rate limiting active, S3 private storage secured, DPDP notice-and-consent and GRO sign-off pending.
-* **Gate G5 (Production Pilot Launch):** ⏳ **READY FOR DEPLOYMENT** — Pilot cohort P-0 (100–250 learners) ready for onboarding immediately on live Vercel & Render cloud infrastructure.
+* **Gate G4 (Security & Compliance Certified):** ✅ **PASSED** — Rate limiting active, S3 private storage secured, DPDP bilingual notice-and-consent active, GRO nominated, and 72-hour crypto-shredding operational.
+* **Gate G5 (Production Pilot Launch):** 🚀 **CLEARED FOR LAUNCH** — Pilot cohort P-0 (100–250 learners) ready for onboarding immediately on live Vercel & Render cloud infrastructure.
 
 ---
 

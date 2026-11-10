@@ -9,7 +9,7 @@ from svix.webhooks import Webhook, WebhookVerificationError
 from app.core.config import settings
 from app.db.session import get_db
 from app.models.user import User, UserProfile, ClerkWebhookEvent
-from app.services.user_service import calculate_completeness
+from app.services.user_service import calculate_completeness, crypto_shred_user
 from app.core.email import send_welcome_email
 
 logger = logging.getLogger(__name__)
@@ -171,14 +171,14 @@ async def handle_clerk_webhook(
                     db.add(profile)
                     logger.info(f"Created candidate user from out-of-order user.updated webhook: {clerk_id}")
 
-        # 3. User Deleted (Soft delete)
+        # 3. User Deleted (DPDP Section 12 Right-to-Erasure & Crypto-Shredding)
         elif event_type == "user.deleted":
             clerk_id = data.get("id")
             if clerk_id:
                 user = db.scalar(select(User).where(User.clerk_id == clerk_id))
                 if user:
-                    user.is_active = False
-                    logger.info(f"Deactivated candidate user in DB from webhook: {clerk_id}")
+                    crypto_shred_user(db, user)
+                    logger.info(f"Purged candidate identity and shredded assets via DPDP: {clerk_id}")
 
         # 4. Session Ended (Audit & Status Update)
         elif event_type == "session.ended":

@@ -95,3 +95,25 @@ def generate_presigned_upload_url(key: str, content_type: str = "application/pdf
         logger.error(f"Failed to generate presigned upload URL for key {key}: {e}")
         return None
 
+def delete_file_from_storage(key: str) -> bool:
+    """Permanently deletes a candidate file from Cloudflare R2 or local storage (DPDP Right-to-Erasure)."""
+    client = get_s3_client()
+    if client and settings.storage_backend == "s3":
+        try:
+            client.delete_object(Bucket=settings.s3_bucket, Key=key)
+            logger.info(f"Permanently shredded object from R2: {key}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to delete object from R2 {key}: {e}")
+            return False
+    else:
+        try:
+            local_path = Path(settings.upload_dir) / key
+            if local_path.exists():
+                local_path.unlink()
+                logger.info(f"Shredded local file: {local_path}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to shred local file {key}: {e}")
+            return False
+

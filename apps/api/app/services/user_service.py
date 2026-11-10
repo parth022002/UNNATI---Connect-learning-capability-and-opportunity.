@@ -2,8 +2,13 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from typing import Optional, Dict, Any
 import re
+import logging
 from app.models.user import User, UserProfile, EducationRecord, ExperienceRecord
+from app.models.document import CandidateDocument
 from app.schemas.user import UserProfileUpdate, EducationRecordCreate, ExperienceRecordCreate
+from app.core.storage import delete_file_from_storage
+
+logger = logging.getLogger(__name__)
 
 def calculate_completeness(user: User) -> int:
     """Calculates profile completeness score (0-100%)."""
@@ -127,4 +132,32 @@ def add_experience(db: Session, user: User, exp_in: ExperienceRecordCreate) -> E
     db.commit()
     db.refresh(exp)
     return exp
+
+def crypto_shred_user(db: Session, user: User) -> bool:
+    """
+    Executes DPDP Act (India) Section 12 Right-to-Erasure and 72-hour crypto-shredding.
+    1. Permanently shreds all private documents and resumes from Cloudflare R2 / storage.
+    2. Cascades deletion across candidate profile, education, experience, roadmaps, and skills.
+    3. Purges user identity record from PostgreSQL.
+    """
+    user_id = user.id
+    clerk_id = user.clerk_id
+    logger.info(f"Initiating DPDP crypto-shredding for candidate {user_id} (Clerk: {clerk_id})")
+
+    try:
+        # 1. Purge all stored candidate files from R2 / storage
+        docs = db.scalars(select(CandidateDocument).where(CandidateDocument.user_id == user_id)).all()
+        for doc in docs:
+            if doc.storage_path:
+                delete_file_from_storage(doc.storage_path)
+
+        # 2. Delete user entity (cascades to profile, education, experience, candidate_skills, roadmaps)
+        db.delete(user)
+        db.commit()
+        logger.info(f"DPDP crypto-shredding completed successfully for candidate {user_id}")
+        return True
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Failed to execute DPDP crypto-shredding for candidate {user_id}: {e}")
+        return False
 

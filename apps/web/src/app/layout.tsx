@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import "./globals.css";
+import ConsentModal from "../components/privacy/ConsentModal";
 
 export const metadata: Metadata = {
   title: "UNNATI — Your Growth Companion",
@@ -11,7 +12,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
-        <ClerkProvider>{children}</ClerkProvider>
+        <ClerkProvider>
+          {children}
+          <ConsentModal />
+        </ClerkProvider>
       </body>
     </html>
   );

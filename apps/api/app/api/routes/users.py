@@ -19,7 +19,8 @@ from app.services.user_service import (
     sync_clerk_user,
     update_user_profile,
     add_education,
-    add_experience
+    add_experience,
+    crypto_shred_user
 )
 
 router = APIRouter(prefix="/api/v1/users", tags=["users"])
@@ -80,4 +81,25 @@ def create_experience(
     """Adds a professional work or internship experience record."""
     exp = add_experience(db, user, exp_in)
     return exp
+
+@router.delete("/me", status_code=status.HTTP_200_OK)
+def delete_candidate_account(
+    user: User = Depends(get_db_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Statutory Right-to-Erasure (DPDP Act India 2025/2026).
+    Permanently crypto-shreds all uploaded resumes/documents from Cloudflare R2
+    and purges all user profiles, education, experience, and roadmap data.
+    """
+    success = crypto_shred_user(db, user)
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to complete DPDP erasure."
+        )
+    return {
+        "status": "success",
+        "message": "Candidate account and all personal assets permanently erased pursuant to DPDP Act."
+    }
 

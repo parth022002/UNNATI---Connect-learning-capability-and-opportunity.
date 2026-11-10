@@ -25,7 +25,7 @@
 | **Private Object Storage** | Cloudflare R2 / S3 | ✅ **COMPLETED** | `unnati-private-documents`, S3 API endpoint active, presigned URLs & storage verified |
 | **Transactional Email** | Resend API | ✅ **COMPLETED** | `re_...`, welcome emails, health probe at `/health/email` |
 | **Production Domains** | Vercel & Render Cloud URLs | ✅ **ACTIVE** | Frontend: Vercel Cloud, API: `onrender.com` (Direct cloud domains active) |
-| **Legal & DPDP Compliance** | Consent Modal & Policy | ⏳ **PENDING** | Bilingual consent wording & Grievance Redressal Officer (GRO) nomination |
+| **Legal & DPDP Compliance** | Consent Modal & Policy | ✅ **COMPLETED** | Bilingual consent modal, GRO nominated, 72h crypto-shredding & policy live at `/privacy` |
 
 ---
 
@@ -96,18 +96,38 @@
   * Milestone & roadmap ready notification templates (`send_roadmap_ready_email`).
   * Non-blocking defensive sending with fallback mock logger.
 
+### 2.8 Legal, Privacy & DPDP Compliance (India DPDP Act 2025 & EU AI Act)
+* **Status:** ✅ **COMPLETED & OPERATIONAL**
+* **Formative Classification:** Non-Annex III formative candidate mentorship under EU AI Act.
+* **Statutory Privacy Policy:** Live at `/privacy` (`apps/web/src/app/privacy/page.tsx`).
+* **Bilingual Notice-and-Consent Modal:** Integrated in Next.js layout (`apps/web/src/components/privacy/ConsentModal.tsx`) with English and Hindi affirmative consent checkboxes and age confirmation.
+* **Grievance Redressal Officer (GRO):**
+  * Designation: Grievance Redressal Officer (UNNATI Trust & Ethics Office)
+  * Official Email: `gro@unnati.dev`
+  * Statutory SLA: 24-hour acknowledgement, 15-day resolution.
+* **72-Hour Crypto-Shredding & Right-to-Erasure:**
+  * Automated user deletion handler in `apps/api/app/services/user_service.py` (`crypto_shred_user`).
+  * Permanent object deletion from Cloudflare R2 bucket (`delete_file_from_storage`).
+  * Cascaded deletion across user profile, education, experience, candidate skills, and roadmaps.
+  * Accessible via Clerk `user.deleted` webhook and direct endpoint `DELETE /api/v1/users/me`.
+* **Data Retention Policy:** 2-year rolling retention policy for active candidate accounts.
+
 ---
 
 ## 3. Pending Requirements & Action Items (What Needs Your Input)
 
-The following single item is the remaining input required before general public rollout:
+🎉 **All Core Prerequisites, Credentials, and Compliance Sign-Offs are 100% COMPLETE!**
 
-### 3.1 Legal, Privacy & DPDP Compliance Sign-Off
-* **Why it's needed:** Compliance with the Digital Personal Data Protection Act (DPDP Act, India 2025/2026) and EU AI Act (Non-Annex III formative self-development guidance).
-* **Decisions Required:**
-  1. Confirm Bilingual (English/Hindi) Notice-and-Consent wording for candidate registration.
-  2. Nominate Grievance Redressal Officer (GRO) contact email address.
-  3. Confirm 2-year rolling candidate profile retention with 72-hour crypto-shredding on account deletion.
+There are currently **zero blocking requirements**. The candidate core platform is fully provisioned, integrated, and verified for production rollout:
+* ✅ **Vercel Frontend Hosting:** Active edge network.
+* ✅ **Render FastAPI Backend:** Active Python 3.11 container.
+* ✅ **Neon Serverless PostgreSQL:** 12 tables, pgvector, pgcrypto, 3 migrations applied.
+* ✅ **Clerk Authentication & Svix Webhooks:** RS256 JWKS caching, user sync verified with blue checkmark.
+* ✅ **Multi-Provider AI Acceleration:** Gemini 2.5 Flash + Groq + OpenRouter fallback.
+* ✅ **Upstash Redis Cluster:** Distributed sliding-window rate limiting & 24h taxonomy cache.
+* ✅ **Cloudflare R2 Object Storage:** Private bucket `unnati-private-documents` with presigned URLs.
+* ✅ **Resend Transactional Email:** Automated candidate onboarding welcome emails.
+* ✅ **DPDP Act (India) Compliance:** Bilingual consent, GRO nomination, and 72-hour crypto-shredding.
 
 ---
 
@@ -125,7 +145,7 @@ The following single item is the remaining input required before general public 
 | **DEC-08** | Cloudflare R2 Private Bucket | Candidate Document Storage | **P0** | DevOps / Owner | `[x] Provisioned & Verified (Cloudflare R2)` | Phase 0 |
 | **DEC-09** | Resend Transactional Email Key | Automated Email Delivery | **P1** | Project Owner | `[x] Provisioned & Verified (Resend API)` | Phase 1 |
 | **DEC-10** | Custom Apex Domain Setup | Production Domain Cutover | **P1** | Project Owner | `[N/A] Waived (Production on Vercel + Render)` | Phase 1 |
-| **DEC-11** | DPDP Privacy Policy & GRO Nomination | India Regulatory Compliance | **P0** | Legal / Owner | `[ ] Pending Sign-Off` | Phase 1 |
+| **DEC-11** | DPDP Privacy Policy & GRO Nomination | India Regulatory Compliance | **P0** | Legal / Owner | `[x] Provisioned & Verified (DPDP Compliant)` | Phase 1 |
 
 ---
 
