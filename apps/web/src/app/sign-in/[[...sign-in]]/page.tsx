@@ -23,25 +23,26 @@ export default function SignInPage() {
       {/* Center Auth Card with Prominent Logo */}
       <div className="relative z-10 mx-auto max-w-md w-full flex flex-col items-center">
         <div className="mb-6 flex flex-col items-center text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-800 to-orange-500 p-2.5 shadow-md mb-3">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-100/90 via-white to-orange-50/80 p-1.5 border-2 border-purple-200/90 shadow-soft-md mb-3">
             <Image 
               src="/logo.png" 
               alt="UNNATI" 
-              width={48} 
-              height={48} 
-              className="h-11 w-11 object-contain drop-shadow-sm" 
+              width={52} 
+              height={52} 
+              className="h-10 w-10 object-contain" 
               priority 
             />
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="font-heading text-2xl font-black tracking-tight text-slate-900">
+          <div className="flex items-center gap-2">
+            <span className="font-heading text-2xl font-black tracking-tight text-unnati-indigo">
               UNNATI
             </span>
-            <span className="text-sm font-semibold text-purple-800">
+            <span className="text-[13px] font-bold text-purple-700 font-sans">
               (उन्नति)
             </span>
+            <span className="h-2 w-2 rounded-full bg-unnati-saffron animate-pulse" />
           </div>
-          <p className="text-xs font-semibold text-slate-500 mt-0.5">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mt-1">
             Your Growth Companion
           </p>
         </div>

@@ -232,26 +232,27 @@ export default function OnboardingPage() {
       <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto flex h-20 max-w-5xl items-center justify-between px-6">
           <Link href="/" className="group flex items-center gap-3.5 focus:outline-none">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-800 to-orange-500 p-2 shadow-md">
+            <div className="relative flex h-13 w-13 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-100/90 via-white to-orange-50/80 p-1.5 border-2 border-purple-200/90 shadow-soft-md transition-all duration-300 group-hover:border-unnati-violet">
               <Image 
                 src="/logo.png" 
                 alt="UNNATI" 
-                width={44} 
-                height={44} 
-                className="h-10 w-10 object-contain drop-shadow-sm" 
+                width={52} 
+                height={52} 
+                className="h-10 w-10 object-contain transition-transform duration-300 group-hover:scale-105" 
                 priority 
               />
             </div>
             <div className="flex flex-col">
-              <div className="flex items-center gap-1.5 leading-none">
-                <span className="font-heading text-xl font-black tracking-tight text-slate-900">
+              <div className="flex items-center gap-2 leading-none">
+                <span className="font-heading text-2xl font-black tracking-tight text-unnati-indigo group-hover:text-unnati-violet transition-colors">
                   UNNATI
                 </span>
-                <span className="text-xs font-semibold text-purple-800">
+                <span className="text-[13px] font-bold text-purple-700 font-sans">
                   (उन्नति)
                 </span>
+                <span className="inline-block h-2 w-2 rounded-full bg-unnati-saffron animate-pulse" />
               </div>
-              <span className="text-[11px] font-semibold text-slate-500 tracking-wide mt-0.5">
+              <span className="text-[11px] font-bold tracking-wider text-slate-500 uppercase mt-1">
                 Your Growth Companion
               </span>
             </div>
