@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 
 from app.core.config import settings
+from app.core.storage import upload_document_bytes
 from app.models.document import CandidateDocument
 from app.models.user import User, UserProfile, EducationRecord, ExperienceRecord
 from app.models.skill import CanonicalSkill, SkillAlias, CandidateSkill
@@ -221,12 +222,9 @@ def save_and_parse_document(
     file_size = len(file_bytes)
     doc_id = uuid.uuid4()
 
-    # Create destination directory: storage/uploads/{user_id}/
-    storage_dir = Path(settings.upload_dir) / str(user.id)
-    storage_dir.mkdir(parents=True, exist_ok=True)
     safe_filename = re.sub(r"[^\w\-.]", "_", filename)
-    dest_path = storage_dir / f"{doc_id}_{safe_filename}"
-    dest_path.write_bytes(file_bytes)
+    storage_key = f"{user.id}/{doc_id}_{safe_filename}"
+    storage_path = upload_document_bytes(file_bytes, storage_key, mime_type)
 
     # Extract text
     raw_text = ""
@@ -249,7 +247,7 @@ def save_and_parse_document(
         filename=filename,
         file_size_bytes=file_size,
         mime_type=mime_type,
-        storage_path=str(dest_path),
+        storage_path=storage_path,
         checksum_sha256=checksum,
         status="PROCESSING",
         raw_text=raw_text

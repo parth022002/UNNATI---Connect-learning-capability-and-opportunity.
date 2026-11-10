@@ -28,6 +28,18 @@ services:
         value: "true"
       - key: RATE_LIMIT_ENABLED
         value: "true"
+      - key: STORAGE_BACKEND
+        value: "s3"
+      - key: S3_ENDPOINT_URL
+        value: "https://fff51884b9fbf78df9303e2c5952d621.r2.cloudflarestorage.com"
+      - key: S3_REGION
+        value: "auto"
+      - key: S3_BUCKET
+        value: "unnati-private-documents"
+      - key: S3_ACCESS_KEY_ID
+        sync: false
+      - key: S3_SECRET_ACCESS_KEY
+        sync: false
       - key: CLERK_WEBHOOK_SECRET
         sync: false
       - key: GEMINI_API_KEY

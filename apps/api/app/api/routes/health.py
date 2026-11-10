@@ -5,6 +5,7 @@ import time
 from app.core.config import settings
 from app.core.security import get_current_user
 from app.core.redis_client import get_redis_client
+from app.core.storage import get_s3_client
 
 router = APIRouter(tags=["system"])
 
@@ -38,6 +39,35 @@ def health_db():
     except Exception as e:
         return {
             "status": "error",
+            "message": str(e)
+        }
+
+@router.get("/health/storage")
+def health_storage():
+    client = get_s3_client()
+    if not client or settings.storage_backend != "s3":
+        return {
+            "status": "local",
+            "backend": "local_filesystem",
+            "upload_dir": settings.upload_dir
+        }
+    try:
+        start = time.perf_counter()
+        res = client.list_objects_v2(Bucket=settings.s3_bucket, MaxKeys=1)
+        latency_ms = round((time.perf_counter() - start) * 1000, 2)
+        return {
+            "status": "connected",
+            "backend": "Cloudflare R2",
+            "bucket": settings.s3_bucket,
+            "region": settings.s3_region,
+            "endpoint": settings.s3_endpoint_url,
+            "latency_ms": latency_ms,
+            "object_count": res.get("KeyCount", 0)
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "backend": "Cloudflare R2",
             "message": str(e)
         }
 

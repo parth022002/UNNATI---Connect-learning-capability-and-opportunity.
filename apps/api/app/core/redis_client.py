@@ -87,3 +87,4 @@ def check_rate_limit(key: str, limit: int, window_seconds: int = 60) -> tuple[bo
     except Exception as e:
         logger.warning(f"Rate limit check error for key {key}: {e}")
         return True, limit
+

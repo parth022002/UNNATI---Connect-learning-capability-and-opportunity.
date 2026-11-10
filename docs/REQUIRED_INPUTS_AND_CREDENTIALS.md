@@ -22,7 +22,7 @@
 | **Fast Inference AI** | Groq (`llama-3.3-70b`) | ✅ **COMPLETED** | Sub-400ms conversational inference fallback |
 | **Gateway Fallback AI** | OpenRouter | ✅ **COMPLETED** | Secondary upstream redundancy |
 | **Distributed Caching** | Upstash Redis | ✅ **COMPLETED** | `capable-tetra-139975.upstash.io:6379`, TLS `rediss://`, rate limiting & caching verified |
-| **Private Object Storage** | Cloudflare R2 / S3 | ⏳ **PENDING** | Private document bucket for candidate PDFs. *(Currently running with local storage fallback)* |
+| **Private Object Storage** | Cloudflare R2 / S3 | ✅ **COMPLETED** | `unnati-private-documents`, S3 API endpoint active, presigned URLs & storage verified |
 | **Transactional Email** | Resend API | ⏳ **PENDING** | Welcome emails, milestone celebration notifications (`mail.unnati.in`) |
 | **Custom Domain & DNS** | Cloudflare (`unnati.in`) | ⏳ **PENDING** | Apex `unnati.in` & `api.unnati.in` custom domain cutover |
 | **Legal & DPDP Compliance** | Consent Modal & Policy | ⏳ **PENDING** | Bilingual consent wording & Grievance Redressal Officer (GRO) appointment |
@@ -77,30 +77,24 @@
   * Taxonomy cache TTL: 86,400s (24 hours)
   * Resilient connection pooling with graceful in-memory fallback.
 
+### 2.6 Private Object Storage (Cloudflare R2)
+* **Bucket Name:** `unnati-private-documents`
+* **Endpoint URL:** `https://fff51884b9fbf78df9303e2c5952d621.r2.cloudflarestorage.com`
+* **Region:** `auto`
+* **Status:** Verified live (`GET /health/storage` &rarr; `status: connected`, `object_count: 0`, latency: ~711ms)
+* **Features Configured:**
+  * Zero public access (`s3_public_access = False`)
+  * Presigned upload & download URLs with 900s (15 min) TTL
+  * Candidate resumes and transcripts stored under `uploads/{user_id}/{doc_id}_{filename}`
+  * Resilient local filesystem fallback if S3 is ever unreachable.
+
 ---
 
 ## 3. Pending Requirements & Action Items (What Needs Your Input)
 
 The following items are the remaining inputs required before general public rollout:
 
-### 3.1 Private Object Storage (Cloudflare R2 / AWS S3)
-* **Why it's needed:** Production storage for candidate resumes, transcripts, and certificates with zero public read access and 15-minute presigned upload URLs.
-* **Action Required:**
-  1. In [Cloudflare Dashboard](https://dash.cloudflare.com/) &rarr; **R2 Object Storage**.
-  2. Click **Create bucket** &rarr; Name: `unnati-private-documents` (Region: `APAC`).
-  3. Under **Manage R2 API Tokens**, create a token with `Object Read & Write` permissions.
-  4. Copy `Access Key ID`, `Secret Access Key`, and the Account S3 Endpoint URL.
-  5. Add to Render & `.env`:
-     ```bash
-     STORAGE_BACKEND=s3
-     S3_ENDPOINT_URL=https://<ACCOUNT_ID>.r2.cloudflarestorage.com
-     S3_REGION=auto
-     S3_BUCKET=unnati-private-documents
-     S3_ACCESS_KEY_ID=<YOUR_ACCESS_KEY_ID>
-     S3_SECRET_ACCESS_KEY=<YOUR_SECRET_ACCESS_KEY>
-     ```
-
-### 3.3 Transactional Email Sending (Resend)
+### 3.1 Transactional Email Sending (Resend)
 * **Why it's needed:** Automated welcome emails, assessment score summaries, and milestone achievements.
 * **Action Required:**
   1. Go to [Resend Dashboard](https://resend.com/).
@@ -139,7 +133,7 @@ The following items are the remaining inputs required before general public roll
 | **DEC-05** | Groq API Key (Low-Latency LLM) | Fast Agent Inference | **P1** | Project Owner | `[x] Provisioned & Verified` | Phase 0 |
 | **DEC-06** | OpenRouter API Key (Gateway Failover) | Upstream LLM Fallback | **P2** | Project Owner | `[x] Provisioned & Verified` | Phase 0 |
 | **DEC-07** | Upstash Redis TLS Cluster | Distributed Rate Limiting & Cache | **P0** | DevOps / Owner | `[x] Provisioned & Verified (Upstash TLS)` | Phase 0 |
-| **DEC-08** | Cloudflare R2 Private Bucket | Candidate Document Storage | **P0** | DevOps / Owner | `[ ] Pending Provisioning` | Phase 1 |
+| **DEC-08** | Cloudflare R2 Private Bucket | Candidate Document Storage | **P0** | DevOps / Owner | `[x] Provisioned & Verified (Cloudflare R2)` | Phase 0 |
 | **DEC-09** | Resend Transactional Email Key | Automated Email Delivery | **P1** | Project Owner | `[ ] Pending Provisioning` | Phase 1 |
 | **DEC-10** | Custom Apex Domain Setup (`unnati.in`) | Production Domain Cutover | **P1** | Project Owner | `[ ] Pending DNS Registration` | Phase 1 |
 | **DEC-11** | DPDP Privacy Policy & GRO Nomination | India Regulatory Compliance | **P0** | Legal / Owner | `[ ] Pending Sign-Off` | Phase 1 |
@@ -170,5 +164,9 @@ The following table summarizes all environment variables currently in effect acr
 | `REDIS_URL` | API | Yes | Configured in Render & `.env` (`rediss://...upstash.io:6379`) | **YES** |
 | `REDIS_ENABLED` | API | Yes | `"true"` | No |
 | `RATE_LIMIT_ENABLED` | API | Yes | `"true"` | No |
-| `S3_BUCKET` / `S3_KEY` | API | *Pending* | Default: local storage (`storage/uploads`) | **YES** |
+| `STORAGE_BACKEND` | API | Yes | `"s3"` (Cloudflare R2 private bucket) | No |
+| `S3_ENDPOINT_URL` | API | Yes | `https://fff51884b9fbf78df9303e2c5952d621.r2.cloudflarestorage.com` | No |
+| `S3_BUCKET` | API | Yes | `unnati-private-documents` | No |
+| `S3_ACCESS_KEY_ID` | API | Yes | Configured in Render & `.env` | **YES** |
+| `S3_SECRET_ACCESS_KEY` | API | Yes | Configured in Render & `.env` | **YES** |
 | `RESEND_API_KEY` | API | *Pending* | Default: console logger | **YES** |

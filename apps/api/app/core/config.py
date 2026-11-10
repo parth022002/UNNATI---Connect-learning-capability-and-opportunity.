@@ -88,8 +88,17 @@ class Settings(BaseSettings):
     openrouter_api_key: Optional[str] = None
     openai_api_key: Optional[str] = None
 
-    # Storage
+    # Storage (Cloudflare R2 / AWS S3 / Local)
+    storage_backend: str = "s3"
     upload_dir: str = "storage/uploads"
+    s3_endpoint_url: Optional[str] = "https://fff51884b9fbf78df9303e2c5952d621.r2.cloudflarestorage.com"
+    s3_region: str = "auto"
+    s3_bucket: str = "unnati-private-documents"
+    s3_access_key_id: Optional[str] = None
+    s3_secret_access_key: Optional[str] = None
+    s3_presigned_upload_ttl: int = 900
+    s3_presigned_download_ttl: int = 900
+    s3_public_access: bool = False
 
     # Logging
     log_level: str = "INFO"
