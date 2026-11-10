@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: unnati-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: unnati
+      POSTGRES_PASSWORD: unnati_dev_password
+      POSTGRES_DB: unnati
+    ports:
+      - "5432:5432"
+    volumes:
+      - unnati_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U unnati -d unnati"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: unnati-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - unnati_redis_data:/data
+
+  neo4j:
+    image: neo4j:5-community
+    container_name: unnati-neo4j
+    environment:
+      NEO4J_AUTH: neo4j/unnati_dev_password
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - unnati_neo4j_data:/data
+
+volumes:
+  unnati_postgres_data:
+  unnati_redis_data:
+  unnati_neo4j_data:

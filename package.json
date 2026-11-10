@@ -1,0 +1,12 @@
+{
+  "name": "unnati",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev": "pnpm --filter @unnati/web dev",
+    "build": "pnpm --filter @unnati/web build",
+    "lint": "pnpm --filter @unnati/web lint",
+    "typecheck": "pnpm --filter @unnati/web typecheck"
+  }
+}

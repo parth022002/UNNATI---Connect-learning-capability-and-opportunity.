@@ -1,0 +1,21 @@
+{
+  "brand": {
+    "name": "UNNATI",
+    "hindiName": "उन्नति",
+    "tagline": "Your Growth Companion",
+    "campaignLine": "Learn. Build. Grow. Succeed."
+  },
+  "colors": {
+    "indigo": "#4C1D95",
+    "violet": "#7C3AED",
+    "saffron": "#FF8A00",
+    "teal": "#14B8A6",
+    "midnight": "#17152D",
+    "cloud": "#F8FAFC"
+  },
+  "typography": {
+    "display": "Poppins",
+    "body": "Inter",
+    "devanagari": "Noto Sans Devanagari"
+  }
+}

@@ -1,0 +1,42 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.core.config import settings
+from app.api.routes.health import router as health_router
+from app.api.routes.users import router as users_router
+from app.api.routes.skills import router as skills_router
+from app.api.routes.documents import router as documents_router
+from app.api.routes.roadmaps import router as roadmaps_router
+from app.api.routes.webhooks import router as webhooks_router
+
+app = FastAPI(
+    title="UNNATI (उन्नति) API",
+    description="AI-powered career growth and talent intelligence platform API",
+    version="1.0.0",
+)
+
+origins = [origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Core Routers
+app.include_router(health_router)
+app.include_router(users_router)
+app.include_router(skills_router)
+app.include_router(documents_router)
+app.include_router(roadmaps_router)
+app.include_router(webhooks_router)
+
+@app.get("/")
+async def root():
+    return {
+        "name": "UNNATI (उन्नति) API",
+        "tagline": "Your Growth Companion",
+        "docs": "/docs",
+        "health": "/health",
+        "version": "1.0.0"
+    }
