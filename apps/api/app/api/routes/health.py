@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import create_async_engine
 import psycopg
 from app.core.config import settings
 from app.core.security import get_current_user
