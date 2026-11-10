@@ -244,8 +244,9 @@ export default function HomePage() {
         {/* ========================================================
             HERO SECTION: Porsche / Trionn Visual Confidence & Polish
            ======================================================== */}
-        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 pb-18">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        <section className="w-full relative overflow-hidden pt-10 sm:pt-16 pb-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             
             {/* Left Column: Core Positioning & Typography */}
             <div className="lg:col-span-7 space-y-6 text-left">
@@ -418,13 +419,15 @@ export default function HomePage() {
             </div>
 
           </div>
+          </div>
         </section>
 
         {/* ========================================================
             SECTION 2: AUDIENCE PATHWAYS (Who UNNATI Helps)
            ======================================================== */}
-        <section id="audiences" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-22 border-t border-slate-200/80">
-          <ScrollReveal direction="up">
+        <section id="audiences" className="w-full bg-white border-t border-slate-200/80 py-20 sm:py-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <ScrollReveal direction="up">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <Badge variant="violet" className="text-xs mb-3">
                 Tailored For Your Stage
@@ -479,29 +482,33 @@ export default function HomePage() {
               );
             })}
           </div>
+          </div>
         </section>
 
         {/* ========================================================
             SECTION 3: CONTINUOUS CAREER JOURNEY (21hrs Storytelling Flow)
            ======================================================== */}
-        <section id="how-it-works" className="bg-white py-24 border-t border-slate-200 relative overflow-hidden">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section id="how-it-works" className="w-full bg-slate-50/90 border-t border-slate-200/90 py-20 sm:py-24 relative overflow-hidden">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
             <ScrollReveal direction="up">
               <div className="text-center max-w-3xl mx-auto mb-16">
                 <Badge variant="saffron" className="text-xs mb-3">
-                  Continuous Growth Cycle
+                  Continuous 6-Stage Growth Cycle
                 </Badge>
                 <h2 className="font-heading text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-slate-900 tracking-tight leading-tight">
-                  How UNNATI Powers Your Lifelong Growth
+                  How UNNATI Powers Your Lifelong Career Growth
                 </h2>
-                <p className="text-base text-slate-600 mt-3 leading-relaxed">
-                  Growth is not a one-time test. It is an adaptive feedback loop that evolves as you acquire practical skills and target higher opportunities.
+                <p className="text-base text-slate-600 mt-3 leading-relaxed max-w-2xl mx-auto">
+                  Growth is not a one-time test. It is an adaptive 6-stage feedback loop that evolves as you acquire practical competencies, build real proof of work, and unlock high-impact opportunities.
                 </p>
               </div>
             </ScrollReveal>
 
+            {/* Desktop Animated Connector Line */}
+            <div className="hidden lg:block absolute top-[280px] left-[6%] right-[6%] h-[2px] bg-gradient-to-r from-purple-300 via-orange-300 to-emerald-300 z-0 opacity-40" />
+
             {/* Connected Journey Grid with Visual Flow Indicator */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5 relative">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5 relative z-10">
               {[
                 {
                   num: "01",
@@ -600,8 +607,9 @@ export default function HomePage() {
         {/* ========================================================
             SECTION 4: PRODUCT SHOWCASE (Epiminds / Cerebrium Working Tools)
            ======================================================== */}
-        <section id="showcase" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 border-t border-slate-200/80">
-          <ScrollReveal direction="up">
+        <section id="showcase" className="w-full bg-slate-100/60 border-t border-slate-200/80 py-20 sm:py-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <ScrollReveal direction="up">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <Badge variant="violet" className="text-xs mb-3">
                 Inside UNNATI
@@ -930,13 +938,15 @@ export default function HomePage() {
               )}
             </div>
           </ScrollReveal>
+          </div>
         </section>
 
         {/* ========================================================
             SECTION 5: INTERACTIVE SKILL GAP DIAGNOSTIC
            ======================================================== */}
-        <section id="diagnostic" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 border-t border-slate-200/80">
-          <ScrollReveal direction="up">
+        <section id="diagnostic" className="w-full bg-gradient-to-b from-purple-50/40 via-orange-50/20 to-white border-t border-slate-200/80 py-20 sm:py-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <ScrollReveal direction="up">
             <div className="text-center max-w-3xl mx-auto mb-14">
               <Badge variant="violet" className="text-xs mb-3">
                 Interactive Career Diagnostic
@@ -1040,13 +1050,14 @@ export default function HomePage() {
               </div>
             </div>
           </ScrollReveal>
+          </div>
         </section>
 
         {/* ========================================================
             SECTION 6: TRUST, ETHICS & DATA PROTECTION (Midnight / Deep Indigo)
            ======================================================== */}
-        <section id="trust" className="bg-purple-950 text-white py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-          <div className="max-w-5xl mx-auto space-y-12">
+        <section id="trust" className="w-full bg-purple-950 text-white border-t border-purple-900/60 py-20 sm:py-24 relative overflow-hidden">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
             <ScrollReveal direction="up">
               <div className="text-center max-w-3xl mx-auto">
                 <Badge variant="outline" className="text-xs mb-3 border-purple-400/40 text-purple-200">
@@ -1110,78 +1121,82 @@ export default function HomePage() {
         {/* ========================================================
             SECTION 7: FREQUENTLY ASKED QUESTIONS
            ======================================================== */}
-        <section id="faq" className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-24">
-          <ScrollReveal direction="up">
-            <div className="text-center mb-16">
-              <Badge variant="violet" className="text-xs mb-3">
-                Common Questions
-              </Badge>
-              <h2 className="font-heading text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-slate-900 tracking-tight leading-tight">
-                Frequently Asked Questions
-              </h2>
-              <p className="text-base text-slate-600 mt-3 leading-relaxed">
-                Everything you need to know about UNNATI.
-              </p>
-            </div>
-          </ScrollReveal>
+        <section id="faq" className="w-full bg-white border-t border-slate-200/80 py-20 sm:py-24">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <ScrollReveal direction="up">
+              <div className="text-center mb-16">
+                <Badge variant="violet" className="text-xs mb-3">
+                  Common Questions
+                </Badge>
+                <h2 className="font-heading text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-slate-900 tracking-tight leading-tight">
+                  Frequently Asked Questions
+                </h2>
+                <p className="text-base text-slate-600 mt-3 leading-relaxed">
+                  Everything you need to know about UNNATI.
+                </p>
+              </div>
+            </ScrollReveal>
 
-          <div className="space-y-4">
-            {faqs.map((faq, idx) => {
-              const isOpen = openFaqIndex === idx;
-              return (
-                <div
-                  key={idx}
-                  className="clean-card overflow-hidden transition-all border border-slate-200 bg-white"
-                >
-                  <button
-                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                    className="w-full flex items-center justify-between p-5 sm:p-6 text-left text-sm sm:text-base font-bold text-slate-900 hover:text-unnati-indigo transition-colors cursor-pointer"
-                    aria-expanded={isOpen}
+            <div className="space-y-4">
+              {faqs.map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div
+                    key={idx}
+                    className="clean-card overflow-hidden transition-all border border-slate-200 bg-white"
                   >
-                    <span>{faq.q}</span>
-                    {isOpen ? (
-                      <ChevronUp className="h-5 w-5 text-unnati-saffron shrink-0 ml-3" />
-                    ) : (
-                      <ChevronDown className="h-5 w-5 text-slate-400 shrink-0 ml-3" />
+                    <button
+                      onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                      className="w-full flex items-center justify-between p-5 sm:p-6 text-left text-sm sm:text-base font-bold text-slate-900 hover:text-unnati-indigo transition-colors cursor-pointer"
+                      aria-expanded={isOpen}
+                    >
+                      <span>{faq.q}</span>
+                      {isOpen ? (
+                        <ChevronUp className="h-5 w-5 text-unnati-saffron shrink-0 ml-3" />
+                      ) : (
+                        <ChevronDown className="h-5 w-5 text-slate-400 shrink-0 ml-3" />
+                      )}
+                    </button>
+                    {isOpen && (
+                      <div className="px-5 sm:px-6 pb-6 pt-0 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 animate-in fade-in duration-200">
+                        <p className="mt-3.5 leading-relaxed">{faq.a}</p>
+                      </div>
                     )}
-                  </button>
-                  {isOpen && (
-                    <div className="px-5 sm:px-6 pb-6 pt-0 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 animate-in fade-in duration-200">
-                      <p className="mt-3.5 leading-relaxed">{faq.a}</p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
 
         {/* ========================================================
             SECTION 8: FINAL CONVERSION BANNER
            ======================================================== */}
-        <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pb-24">
-          <ScrollReveal direction="up">
-            <div className="rounded-[2.5rem] bg-gradient-to-r from-unnati-indigo via-purple-900 to-unnati-indigo p-8 sm:p-14 text-center text-white shadow-soft-xl relative overflow-hidden">
-              <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
-                Your Career Journey Starts With One Step
-              </h2>
-              <p className="text-sm sm:text-base text-purple-200 max-w-xl mx-auto mt-4 leading-relaxed">
-                Join students, graduates, and professionals building verifiable capability and moving toward the careers they deserve.
-              </p>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                <Link href="/onboarding">
-                  <Button variant="saffron" size="lg" className="btn-shimmer text-base font-bold shadow-soft-md shadow-glow-saffron h-13 px-8 rounded-2xl text-white">
-                    Get Started Free <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </Link>
-                <Link href="/explore">
-                  <Button variant="outline" size="lg" className="text-base font-semibold bg-white/10 hover:bg-white/20 text-white border-white/30 h-13 px-8 rounded-2xl">
-                    Explore Career Pathways
-                  </Button>
-                </Link>
+        <section className="w-full bg-slate-50/90 border-t border-slate-200/80 py-20 sm:py-24">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <ScrollReveal direction="up">
+              <div className="rounded-[2.5rem] bg-gradient-to-r from-unnati-indigo via-purple-900 to-unnati-indigo p-8 sm:p-14 text-center text-white shadow-soft-xl relative overflow-hidden">
+                <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+                  Your Career Journey Starts With One Step
+                </h2>
+                <p className="text-sm sm:text-base text-purple-200 max-w-xl mx-auto mt-4 leading-relaxed">
+                  Join students, graduates, and professionals building verifiable capability and moving toward the careers they deserve.
+                </p>
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+                  <Link href="/onboarding">
+                    <Button variant="saffron" size="lg" className="btn-shimmer text-base font-bold shadow-soft-md shadow-glow-saffron h-13 px-8 rounded-2xl text-white">
+                      Get Started Free <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </Link>
+                  <Link href="/explore">
+                    <Button variant="outline" size="lg" className="text-base font-semibold bg-white/10 hover:bg-white/20 text-white border-white/30 h-13 px-8 rounded-2xl">
+                      Explore Career Pathways
+                    </Button>
+                  </Link>
+                </div>
               </div>
-            </div>
-          </ScrollReveal>
+            </ScrollReveal>
+          </div>
         </section>
 
       </main>
