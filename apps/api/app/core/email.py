@@ -113,3 +113,4 @@ def send_roadmap_ready_email(to_email: str, candidate_name: str, target_role: st
     </html>
     """
     return send_email(to_email, subject, html_content)
+

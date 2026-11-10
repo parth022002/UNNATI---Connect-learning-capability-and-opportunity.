@@ -23,7 +23,7 @@
 | **Gateway Fallback AI** | OpenRouter | ✅ **COMPLETED** | Secondary upstream redundancy |
 | **Distributed Caching** | Upstash Redis | ✅ **COMPLETED** | `capable-tetra-139975.upstash.io:6379`, TLS `rediss://`, rate limiting & caching verified |
 | **Private Object Storage** | Cloudflare R2 / S3 | ✅ **COMPLETED** | `unnati-private-documents`, S3 API endpoint active, presigned URLs & storage verified |
-| **Transactional Email** | Resend API | ✅ **COMPLETED** | `re_2V1Q...`, welcome emails, health probe at `/health/email` |
+| **Transactional Email** | Resend API | ✅ **COMPLETED** | `re_...`, welcome emails, health probe at `/health/email` |
 | **Custom Domain & DNS** | Cloudflare (`unnati.in`) | ⏳ **PENDING** | Apex `unnati.in` & `api.unnati.in` custom domain cutover |
 | **Legal & DPDP Compliance** | Consent Modal & Policy | ⏳ **PENDING** | Bilingual consent wording & Grievance Redressal Officer (GRO) appointment |
 
@@ -109,7 +109,7 @@ The following items are the remaining inputs required before general public roll
   * Subdomain `api.unnati.in` &rarr; CNAME to Render (`unnati-connect-learning-capability-and.onrender.com`)
 * **When ready:** Switch Clerk from Development instance to Production instance and update the webhook URL to `https://api.unnati.in/api/v1/webhooks/clerk`.
 
-### 3.5 Legal, Privacy & DPDP Compliance Sign-Off
+### 3.2 Legal, Privacy & DPDP Compliance Sign-Off
 * **Why it's needed:** Compliance with the Digital Personal Data Protection Act (DPDP Act, India 2025/2026) and EU AI Act (Non-Annex III formative self-development guidance).
 * **Decisions Required:**
   1. Confirm Bilingual (English/Hindi) Notice-and-Consent wording for registration.
@@ -165,5 +165,43 @@ The following table summarizes all environment variables currently in effect acr
 | `S3_BUCKET` | API | Yes | `unnati-private-documents` | No |
 | `S3_ACCESS_KEY_ID` | API | Yes | Configured in Render & `.env` | **YES** |
 | `S3_SECRET_ACCESS_KEY` | API | Yes | Configured in Render & `.env` | **YES** |
-| `RESEND_API_KEY` | API | Yes | Configured in Render & `.env` (`re_2V1Q...`) | **YES** |
+| `RESEND_API_KEY` | API | Yes | Configured in Render & `.env` (`re_...`) | **YES** |
 | `EMAIL_FROM` | API | Yes | `UNNATI <onboarding@resend.dev>` | No |
+
+---
+
+### 5.1 Deployment Allocation Guide (Vercel vs. Render)
+
+To prevent security misconfigurations and cross-environment exposure, observe this strict boundary:
+
+#### Vercel Environment (Frontend Next.js)
+* **Required Variables:**
+  - `NEXT_PUBLIC_APP_NAME="UNNATI"`
+  - `NEXT_PUBLIC_API_URL="https://unnati-connect-learning-capability-and.onrender.com"`
+  - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_YWxsb3dpbmctcmFwdG9yLTkxNzguY2xlcmsuYWNjb3VudHMuZGV2JA"`
+  - `CLERK_SECRET_KEY="sk_test_..."`
+* **Rule:** ⚠️ **Never** add `DATABASE_URL`, `REDIS_URL`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, or `RESEND_API_KEY` to Vercel.
+
+#### Render Environment (Backend FastAPI `unnati-api`)
+* **Required Variables:**
+  - `PYTHON_VERSION="3.11.9"`
+  - `PYTHONUNBUFFERED="1"`
+  - `DATABASE_URL` (Neon pooled connection string on port 6543)
+  - `CLERK_ISSUER="https://allowing-raptor-9178.clerk.accounts.dev"`
+  - `CLERK_JWKS_URL="https://allowing-raptor-9178.clerk.accounts.dev/.well-known/jwks.json"`
+  - `CLERK_AUDIENCE="unnati-api"`
+  - `CLERK_WEBHOOK_SECRET` (`whsec_...` from Clerk Webhook endpoint)
+  - `GEMINI_API_KEY` (Google AI Studio)
+  - `GROQ_API_KEY` (Groq Cloud)
+  - `REDIS_URL` (`rediss://...upstash.io:6379`)
+  - `REDIS_ENABLED="true"`
+  - `RATE_LIMIT_ENABLED="true"`
+  - `STORAGE_BACKEND="s3"`
+  - `S3_ENDPOINT_URL="https://fff51884b9fbf78df9303e2c5952d621.r2.cloudflarestorage.com"`
+  - `S3_REGION="auto"`
+  - `S3_BUCKET="unnati-private-documents"`
+  - `S3_ACCESS_KEY_ID="1472a7383cc35199d0ea36efbe57d171"`
+  - `S3_SECRET_ACCESS_KEY` (Configured securely in Render & local `.env`)
+  - `RESEND_API_KEY` (`re_...` - configured securely in Render & local `.env`)
+  - `EMAIL_FROM="UNNATI <onboarding@resend.dev>"`
+  - `CORS_ORIGINS="http://localhost:3000,http://127.0.0.1:3000"`
