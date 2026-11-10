@@ -23,8 +23,7 @@ target_metadata = Base.metadata
 
 def get_database_url() -> str:
     """Prefer unpooled direct database connection for DDL migrations."""
-    url = settings.database_direct_url or settings.database_url
-    return url
+    return settings.resolved_database_direct_url
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""

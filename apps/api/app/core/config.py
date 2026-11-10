@@ -35,6 +35,24 @@ class Settings(BaseSettings):
     clerk_webhook_signing_secret: Optional[str] = None
 
     @property
+    def resolved_database_url(self) -> str:
+        url = self.database_url
+        if url.startswith("postgres://"):
+            url = url.replace("postgres://", "postgresql+psycopg://", 1)
+        elif url.startswith("postgresql://") and not url.startswith("postgresql+"):
+            url = url.replace("postgresql://", "postgresql+psycopg://", 1)
+        return url
+
+    @property
+    def resolved_database_direct_url(self) -> str:
+        url = self.database_direct_url or self.database_url
+        if url.startswith("postgres://"):
+            url = url.replace("postgres://", "postgresql+psycopg://", 1)
+        elif url.startswith("postgresql://") and not url.startswith("postgresql+"):
+            url = url.replace("postgresql://", "postgresql+psycopg://", 1)
+        return url
+
+    @property
     def resolved_webhook_secret(self) -> Optional[str]:
         return self.clerk_webhook_secret or self.clerk_webhook_signing_secret
 
