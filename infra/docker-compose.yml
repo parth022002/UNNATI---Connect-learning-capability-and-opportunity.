@@ -3,6 +3,7 @@ services:
     image: pgvector/pgvector:pg16
     container_name: unnati-postgres
     restart: unless-stopped
+    profiles: ["default", "full"]
     environment:
       POSTGRES_USER: unnati
       POSTGRES_PASSWORD: unnati_dev_password
@@ -20,14 +21,37 @@ services:
   redis:
     image: redis:7-alpine
     container_name: unnati-redis
+    profiles: ["default", "full"]
+    restart: unless-stopped
     ports:
       - "6379:6379"
     volumes:
       - unnati_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: unnati-minio
+    profiles: ["full"]
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin_dev_password
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - unnati_minio_data:/data
 
   neo4j:
     image: neo4j:5-community
     container_name: unnati-neo4j
+    profiles: ["optional"]
     environment:
       NEO4J_AUTH: neo4j/unnati_dev_password
     ports:
@@ -39,4 +63,5 @@ services:
 volumes:
   unnati_postgres_data:
   unnati_redis_data:
+  unnati_minio_data:
   unnati_neo4j_data:

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth, useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 import { 
   Compass, 
   GraduationCap, 
@@ -210,8 +211,9 @@ export default function OnboardingPage() {
       {/* Header */}
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link href="/" className="text-xl font-black tracking-tight text-unnati-indigo">
-            UNNATI<span className="text-unnati-saffron">.</span>
+          <Link href="/" className="flex items-center gap-2 text-xl font-black tracking-tight text-unnati-indigo">
+            <Image src="/logo.png" alt="UNNATI" width={30} height={30} className="rounded-lg shadow-xs" priority />
+            <span>UNNATI<span className="text-unnati-saffron">.</span></span>
           </Link>
           <div className="text-sm font-semibold text-slate-500">
             Step {step} of 5

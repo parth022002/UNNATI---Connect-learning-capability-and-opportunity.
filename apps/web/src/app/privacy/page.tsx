@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function PrivacyPolicyPage() {
   return (
@@ -8,9 +9,7 @@ export default function PrivacyPolicyPage() {
       <header className="border-b border-slate-200 bg-white/80 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-900 text-white font-extrabold text-lg">
-              उ
-            </span>
+            <Image src="/logo.png" alt="UNNATI Logo" width={36} height={36} className="rounded-xl shadow-xs" priority />
             <span className="text-xl font-bold tracking-tight text-slate-900">
               UNNATI <span className="text-sm font-normal text-slate-500">(उन्नति)</span>
             </span>

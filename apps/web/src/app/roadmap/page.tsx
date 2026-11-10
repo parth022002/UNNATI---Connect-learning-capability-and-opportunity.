@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 import { 
   ArrowLeft, 
   CheckCircle2, 
@@ -149,8 +150,9 @@ export default function RoadmapPage() {
               Dashboard
             </Link>
             <div className="h-4 w-px bg-slate-200" />
-            <Link href="/" className="text-lg font-black tracking-tight text-unnati-indigo">
-              UNNATI<span className="text-unnati-saffron">.</span>
+            <Link href="/" className="flex items-center gap-2 text-lg font-black tracking-tight text-unnati-indigo">
+              <Image src="/logo.png" alt="UNNATI" width={28} height={28} className="rounded-md shadow-xs" priority />
+              <span>UNNATI<span className="text-unnati-saffron">.</span></span>
             </Link>
           </div>
 

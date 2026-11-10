@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SignInButton, SignUpButton, Show, UserButton, OrganizationSwitcher } from "@clerk/nextjs";
 import { Suspense } from "react";
 
@@ -15,7 +16,10 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-        <Link href="/" className="text-2xl font-black tracking-tight text-unnati-indigo">UNNATI<span className="text-unnati-saffron">.</span></Link>
+        <Link href="/" className="flex items-center gap-2.5">
+          <Image src="/logo.png" alt="UNNATI" width={38} height={38} className="rounded-xl shadow-xs" priority />
+          <span className="text-2xl font-black tracking-tight text-unnati-indigo">UNNATI<span className="text-unnati-saffron">.</span></span>
+        </Link>
         <nav className="hidden gap-8 text-sm font-medium text-slate-600 md:flex">
           <a href="#how-it-works">How it works</a><a href="#features">Features</a><a href="#about">About</a>
         </nav>

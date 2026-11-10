@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface ConsentModalProps {
   onConsentGiven?: () => void;
@@ -43,10 +44,8 @@ export default function ConsentModal({ onConsentGiven, forceShow = false }: Cons
       <div className="relative w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl border border-violet-100 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-          <div className="flex items-center space-x-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-900 text-white font-bold text-sm">
-              उ
-            </span>
+          <div className="flex items-center space-x-2.5">
+            <Image src="/logo.png" alt="UNNATI" width={32} height={32} className="rounded-lg shadow-xs" priority />
             <div>
               <h2 className="text-lg font-bold text-gray-900">
                 {lang === "en" ? "Data Protection & Privacy Notice" : "डेटा सुरक्षा एवं गोपनीयता सूचना"}

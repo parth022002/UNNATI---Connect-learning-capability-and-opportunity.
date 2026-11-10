@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 import { 
   UserButton, 
   OrganizationSwitcher 
@@ -241,8 +242,9 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5">
           <div className="flex items-center gap-8">
-            <Link href="/" className="text-xl font-black tracking-tight text-unnati-indigo">
-              UNNATI<span className="text-unnati-saffron">.</span>
+            <Link href="/" className="flex items-center gap-2 text-xl font-black tracking-tight text-unnati-indigo">
+              <Image src="/logo.png" alt="UNNATI" width={30} height={30} className="rounded-lg shadow-xs" priority />
+              <span>UNNATI<span className="text-unnati-saffron">.</span></span>
             </Link>
             <nav className="hidden items-center gap-6 text-sm font-semibold text-slate-600 md:flex">
               <Link href="/dashboard" className="text-unnati-indigo font-bold">

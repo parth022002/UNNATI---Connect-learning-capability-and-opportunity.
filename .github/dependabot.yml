@@ -1,0 +1,25 @@
+# ==============================================================================
+# UNNATI — Dependabot Configuration (Automated Dependency Scanning)
+# ==============================================================================
+version: 2
+updates:
+  # Maintain Node.js / pnpm dependencies for Next.js frontend
+  - package-ecosystem: "npm"
+    directory: "/apps/web"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Maintain Python dependencies for FastAPI backend
+  - package-ecosystem: "pip"
+    directory: "/apps/api"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Maintain GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 3
