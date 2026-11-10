@@ -40,7 +40,8 @@ import {
   HelpCircle,
   Eye,
   Sliders,
-  Check
+  Check,
+  CheckCircle
 } from "lucide-react";
 
 export default function HomePage() {
@@ -146,61 +147,61 @@ export default function HomePage() {
 
   const currentDemo = domainDemos[selectedDemoDomain];
 
-  // 3. Hero Interactive Step Details
+  // 3. Hero Stepped Product Preview Steps (Goal -> Baseline -> Delta -> Roadmap -> Action)
   const heroSteps = [
     {
       title: "1. Goal",
-      tag: "Career Direction",
-      summary: "Set your goal: Product & Business Strategy Lead",
+      tag: "Target Career Direction",
+      summary: "Set benchmark: Product & Business Strategy Lead",
       content: {
-        badge: "Target Benchmark",
+        badge: "Industry Benchmark",
         heading: "Product & Business Strategy Lead",
-        sub: "Cross-disciplinary role spanning Business, UX & Technology",
-        metrics: ["Median: ₹18.0L CTC", "Demand: High Growth", "Prep: ~6 Weeks"]
+        sub: "Cross-disciplinary role connecting Business, UX and Analytical Decision-Making.",
+        metrics: ["Typical Median: ₹18.0L CTC", "Market Demand: High Growth", "Est. Preparation: ~6 Weeks (8 hrs/wk)"]
       }
     },
     {
       title: "2. Baseline",
-      tag: "Verified Evidence",
-      summary: "Resume & background extracted into 4-tier ledger",
+      tag: "4-Tier Skill Ledger",
+      summary: "Profile & coursework extracted into verified ledger",
       content: {
         badge: "Competency Baseline",
         heading: "3 Verified Core Competencies",
-        sub: "Identified from uploaded resume and academic coursework",
-        metrics: ["User Research (Assessed: 88%)", "Data Modeling (Inferred: 75%)", "Communication (Claimed)"]
+        sub: "Identified from your uploaded resume and college coursework transcripts.",
+        metrics: ["User Research (Assessed: 88%)", "SQL & Data Modeling (Inferred: 75%)", "Stakeholder Communication (Claimed)"]
       }
     },
     {
       title: "3. Delta",
       tag: "Skill Gap Analysis",
-      summary: "Pinpoint exact recommended skills to strengthen",
+      summary: "Pinpoint recommended skills to strengthen",
       content: {
         badge: "Prioritized Gaps",
         heading: "2 High-Impact Skills to Strengthen",
-        sub: "Targeted gaps separating current state from target benchmark",
-        metrics: ["Unit Economics (Priority 1)", "A/B Testing Metrics (Priority 2)", "Overall Readiness: 78%"]
+        sub: "Targeted capability gaps separating current state from employer expectations.",
+        metrics: ["Unit Economics & Financial Modeling (Priority 1)", "A/B Testing Metrics & Cohorts (Priority 2)", "Overall Readiness: 76%"]
       }
     },
     {
       title: "4. Roadmap",
-      tag: "Adaptive Learning",
-      summary: "Milestone journey mapped to 8 hrs/week",
+      tag: "Adaptive Milestone Plan",
+      summary: "3-phase curriculum tailored to your schedule",
       content: {
-        badge: "Milestone Architecture",
-        heading: "Step-by-Step Action Roadmap",
-        sub: "Ordered by prerequisites so you learn fundamentals first",
-        metrics: ["Phase 1: Core Strategy", "Phase 2: Metrics Sprint", "Phase 3: Industry Capstone"]
+        badge: "Topological Milestones",
+        heading: "Ordered 3-Phase Action Roadmap",
+        sub: "Organized by prerequisites so foundational principles are mastered first.",
+        metrics: ["Phase 1: Core Strategy Foundations (Done)", "Phase 2: Metrics Sprint (In Progress)", "Phase 3: Industry Capstone Project"]
       }
     },
     {
       title: "5. Action",
-      tag: "Next Step",
+      tag: "Immediate Next Step",
       summary: "Take a 10-minute diagnostic check to advance",
       content: {
         badge: "Immediate Action",
-        heading: "Diagnostic Skill Check Ready",
-        sub: "Verify your product metrics skills and unlock Verified status",
-        metrics: ["10-Min Quiz", "Real-World Scenarios", "+8% Readiness Boost"]
+        heading: "10-Minute Diagnostic Skill Check Ready",
+        sub: "Complete a real-world scenario challenge to promote your skill to 'Verified' status.",
+        metrics: ["10-Min Scenario Challenge", "Formative Guidance on Answers", "+8% Readiness Boost on Completion"]
       }
     }
   ];
@@ -241,16 +242,16 @@ export default function HomePage() {
       <main className="relative z-10 flex-1">
         
         {/* ========================================================
-            HERO SECTION: Warm, Aspirational, High-Impact
+            HERO SECTION: Porsche / Trionn Visual Confidence & Polish
            ======================================================== */}
-        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 pb-16">
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 pb-18">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             
-            {/* Left Column: Core Positioning */}
+            {/* Left Column: Core Positioning & Typography */}
             <div className="lg:col-span-7 space-y-6 text-left">
               
               {/* Campaign Badge */}
-              <div className="inline-flex items-center gap-2 rounded-full bg-purple-100/90 border border-purple-200/90 px-4 py-1.5 text-xs font-bold text-unnati-indigo shadow-soft-sm">
+              <div className="inline-flex items-center gap-2.5 rounded-full bg-purple-100/90 border border-purple-200/90 px-4 py-1.5 text-xs font-bold text-unnati-indigo shadow-soft-sm">
                 <Sparkles className="h-4 w-4 text-unnati-saffron animate-pulse" />
                 <span>Your Growth Companion</span>
                 <span className="h-1.5 w-1.5 rounded-full bg-unnati-saffron" />
@@ -273,13 +274,21 @@ export default function HomePage() {
               {/* Primary Action Buttons */}
               <div className="flex flex-wrap items-center gap-4 pt-2">
                 <Link href="/onboarding">
-                  <Button variant="saffron" size="lg" className="btn-shimmer text-base font-bold shadow-soft-md shadow-glow-saffron h-12 sm:h-13 px-6 sm:px-8 rounded-2xl">
+                  <Button 
+                    variant="saffron" 
+                    size="lg" 
+                    className="btn-shimmer text-base font-bold shadow-soft-md shadow-glow-saffron h-13 px-7 sm:px-8 rounded-2xl text-white"
+                  >
                     <span>Start Your Free Journey</span>
                     <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 </Link>
                 <Link href="/explore">
-                  <Button variant="outline" size="lg" className="text-base font-semibold h-12 sm:h-13 px-6 sm:px-8 rounded-2xl hover:border-purple-300">
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    className="text-base font-semibold h-13 px-7 sm:px-8 rounded-2xl hover:border-purple-300 bg-white/80"
+                  >
                     <Compass className="h-4 w-4 mr-2 text-unnati-violet" /> 
                     <span>Explore 20+ Career Paths</span>
                   </Button>
@@ -306,28 +315,28 @@ export default function HomePage() {
             {/* Right Column: Hero Stepped Product Preview */}
             <div className="lg:col-span-5">
               <ScrollReveal direction="up" delayMs={150}>
-                <div className="clean-card p-5 sm:p-7 bg-white border-2 border-purple-100 shadow-soft-xl relative overflow-hidden">
+                <div className="clean-card p-6 sm:p-8 bg-white border-2 border-purple-100 shadow-soft-xl relative overflow-hidden">
                   
                   {/* Stepper Header */}
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
+                    <div className="flex items-center gap-2.5">
                       <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
                       <span className="font-heading text-xs font-bold uppercase tracking-wider text-slate-700">
                         Interactive Walkthrough
                       </span>
                     </div>
-                    <Badge variant="violet" className="text-[10px] py-0.5 px-2 font-bold">
+                    <Badge variant="violet" className="text-[10px] py-0.5 px-2.5 font-bold">
                       Step {activeHeroStep + 1} of 5
                     </Badge>
                   </div>
 
                   {/* Step Selector Tabs */}
-                  <div className="grid grid-cols-5 gap-1 my-3.5 bg-slate-100 p-1 rounded-xl">
+                  <div className="grid grid-cols-5 gap-1.5 my-4 bg-slate-100 p-1.5 rounded-xl">
                     {heroSteps.map((s, idx) => (
                       <button
                         key={idx}
                         onClick={() => setActiveHeroStep(idx)}
-                        className={`py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer truncate px-1 text-center ${
+                        className={`py-1.5 text-[11px] font-bold rounded-lg transition-all cursor-pointer truncate px-1 text-center ${
                           activeHeroStep === idx
                             ? "bg-white text-unnati-indigo shadow-soft-sm"
                             : "text-slate-500 hover:text-slate-900"
@@ -340,27 +349,27 @@ export default function HomePage() {
                   </div>
 
                   {/* Step Card Content */}
-                  <div className="rounded-2xl bg-gradient-to-br from-purple-50/70 via-white to-orange-50/40 border border-purple-100 p-4 min-h-[220px] flex flex-col justify-between transition-all duration-300">
+                  <div className="rounded-2xl bg-gradient-to-br from-purple-50/70 via-white to-orange-50/40 border border-purple-100 p-5 min-h-[235px] flex flex-col justify-between transition-all duration-300">
                     <div>
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-bold uppercase tracking-wider text-unnati-saffron">
                           {heroSteps[activeHeroStep].tag}
                         </span>
-                        <span className="text-[10px] bg-purple-100 text-unnati-indigo px-2 py-0.5 rounded-md font-bold">
+                        <span className="text-[10px] bg-purple-100 text-unnati-indigo px-2.5 py-0.5 rounded-md font-bold">
                           {heroSteps[activeHeroStep].content.badge}
                         </span>
                       </div>
-                      <h3 className="font-heading text-base font-bold text-slate-900 mt-1.5">
+                      <h3 className="font-heading text-[17px] font-bold text-slate-900 mt-2">
                         {heroSteps[activeHeroStep].content.heading}
                       </h3>
-                      <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                      <p className="text-[13px] text-slate-600 mt-1.5 leading-relaxed">
                         {heroSteps[activeHeroStep].content.sub}
                       </p>
                     </div>
 
-                    <div className="mt-3.5 pt-3 border-t border-purple-100/80 space-y-2">
+                    <div className="mt-4 pt-3.5 border-t border-purple-100/80 space-y-2">
                       {heroSteps[activeHeroStep].content.metrics.map((m, i) => (
-                        <div key={i} className="flex items-center gap-2 text-xs text-slate-700 font-medium">
+                        <div key={i} className="flex items-center gap-2 text-[12.5px] text-slate-700 font-medium">
                           <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
                           <span>{m}</span>
                         </div>
@@ -369,14 +378,14 @@ export default function HomePage() {
                   </div>
 
                   {/* Stepper Navigation Footer */}
-                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
                       {heroSteps.map((_, i) => (
                         <button
                           key={i}
                           onClick={() => setActiveHeroStep(i)}
                           className={`h-2 rounded-full transition-all cursor-pointer ${
-                            activeHeroStep === i ? "w-6 bg-unnati-indigo" : "w-2 bg-slate-200"
+                            activeHeroStep === i ? "w-7 bg-unnati-indigo" : "w-2 bg-slate-200"
                           }`}
                           aria-label={`Jump to step ${i + 1}`}
                         />
@@ -414,16 +423,16 @@ export default function HomePage() {
         {/* ========================================================
             SECTION 2: AUDIENCE PATHWAYS (Who UNNATI Helps)
            ======================================================== */}
-        <section id="audiences" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 border-t border-slate-200/80">
+        <section id="audiences" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-22 border-t border-slate-200/80">
           <ScrollReveal direction="up">
-            <div className="text-center max-w-3xl mx-auto mb-14">
-              <Badge variant="violet" className="text-xs mb-2.5">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <Badge variant="violet" className="text-xs mb-3">
                 Tailored For Your Stage
               </Badge>
-              <h2 className="font-heading text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-slate-900 tracking-tight leading-tight">
+              <h2 className="font-heading text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-slate-900 tracking-tight leading-tight">
                 A Personalised Growth Journey for Every Ambition
               </h2>
-              <p className="text-sm sm:text-base text-slate-600 mt-2.5 leading-relaxed">
+              <p className="text-base text-slate-600 mt-3 leading-relaxed">
                 Whether you are exploring degrees, stepping into your first role, upskilling, or switching careers, UNNATI provides an authentic roadmap.
               </p>
             </div>
@@ -436,30 +445,30 @@ export default function HomePage() {
                 <ScrollReveal key={idx} direction="up" delayMs={idx * 90}>
                   <Card 
                     hoverEffect
-                    className="clean-card h-full p-7 flex flex-col justify-between bg-white border border-slate-200/90 shadow-soft-sm group hover:border-purple-300 transition-all duration-300"
+                    className="clean-card h-full p-8 flex flex-col justify-between bg-white border border-slate-200/90 shadow-soft-sm group hover:border-purple-300 transition-all duration-300"
                   >
                     <div>
-                      <div className="flex h-13 w-13 items-center justify-center rounded-2xl bg-purple-100 text-unnati-indigo border border-purple-200 mb-5 group-hover:bg-purple-200 transition-colors">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-100 text-unnati-indigo border border-purple-200 mb-6 group-hover:bg-purple-200 transition-colors">
                         <Icon className="h-6 w-6" />
                       </div>
-                      <h3 className="font-heading text-lg font-bold text-slate-900 mb-1">
+                      <h3 className="font-heading text-xl font-bold text-slate-900 mb-1.5">
                         {aud.title}
                       </h3>
-                      <p className="text-xs font-semibold text-unnati-saffron mb-3">
+                      <p className="text-xs font-bold text-unnati-saffron mb-3.5">
                         {aud.subtitle}
                       </p>
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                      <p className="text-[14.5px] text-slate-600 leading-relaxed mb-6">
                         {aud.description}
                       </p>
                     </div>
 
-                    <div className="pt-4 border-t border-slate-100 space-y-3">
-                      <span className="block text-[11px] font-bold text-slate-500">
+                    <div className="pt-5 border-t border-slate-100 space-y-3.5">
+                      <span className="block text-xs font-bold text-slate-500">
                         ★ {aud.highlight}
                       </span>
                       <Link 
                         href={aud.href} 
-                        className="inline-flex items-center justify-center w-full px-4 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-unnati-indigo border border-purple-200 text-xs font-bold transition-all"
+                        className="inline-flex items-center justify-center w-full px-4 py-3 rounded-xl bg-purple-50 hover:bg-purple-100 text-unnati-indigo border border-purple-200 text-xs font-bold transition-all"
                       >
                         <span>{aud.ctaLabel}</span>
                         <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
@@ -473,95 +482,106 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================
-            SECTION 3: CONTINUOUS CAREER JOURNEY (Continuous Loop)
+            SECTION 3: CONTINUOUS CAREER JOURNEY (21hrs Storytelling Flow)
            ======================================================== */}
-        <section id="how-it-works" className="bg-white py-24 border-t border-slate-200">
+        <section id="how-it-works" className="bg-white py-24 border-t border-slate-200 relative overflow-hidden">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="up">
               <div className="text-center max-w-3xl mx-auto mb-16">
-                <Badge variant="saffron" className="text-xs mb-2.5">
+                <Badge variant="saffron" className="text-xs mb-3">
                   Continuous Growth Cycle
                 </Badge>
-                <h2 className="font-heading text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-slate-900 tracking-tight leading-tight">
+                <h2 className="font-heading text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-slate-900 tracking-tight leading-tight">
                   How UNNATI Powers Your Lifelong Growth
                 </h2>
-                <p className="text-sm sm:text-base text-slate-600 mt-2.5 leading-relaxed">
-                  Growth is not a one-time test. It is a continuous feedback loop that adapts as you gain skills and aim for higher opportunities.
+                <p className="text-base text-slate-600 mt-3 leading-relaxed">
+                  Growth is not a one-time test. It is an adaptive feedback loop that evolves as you acquire practical skills and target higher opportunities.
                 </p>
               </div>
             </ScrollReveal>
 
-            {/* Connected Journey Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {/* Connected Journey Grid with Visual Flow Indicator */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5 relative">
               {[
                 {
                   num: "01",
                   title: "Discover Direction",
                   desc: "Explore 20+ pathways across Business, Analytics, Finance, Design, and Tech.",
                   icon: Compass,
-                  color: "text-purple-600"
+                  color: "text-purple-600",
+                  bg: "bg-purple-50"
                 },
                 {
                   num: "02",
                   title: "Ingest Baseline",
                   desc: "Extract verified coursework, projects, and skills from your resume or syllabus.",
                   icon: Layers,
-                  color: "text-indigo-600"
+                  color: "text-indigo-600",
+                  bg: "bg-indigo-50"
                 },
                 {
                   num: "03",
                   title: "Pinpoint Gaps",
                   desc: "Compare profile against industry benchmarks to identify exact skills to strengthen.",
                   icon: Target,
-                  color: "text-orange-600"
+                  color: "text-orange-600",
+                  bg: "bg-orange-50"
                 },
                 {
                   num: "04",
                   title: "Build Roadmap",
                   desc: "Follow an ordered, 3-phase milestone plan tailored to your weekly study hours.",
                   icon: MapPin,
-                  color: "text-violet-600"
+                  color: "text-violet-600",
+                  bg: "bg-violet-50"
                 },
                 {
                   num: "05",
                   title: "Demonstrate",
                   desc: "Complete practical capstones and diagnostic checks to earn Verified status.",
                   icon: Award,
-                  color: "text-emerald-600"
+                  color: "text-emerald-600",
+                  bg: "bg-emerald-50"
                 },
                 {
                   num: "06",
                   title: "Grow & Reassess",
                   desc: "Update your Bayesian competency profile continuously as you level up.",
                   icon: RefreshCw,
-                  color: "text-purple-700"
+                  color: "text-purple-700",
+                  bg: "bg-purple-100"
                 }
               ].map((step, idx) => {
                 const Icon = step.icon;
                 return (
                   <ScrollReveal key={idx} direction="up" delayMs={idx * 80}>
-                    <div className="h-full p-5 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-soft-sm flex flex-col justify-between relative group hover:border-purple-300 transition-all duration-300">
+                    <div className="h-full p-6 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-soft-sm flex flex-col justify-between relative group hover:border-purple-300 transition-all duration-300">
                       <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="font-heading text-2xl font-black text-unnati-indigo">
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="font-heading text-3xl font-black text-unnati-indigo">
                             {step.num}
                           </span>
-                          <div className={`flex h-8 w-8 items-center justify-center rounded-xl bg-white border border-slate-200 ${step.color}`}>
-                            <Icon className="h-4 w-4" />
+                          <div className={`flex h-9 w-9 items-center justify-center rounded-xl bg-white border border-slate-200 shadow-soft-sm ${step.color}`}>
+                            <Icon className="h-4.5 w-4.5" />
                           </div>
                         </div>
-                        <h3 className="font-heading text-sm font-bold text-slate-900 mb-1.5">
+                        <h3 className="font-heading text-[16px] font-bold text-slate-900 mb-2">
                           {step.title}
                         </h3>
-                        <p className="text-xs text-slate-600 leading-relaxed">
+                        <p className="text-[13.5px] text-slate-600 leading-relaxed">
                           {step.desc}
                         </p>
                       </div>
 
-                      {idx === 5 && (
-                        <div className="mt-3 pt-2 border-t border-purple-100 flex items-center gap-1 text-[10px] font-bold text-unnati-violet">
-                          <RefreshCw className="h-3 w-3 animate-spin text-unnati-saffron" />
-                          <span>Continuous Feedback Loop</span>
+                      {idx === 5 ? (
+                        <div className="mt-4 pt-3 border-t border-purple-200/80 flex items-center gap-1.5 text-[11px] font-bold text-unnati-indigo">
+                          <RefreshCw className="h-3.5 w-3.5 animate-spin text-unnati-saffron" />
+                          <span>Continuous Loop ↻</span>
+                        </div>
+                      ) : (
+                        <div className="mt-4 pt-2 flex items-center gap-1 text-[11px] font-bold text-slate-400 group-hover:text-unnati-indigo transition-colors">
+                          <span>Next Stage</span>
+                          <ArrowRight className="h-3 w-3" />
                         </div>
                       )}
                     </div>
@@ -573,25 +593,25 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================
-            SECTION 4: PRODUCT SHOWCASE (Real Implemented Tools)
+            SECTION 4: PRODUCT SHOWCASE (Epiminds / Cerebrium Working Tools)
            ======================================================== */}
         <section id="showcase" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 border-t border-slate-200/80">
           <ScrollReveal direction="up">
-            <div className="text-center max-w-3xl mx-auto mb-14">
-              <Badge variant="violet" className="text-xs mb-2.5">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <Badge variant="violet" className="text-xs mb-3">
                 Inside UNNATI
               </Badge>
-              <h2 className="font-heading text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-slate-900 tracking-tight leading-tight">
+              <h2 className="font-heading text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-slate-900 tracking-tight leading-tight">
                 Explore the Implemented Platform Tools
               </h2>
-              <p className="text-sm sm:text-base text-slate-600 mt-2.5 leading-relaxed">
+              <p className="text-base text-slate-600 mt-3 leading-relaxed">
                 See the actual working interfaces engineered to guide your skills, milestones, and career trajectory.
               </p>
             </div>
           </ScrollReveal>
 
           {/* Feature Showcase Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
+          <div className="flex flex-wrap justify-center gap-2.5 mb-10">
             {[
               { id: "dashboard", label: "Learner Dashboard", icon: LayoutDashboard },
               { id: "explore", label: "Career Discovery", icon: Compass },
@@ -604,7 +624,7 @@ export default function HomePage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveShowcaseTab(tab.id as any)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                  className={`flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                     activeShowcaseTab === tab.id
                       ? "bg-unnati-indigo text-white shadow-soft-md"
                       : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
@@ -619,216 +639,221 @@ export default function HomePage() {
 
           {/* Showcase Display Card */}
           <ScrollReveal direction="up" delayMs={100}>
-            <div className="clean-card p-6 sm:p-10 bg-white border-2 border-purple-100 shadow-soft-xl max-w-5xl mx-auto">
+            <div className="clean-card p-6 sm:p-12 bg-white border-2 border-purple-100 shadow-soft-xl max-w-5xl mx-auto">
+              
+              {/* TAB 1: DASHBOARD */}
               {activeShowcaseTab === "dashboard" && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                   <div className="lg:col-span-6 space-y-4">
                     <Badge variant="violet" className="text-xs">
                       Candidate Growth Hub
                     </Badge>
-                    <h3 className="font-heading text-2xl font-bold text-slate-900">
+                    <h3 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900">
                       Comprehensive Learner Dashboard
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    <p className="text-[14.5px] text-slate-600 leading-relaxed">
                       Track your overall readiness score, upload resumes for instant AI information extraction, and view your 4-tier skill evidence ledger.
                     </p>
-                    <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <ul className="space-y-2.5 text-[14px] text-slate-700">
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>4-Tier Skill Ledger:</strong> Self-Reported, Resume Extracted, Diagnostic Assessed &amp; Verified.</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>AI Document Parsing:</strong> Gemini-powered extraction of education, projects, and work history.</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Weekly Goal Setting:</strong> Adaptive hours tracking tailored to your study availability.</span>
                       </li>
                     </ul>
-                    <div className="pt-2">
+                    <div className="pt-3">
                       <Link href="/dashboard">
-                        <Button variant="saffron" size="sm" className="font-bold text-xs h-10 px-4 rounded-xl shadow-glow-saffron">
-                          Open Learner Dashboard <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                        <Button variant="saffron" size="sm" className="font-bold text-xs h-11 px-5 rounded-xl shadow-glow-saffron text-white">
+                          Open Learner Dashboard <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
                         </Button>
                       </Link>
                     </div>
                   </div>
 
-                  <div className="lg:col-span-6 p-5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-3">
-                    <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-                      <span className="font-bold text-slate-800">Skill Competency Ledger</span>
+                  <div className="lg:col-span-6 p-6 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-3.5">
+                    <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+                      <span className="font-bold text-sm text-slate-800">Skill Competency Ledger</span>
                       <Badge variant="success" className="text-[10px]">Active Profile</Badge>
                     </div>
-                    <div className="space-y-2">
-                      <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
-                        <span className="font-medium text-slate-800">Product Roadmapping</span>
-                        <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold">Assessed (85%)</span>
+                    <div className="space-y-2.5">
+                      <div className="p-3.5 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
+                        <span className="font-semibold text-slate-800">Product Roadmapping</span>
+                        <span className="px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold">Assessed (85%)</span>
                       </div>
-                      <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
-                        <span className="font-medium text-slate-800">SQL &amp; Data Extraction</span>
-                        <span className="px-2 py-0.5 rounded-md bg-purple-100 text-unnati-indigo text-[10px] font-bold">Inferred from Resume</span>
+                      <div className="p-3.5 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
+                        <span className="font-semibold text-slate-800">SQL &amp; Data Extraction</span>
+                        <span className="px-2.5 py-1 rounded-md bg-purple-100 text-unnati-indigo text-[10px] font-bold">Inferred from Resume</span>
                       </div>
-                      <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
-                        <span className="font-medium text-slate-800">Financial Modeling</span>
-                        <span className="px-2 py-0.5 rounded-md bg-orange-100 text-orange-800 text-[10px] font-bold">Recommended to Learn</span>
+                      <div className="p-3.5 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
+                        <span className="font-semibold text-slate-800">Financial Modeling</span>
+                        <span className="px-2.5 py-1 rounded-md bg-orange-100 text-orange-800 text-[10px] font-bold">Recommended to Learn</span>
                       </div>
                     </div>
                   </div>
                 </div>
               )}
 
+              {/* TAB 2: EXPLORE CAREERS */}
               {activeShowcaseTab === "explore" && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                   <div className="lg:col-span-6 space-y-4">
                     <Badge variant="saffron" className="text-xs">
                       Multi-Disciplinary Catalog
                     </Badge>
-                    <h3 className="font-heading text-2xl font-bold text-slate-900">
+                    <h3 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900">
                       Career Discovery &amp; Benchmarks
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    <p className="text-[14.5px] text-slate-600 leading-relaxed">
                       Explore 20+ validated career pathways across Business, Data, Finance, Design, and Engineering. Compare roles side-by-side to understand salary brackets, study hours, and skill overlaps.
                     </p>
-                    <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <ul className="space-y-2.5 text-[14px] text-slate-700">
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Side-by-Side Comparison:</strong> Compare 2 roles to find transferable skills.</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Real Labor Market Data:</strong> Typical compensation and bridge time estimates.</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Set Target Direction:</strong> Link chosen career directly to your personalized roadmap.</span>
                       </li>
                     </ul>
-                    <div className="pt-2">
+                    <div className="pt-3">
                       <Link href="/explore">
-                        <Button variant="saffron" size="sm" className="font-bold text-xs h-10 px-4 rounded-xl shadow-glow-saffron">
-                          Open Career Catalog <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                        <Button variant="saffron" size="sm" className="font-bold text-xs h-11 px-5 rounded-xl shadow-glow-saffron text-white">
+                          Open Career Catalog <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
                         </Button>
                       </Link>
                     </div>
                   </div>
 
-                  <div className="lg:col-span-6 p-5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-3">
+                  <div className="lg:col-span-6 p-6 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-3.5">
                     <div className="p-4 bg-white rounded-xl border border-purple-200 shadow-soft-sm">
                       <span className="text-[10px] uppercase font-bold text-unnati-saffron">Featured Pathway</span>
-                      <h4 className="font-heading text-base font-bold text-slate-900 mt-0.5">Product &amp; Business Strategy Lead</h4>
-                      <p className="text-xs text-slate-500 mt-1">Connects engineering execution, UX empathy, and market metrics.</p>
-                      <div className="mt-3.5 flex items-center justify-between text-xs font-bold text-slate-700 pt-2.5 border-t border-slate-100">
+                      <h4 className="font-heading text-base font-bold text-slate-900 mt-1">Product &amp; Business Strategy Lead</h4>
+                      <p className="text-xs text-slate-500 mt-1 leading-relaxed">Connects engineering execution, UX empathy, and market metrics.</p>
+                      <div className="mt-4 flex items-center justify-between text-xs font-bold text-slate-700 pt-3 border-t border-slate-100">
                         <span>Typical Range: ₹14L – ₹28L CTC</span>
-                        <span className="text-emerald-700">Bridge Time: ~6 Weeks</span>
+                        <span className="text-emerald-700 font-semibold">Bridge Time: ~6 Weeks</span>
                       </div>
                     </div>
                   </div>
                 </div>
               )}
 
+              {/* TAB 3: ASSESSMENTS */}
               {activeShowcaseTab === "assessments" && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                   <div className="lg:col-span-6 space-y-4">
                     <Badge variant="violet" className="text-xs">
                       Formative Verification
                     </Badge>
-                    <h3 className="font-heading text-2xl font-bold text-slate-900">
+                    <h3 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900">
                       Diagnostic Practice Skill Checks
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    <p className="text-[14.5px] text-slate-600 leading-relaxed">
                       Verify what you know through 10-minute scenario challenges. We don&apos;t punish mistakes; every question includes immediate formative explanations to reinforce your understanding.
                     </p>
-                    <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <ul className="space-y-2.5 text-[14px] text-slate-700">
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Multi-Domain Tracks:</strong> Business Strategy, Data Intelligence, and Web Architecture.</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Bayesian Level-Up:</strong> Instantly upgrades skill state to &apos;Diagnostic Verified&apos;.</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Non-Punitive:</strong> Designed as formative guidance, not an elimination barrier.</span>
                       </li>
                     </ul>
-                    <div className="pt-2">
+                    <div className="pt-3">
                       <Link href="/assessments">
-                        <Button variant="saffron" size="sm" className="font-bold text-xs h-10 px-4 rounded-xl shadow-glow-saffron">
-                          Take a Skill Check <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                        <Button variant="saffron" size="sm" className="font-bold text-xs h-11 px-5 rounded-xl shadow-glow-saffron text-white">
+                          Take a Skill Check <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
                         </Button>
                       </Link>
                     </div>
                   </div>
 
-                  <div className="lg:col-span-6 p-5 rounded-2xl bg-purple-50/70 border border-purple-200 text-xs space-y-3">
-                    <div className="flex items-center justify-between text-xs font-bold text-unnati-indigo pb-2 border-b border-purple-200">
+                  <div className="lg:col-span-6 p-6 rounded-2xl bg-purple-50/70 border border-purple-200 text-xs space-y-3.5">
+                    <div className="flex items-center justify-between text-xs font-bold text-unnati-indigo pb-2.5 border-b border-purple-200">
                       <span>Scenario: Product Metric Prioritization</span>
                       <Badge variant="saffron" className="text-[10px]">10 Min Check</Badge>
                     </div>
-                    <p className="text-slate-700 leading-relaxed font-medium">
+                    <p className="text-slate-700 leading-relaxed font-medium text-xs sm:text-[13px]">
                       &quot;Your e-commerce application experiences a 25% checkout drop-off at the payment step. Which analytical approach should you prioritize first?&quot;
                     </p>
-                    <div className="p-3 rounded-xl bg-white border border-purple-200 font-semibold text-unnati-indigo">
+                    <div className="p-3.5 rounded-xl bg-white border border-purple-200 font-semibold text-unnati-indigo text-xs">
                       ✓ Diagnostic Answer: Inspect payment failure codes &amp; conduct funnel friction audit.
                     </div>
                   </div>
                 </div>
               )}
 
+              {/* TAB 4: ROADMAP */}
               {activeShowcaseTab === "roadmap" && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                   <div className="lg:col-span-6 space-y-4">
                     <Badge variant="saffron" className="text-xs">
                       Milestone Progression
                     </Badge>
-                    <h3 className="font-heading text-2xl font-bold text-slate-900">
+                    <h3 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900">
                       Adaptive 3-Phase Learning Roadmap
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    <p className="text-[14.5px] text-slate-600 leading-relaxed">
                       Stop drowning in random tutorials. UNNATI synthesizes an ordered progression: Core Foundations, Applied Capability, and Industry Capstone.
                     </p>
-                    <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <ul className="space-y-2.5 text-[14px] text-slate-700">
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Topological Prerequisite Order:</strong> Learn prerequisite concepts first.</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Interactive Task Checklists:</strong> Mark off modules and track readiness score dynamically.</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Portfolio Capstone Rubric:</strong> Build realistic, employer-ready showcase projects.</span>
                       </li>
                     </ul>
-                    <div className="pt-2">
+                    <div className="pt-3">
                       <Link href="/roadmap">
-                        <Button variant="saffron" size="sm" className="font-bold text-xs h-10 px-4 rounded-xl shadow-glow-saffron">
-                          Inspect Your Roadmap <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                        <Button variant="saffron" size="sm" className="font-bold text-xs h-11 px-5 rounded-xl shadow-glow-saffron text-white">
+                          Inspect Your Roadmap <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
                         </Button>
                       </Link>
                     </div>
                   </div>
 
-                  <div className="lg:col-span-6 p-5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2">
-                    <div className="p-3.5 bg-white rounded-xl border border-slate-200">
-                      <div className="flex items-center justify-between font-bold text-unnati-indigo">
+                  <div className="lg:col-span-6 p-6 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2.5">
+                    <div className="p-4 bg-white rounded-xl border border-slate-200">
+                      <div className="flex items-center justify-between font-bold text-unnati-indigo text-xs sm:text-sm">
                         <span>Phase 1: Foundations</span>
-                        <span className="text-emerald-700">100% Completed</span>
+                        <span className="text-emerald-700 font-semibold">100% Completed</span>
                       </div>
-                      <p className="text-slate-500 text-[11px] mt-1">Core business modeling and analytical workflows.</p>
+                      <p className="text-slate-500 text-xs mt-1">Core business modeling and analytical workflows.</p>
                     </div>
-                    <div className="p-3.5 bg-white rounded-xl border-2 border-purple-300">
-                      <div className="flex items-center justify-between font-bold text-unnati-indigo">
+                    <div className="p-4 bg-white rounded-xl border-2 border-purple-300">
+                      <div className="flex items-center justify-between font-bold text-unnati-indigo text-xs sm:text-sm">
                         <span>Phase 2: Applied Capability</span>
-                        <span className="text-orange-600">In Progress (60%)</span>
+                        <span className="text-orange-600 font-semibold">In Progress (60%)</span>
                       </div>
-                      <p className="text-slate-500 text-[11px] mt-1">Hands-on user research &amp; unit economics metrics sprint.</p>
+                      <p className="text-slate-500 text-xs mt-1">Hands-on user research &amp; unit economics metrics sprint.</p>
                     </div>
-                    <div className="p-3.5 bg-white rounded-xl border border-slate-200">
-                      <div className="flex items-center justify-between font-bold text-slate-500">
+                    <div className="p-4 bg-white rounded-xl border border-slate-200">
+                      <div className="flex items-center justify-between font-bold text-slate-500 text-xs sm:text-sm">
                         <span>Phase 3: Industry Capstone</span>
                         <span>Locked (Complete Phase 2)</span>
                       </div>
@@ -837,40 +862,41 @@ export default function HomePage() {
                 </div>
               )}
 
+              {/* TAB 5: AI COMPANION */}
               {activeShowcaseTab === "companion" && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                   <div className="lg:col-span-6 space-y-4">
                     <Badge variant="violet" className="text-xs">
                       Persistent Mentor
                     </Badge>
-                    <h3 className="font-heading text-2xl font-bold text-slate-900">
+                    <h3 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900">
                       AI Career Companion (Bottom-Right Widget)
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    <p className="text-[14.5px] text-slate-600 leading-relaxed">
                       Docked in the bottom-right corner of every page, UNNATI AI provides 24/7 mentoring. It features a universal persona selector so students, non-tech pros, and career switchers find immediate clarity.
                     </p>
-                    <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <ul className="space-y-2.5 text-[14px] text-slate-700">
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Universal Persona Tabs:</strong> 1-Click starter questions for students, business, and switchers.</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Grounded Advice:</strong> Cites O*NET, ESCO, and UNNATI curated standards.</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                         <span><strong>Continuous Memory:</strong> Conversation history persists as you navigate across pages.</span>
                       </li>
                     </ul>
-                    <div className="pt-2">
+                    <div className="pt-3">
                       <button 
                         onClick={() => {
                           if (typeof window !== "undefined") {
                             window.dispatchEvent(new CustomEvent("open-unnati-companion"));
                           }
                         }}
-                        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-unnati-indigo to-unnati-violet text-white text-xs font-bold shadow-soft-sm hover:opacity-95 transition-all cursor-pointer flex items-center gap-2"
+                        className="px-5 py-3 rounded-xl bg-gradient-to-r from-unnati-indigo to-unnati-violet text-white text-xs font-bold shadow-soft-sm hover:opacity-95 transition-all cursor-pointer flex items-center gap-2"
                       >
                         <Sparkles className="h-4 w-4 text-unnati-saffron" />
                         <span>Launch AI Chatbot (Bottom-Right)</span>
@@ -878,21 +904,21 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  <div className="lg:col-span-6 p-5 rounded-2xl bg-slate-900 text-white text-xs space-y-3">
-                    <div className="flex items-center justify-between text-purple-200 pb-2 border-b border-white/10">
-                      <span className="font-bold flex items-center gap-1.5">
+                  <div className="lg:col-span-6 p-6 rounded-2xl bg-slate-900 text-white text-xs space-y-3.5">
+                    <div className="flex items-center justify-between text-purple-200 pb-2.5 border-b border-white/10">
+                      <span className="font-bold flex items-center gap-1.5 text-sm">
                         <Sparkles className="h-4 w-4 text-unnati-saffron" />
                         UNNATI Growth Advisor
                       </span>
-                      <span className="text-[10px] text-emerald-400">Live &amp; Online</span>
+                      <span className="text-[10px] text-emerald-400 font-bold">Live &amp; Online</span>
                     </div>
-                    <p className="text-slate-300 leading-relaxed text-xs">
+                    <p className="text-slate-300 leading-relaxed text-xs sm:text-[13px]">
                       &quot;Namaste! Whether you are exploring degrees, transitioning from non-tech, or preparing for product interviews, I can break down the exact skills and roadmap for you.&quot;
                     </p>
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      <span className="px-2.5 py-1 rounded-md bg-white/10 text-[10px] text-purple-200">🎓 Students</span>
-                      <span className="px-2.5 py-1 rounded-md bg-white/10 text-[10px] text-purple-200">💼 Business &amp; PM</span>
-                      <span className="px-2.5 py-1 rounded-md bg-white/10 text-[10px] text-purple-200">📊 Data &amp; Finance</span>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <span className="px-3 py-1 rounded-md bg-white/10 text-xs text-purple-200">🎓 Students</span>
+                      <span className="px-3 py-1 rounded-md bg-white/10 text-xs text-purple-200">💼 Business &amp; PM</span>
+                      <span className="px-3 py-1 rounded-md bg-white/10 text-xs text-purple-200">📊 Data &amp; Finance</span>
                     </div>
                   </div>
                 </div>
@@ -906,26 +932,26 @@ export default function HomePage() {
            ======================================================== */}
         <section id="diagnostic" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 border-t border-slate-200/80">
           <ScrollReveal direction="up">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <Badge variant="violet" className="text-xs mb-2.5">
+            <div className="text-center max-w-3xl mx-auto mb-14">
+              <Badge variant="violet" className="text-xs mb-3">
                 Interactive Career Diagnostic
               </Badge>
-              <h2 className="font-heading text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-slate-900 tracking-tight leading-tight">
+              <h2 className="font-heading text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-slate-900 tracking-tight leading-tight">
                 See How Your Roadmap Adapts to Any Career
               </h2>
-              <p className="text-sm sm:text-base text-slate-600 mt-2.5 leading-relaxed">
+              <p className="text-base text-slate-600 mt-3 leading-relaxed">
                 Select a career discipline below to see how UNNATI pinpoints required skills, calculates study effort, and plans your path.
               </p>
             </div>
           </ScrollReveal>
 
           {/* Domain Tabs (5 Multi-Disciplinary Tracks) */}
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
+          <div className="flex flex-wrap justify-center gap-2.5 mb-10">
             {(["business", "data", "finance", "design", "tech"] as const).map((key) => (
               <button
                 key={key}
                 onClick={() => setSelectedDemoDomain(key)}
-                className={`px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                   selectedDemoDomain === key
                     ? "bg-unnati-indigo text-white shadow-soft-md"
                     : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
@@ -938,43 +964,44 @@ export default function HomePage() {
 
           {/* Interactive Calculation Card */}
           <ScrollReveal direction="up" delayMs={100}>
-            <div className="max-w-4xl mx-auto clean-card p-6 sm:p-10 bg-white border-2 border-purple-100 shadow-soft-lg">
+            <div className="max-w-4xl mx-auto clean-card p-6 sm:p-12 bg-white border-2 border-purple-100 shadow-soft-lg">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-100 gap-4">
                 <div>
                   <span className="text-xs font-bold uppercase tracking-wider text-unnati-saffron">Target Career Direction</span>
-                  <h3 className="font-heading text-2xl font-bold text-slate-900 mt-0.5">{currentDemo.roleTitle}</h3>
+                  <h3 className="font-heading text-2xl sm:text-3xl font-bold text-slate-900 mt-1">{currentDemo.roleTitle}</h3>
                 </div>
-                <Badge variant="violet" className="text-xs font-semibold py-1">
+                <Badge variant="violet" className="text-xs font-semibold py-1 px-3">
                   {currentDemo.domain}
                 </Badge>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 py-6 border-b border-slate-100 text-center">
+              {/* Display Metrics Grid with Prominent Numbers */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 py-8 border-b border-slate-100 text-center">
                 <div>
-                  <p className="text-xs text-slate-500 font-semibold uppercase">Estimated Readiness</p>
-                  <p className="font-heading text-3xl font-black text-emerald-600 mt-1">{currentDemo.readinessPct}%</p>
-                  <p className="text-xs text-slate-400 mt-0.5">Based on sample candidate profile</p>
+                  <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Estimated Readiness</p>
+                  <p className="font-heading text-4xl sm:text-5xl font-black text-emerald-600 mt-2">{currentDemo.readinessPct}%</p>
+                  <p className="text-xs text-slate-400 mt-1">Based on sample candidate profile</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500 font-semibold uppercase">Estimated Study Effort</p>
-                  <p className="font-heading text-2xl sm:text-3xl font-black text-orange-600 mt-1">{currentDemo.studyHours.split(" (")[0]}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">Tailored to your weekly availability</p>
+                  <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Estimated Study Effort</p>
+                  <p className="font-heading text-2xl sm:text-3xl font-black text-orange-600 mt-2">{currentDemo.studyHours.split(" (")[0]}</p>
+                  <p className="text-xs text-slate-400 mt-1">Tailored to your weekly availability</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500 font-semibold uppercase">Typical Market Compensation</p>
-                  <p className="font-heading text-2xl sm:text-3xl font-black text-slate-900 mt-1">{currentDemo.medianSalary}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">Range: {currentDemo.salaryRange}</p>
+                  <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Typical Market Compensation</p>
+                  <p className="font-heading text-2xl sm:text-3xl font-black text-slate-900 mt-2">{currentDemo.medianSalary}</p>
+                  <p className="text-xs text-slate-400 mt-1">Range: {currentDemo.salaryRange}</p>
                 </div>
               </div>
 
               {/* Recommended Skills (Responsible Wording) */}
-              <div className="mt-6">
-                <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+              <div className="mt-8">
+                <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-4">
                   Recommended Skills to Strengthen Your Profile:
                 </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                   {currentDemo.skillsToLearn.map((skill, idx) => (
-                    <div key={idx} className="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200 text-xs font-semibold text-unnati-indigo flex items-center gap-2">
+                    <div key={idx} className="p-4 rounded-xl bg-purple-50/70 border border-purple-200 text-xs sm:text-[13px] font-semibold text-unnati-indigo flex items-center gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-unnati-saffron shrink-0" />
                       <span>{skill}</span>
                     </div>
@@ -983,26 +1010,26 @@ export default function HomePage() {
               </div>
 
               {/* How Readiness is Calculated Callout */}
-              <div className="mt-6 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1">
-                <p className="font-bold text-slate-800 flex items-center gap-1.5">
+              <div className="mt-8 p-5 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1.5">
+                <p className="font-bold text-slate-800 text-sm flex items-center gap-2">
                   <HelpCircle className="h-4 w-4 text-unnati-indigo" />
                   How is Career Readiness Calculated?
                 </p>
-                <p className="leading-relaxed text-[11px]">
+                <p className="leading-relaxed text-xs sm:text-[13px]">
                   Readiness is an evidence-weighted Bayesian score comparing your verified capabilities against target role benchmarks. Self-reported skills give baseline credit, while resume-extracted background and diagnostic practice checks increase confidence toward industry expectations.
                 </p>
-                <p className="text-[10px] text-slate-400 pt-1">
+                <p className="text-[11px] text-slate-400 pt-1">
                   *Illustrative sample diagnostic based on curated labor market benchmarks. Individual progress depends on study commitment.
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <span className="text-xs text-slate-500">
+              <div className="mt-8 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <span className="text-xs sm:text-sm text-slate-500 font-medium">
                   Want to build your exact roadmap based on your real resume or degree?
                 </span>
                 <Link href="/onboarding">
-                  <Button variant="saffron" size="sm" className="btn-shimmer text-xs font-bold h-10 px-4 rounded-xl shadow-glow-saffron">
-                    Start Your Free Assessment <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                  <Button variant="saffron" size="sm" className="btn-shimmer text-xs sm:text-sm font-bold h-11 px-5 rounded-xl shadow-glow-saffron text-white">
+                    Start Your Free Assessment <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
                   </Button>
                 </Link>
               </div>
@@ -1011,19 +1038,19 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================
-            SECTION 6: TRUST, ETHICS & DATA PROTECTION
+            SECTION 6: TRUST, ETHICS & DATA PROTECTION (Midnight / Deep Indigo)
            ======================================================== */}
-        <section id="trust" className="bg-purple-950 text-white py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-          <div className="max-w-5xl mx-auto space-y-10">
+        <section id="trust" className="bg-purple-950 text-white py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+          <div className="max-w-5xl mx-auto space-y-12">
             <ScrollReveal direction="up">
               <div className="text-center max-w-3xl mx-auto">
-                <Badge variant="outline" className="text-xs mb-2.5 border-purple-400/40 text-purple-200">
+                <Badge variant="outline" className="text-xs mb-3 border-purple-400/40 text-purple-200">
                   Data Trust &amp; Ethics
                 </Badge>
-                <h2 className="font-heading text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-white leading-tight">
+                <h2 className="font-heading text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-white leading-tight">
                   Engineered for Your Privacy and Autonomy
                 </h2>
-                <p className="text-sm text-purple-200 mt-2.5 leading-relaxed">
+                <p className="text-base text-purple-200 mt-3 leading-relaxed">
                   UNNATI is designed as a supportive mentor, not a punitive monitoring system.
                 </p>
               </div>
@@ -1031,44 +1058,44 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <ScrollReveal direction="up" delayMs={0}>
-                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 h-full">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300 font-bold mb-3">
-                    <ShieldCheck className="h-5 w-5" />
+                <div className="p-7 rounded-2xl bg-white/5 border border-white/10 h-full">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300 font-bold mb-4">
+                    <ShieldCheck className="h-6 w-6" />
                   </div>
-                  <h3 className="font-bold text-white text-base mb-1">Formative, Not High-Risk</h3>
-                  <p className="text-xs text-purple-200 leading-relaxed">
+                  <h3 className="font-bold text-white text-lg mb-2">Formative, Not High-Risk</h3>
+                  <p className="text-xs sm:text-[13px] text-purple-200 leading-relaxed">
                     Classified as Non-Annex III formative mentorship under AI governance. We provide guidance for candidate self-growth—never automated rejection or high-risk employee monitoring.
                   </p>
                 </div>
               </ScrollReveal>
 
               <ScrollReveal direction="up" delayMs={100}>
-                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 h-full">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/20 text-orange-300 font-bold mb-3">
-                    <Lock className="h-5 w-5" />
+                <div className="p-7 rounded-2xl bg-white/5 border border-white/10 h-full">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-500/20 text-orange-300 font-bold mb-4">
+                    <Lock className="h-6 w-6" />
                   </div>
-                  <h3 className="font-bold text-white text-base mb-1">72-Hour Data Erasure</h3>
-                  <p className="text-xs text-purple-200 leading-relaxed">
+                  <h3 className="font-bold text-white text-lg mb-2">72-Hour Data Erasure</h3>
+                  <p className="text-xs sm:text-[13px] text-purple-200 leading-relaxed">
                     Your data belongs to you. When you request account deletion, all private documents and profile records are cryptographically wiped within 72 hours under DPDP Act requirements.
                   </p>
                 </div>
               </ScrollReveal>
 
               <ScrollReveal direction="up" delayMs={200}>
-                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 h-full">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/20 text-purple-300 font-bold mb-3">
-                    <CheckCheck className="h-5 w-5" />
+                <div className="p-7 rounded-2xl bg-white/5 border border-white/10 h-full">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/20 text-purple-300 font-bold mb-4">
+                    <CheckCheck className="h-6 w-6" />
                   </div>
-                  <h3 className="font-bold text-white text-base mb-1">Evidence Transparency</h3>
-                  <p className="text-xs text-purple-200 leading-relaxed">
+                  <h3 className="font-bold text-white text-lg mb-2">Evidence Transparency</h3>
+                  <p className="text-xs sm:text-[13px] text-purple-200 leading-relaxed">
                     We clearly distinguish between self-reported skills, AI-extracted background, and diagnostic checks. You can inspect or correct any detail at any time.
                   </p>
                 </div>
               </ScrollReveal>
             </div>
 
-            <div className="text-center pt-2">
-              <Link href="/privacy" className="text-xs text-purple-300 hover:text-white underline font-medium">
+            <div className="text-center pt-3">
+              <Link href="/privacy" className="text-xs sm:text-sm text-purple-300 hover:text-white underline font-semibold">
                 Read our complete DPDP Privacy Notice &amp; Grievance Redressal Protocol &rarr;
               </Link>
             </div>
@@ -1080,14 +1107,14 @@ export default function HomePage() {
            ======================================================== */}
         <section id="faq" className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-24">
           <ScrollReveal direction="up">
-            <div className="text-center mb-14">
-              <Badge variant="violet" className="text-xs mb-2.5">
+            <div className="text-center mb-16">
+              <Badge variant="violet" className="text-xs mb-3">
                 Common Questions
               </Badge>
-              <h2 className="font-heading text-3xl sm:text-4xl lg:text-[40px] font-extrabold text-slate-900 tracking-tight leading-tight">
+              <h2 className="font-heading text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-slate-900 tracking-tight leading-tight">
                 Frequently Asked Questions
               </h2>
-              <p className="text-sm text-slate-600 mt-2.5 leading-relaxed">
+              <p className="text-base text-slate-600 mt-3 leading-relaxed">
                 Everything you need to know about UNNATI.
               </p>
             </div>
@@ -1115,7 +1142,7 @@ export default function HomePage() {
                   </button>
                   {isOpen && (
                     <div className="px-5 sm:px-6 pb-6 pt-0 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 animate-in fade-in duration-200">
-                      <p className="mt-3.5">{faq.a}</p>
+                      <p className="mt-3.5 leading-relaxed">{faq.a}</p>
                     </div>
                   )}
                 </div>
@@ -1133,17 +1160,17 @@ export default function HomePage() {
               <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
                 Your Career Journey Starts With One Step
               </h2>
-              <p className="text-sm sm:text-base text-purple-200 max-w-xl mx-auto mt-3.5 leading-relaxed">
+              <p className="text-sm sm:text-base text-purple-200 max-w-xl mx-auto mt-4 leading-relaxed">
                 Join students, graduates, and professionals building verifiable capability and moving toward the careers they deserve.
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
                 <Link href="/onboarding">
-                  <Button variant="saffron" size="lg" className="btn-shimmer text-base font-bold shadow-soft-md shadow-glow-saffron h-12 sm:h-13 px-7 rounded-2xl">
+                  <Button variant="saffron" size="lg" className="btn-shimmer text-base font-bold shadow-soft-md shadow-glow-saffron h-13 px-8 rounded-2xl text-white">
                     Get Started Free <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 </Link>
                 <Link href="/explore">
-                  <Button variant="outline" size="lg" className="text-base font-semibold bg-white/10 hover:bg-white/20 text-white border-white/30 h-12 sm:h-13 px-7 rounded-2xl">
+                  <Button variant="outline" size="lg" className="text-base font-semibold bg-white/10 hover:bg-white/20 text-white border-white/30 h-13 px-8 rounded-2xl">
                     Explore Career Pathways
                   </Button>
                 </Link>

@@ -8,14 +8,14 @@ import { BackgroundAtmosphere } from "@/components/layout/BackgroundAtmosphere";
 import { CareerCompanionDrawer } from "@/components/companion/CareerCompanionDrawer";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { 
-  Compass, 
-  Home, 
-  FileCheck2, 
-  Sparkles, 
-  ArrowRight, 
-  Search, 
-  HelpCircle 
+import {
+  Compass,
+  Home,
+  FileCheck2,
+  Sparkles,
+  ArrowRight,
+  Search,
+  HelpCircle
 } from "lucide-react";
 
 export default function NotFound() {
@@ -71,8 +71,8 @@ export default function NotFound() {
               Popular Destinations &amp; Tools:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              <Link 
-                href="/assessments" 
+              <Link
+                href="/assessments"
                 className="group p-3 rounded-xl border border-slate-200/70 bg-white/50 hover:bg-white hover:border-purple-300 hover:shadow-sm transition-all text-xs font-medium text-slate-700 hover:text-purple-900 flex items-center justify-between"
               >
                 <span className="flex items-center gap-2">
@@ -81,8 +81,8 @@ export default function NotFound() {
                 </span>
                 <ArrowRight className="h-3 w-3 text-slate-400 group-hover:translate-x-0.5 group-hover:text-purple-600 transition-all" />
               </Link>
-              <Link 
-                href="/onboarding" 
+              <Link
+                href="/onboarding"
                 className="group p-3 rounded-xl border border-slate-200/70 bg-white/50 hover:bg-white hover:border-amber-300 hover:shadow-sm transition-all text-xs font-medium text-slate-700 hover:text-amber-900 flex items-center justify-between"
               >
                 <span className="flex items-center gap-2">
@@ -91,8 +91,8 @@ export default function NotFound() {
                 </span>
                 <ArrowRight className="h-3 w-3 text-slate-400 group-hover:translate-x-0.5 group-hover:text-amber-600 transition-all" />
               </Link>
-              <Link 
-                href="/privacy" 
+              <Link
+                href="/privacy"
                 className="group p-3 rounded-xl border border-slate-200/70 bg-white/50 hover:bg-white hover:border-emerald-300 hover:shadow-sm transition-all text-xs font-medium text-slate-700 hover:text-emerald-900 flex items-center justify-between"
               >
                 <span className="flex items-center gap-2">
@@ -107,9 +107,9 @@ export default function NotFound() {
       </main>
 
       <Footer />
-      <CareerCompanionDrawer 
-        isOpen={isCompanionOpen} 
-        onClose={() => setIsCompanionOpen(false)} 
+      <CareerCompanionDrawer
+        isOpen={isCompanionOpen}
+        onClose={() => setIsCompanionOpen(false)}
       />
     </div>
   );

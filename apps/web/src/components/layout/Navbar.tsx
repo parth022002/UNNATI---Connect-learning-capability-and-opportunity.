@@ -33,7 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
   // Scroll detection for navbar elevation & frosted glass transition
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 15);
     };
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -56,15 +56,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/roadmap", label: "My Roadmap", icon: MapPin },
     { href: "/explore", label: "Explore Careers", icon: Compass },
-    { href: "/assessments", label: "Skill Checks", icon: FileCheck2 },
+    { href: "/assessments", label: "Skills Check", icon: FileCheck2 },
   ];
 
-  // Public visitor navigation items (Target destinations)
+  // Public visitor navigation items (Restrained, calm, purposeful)
   const publicLinks = [
     { href: "/#how-it-works", label: "How It Works", icon: Briefcase },
     { href: "/explore", label: "Career Pathways", icon: Compass },
     { href: "/assessments", label: "Skills Check", icon: FileCheck2 },
-    { href: "/#showcase", label: "Showcase", icon: Layers },
+    { href: "/#showcase", label: "Platform Tour", icon: Layers },
     { href: "/#faq", label: "FAQ", icon: HelpCircle },
   ];
 
@@ -86,54 +86,54 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
     <header 
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isScrolled 
-          ? "bg-white/95 backdrop-blur-xl border-b border-slate-200/90 shadow-soft-md" 
-          : "bg-white/80 backdrop-blur-md border-b border-slate-200/60 shadow-soft-sm"
+          ? "bg-white/95 backdrop-blur-xl border-b border-slate-200/90 shadow-soft-md py-0" 
+          : "bg-white/85 backdrop-blur-md border-b border-slate-200/60 shadow-soft-sm py-1"
       }`}
     >
-      <div className="mx-auto flex h-[76px] sm:h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-[80px] sm:h-[84px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         
         {/* ========================================================
-            LEFT: BRAND GROUP (Logo, Wordmark, Tagline)
+            GROUP A: BRAND IDENTITY (Strong Left Visual Anchor)
            ======================================================== */}
         <Link 
           href="/" 
-          className="group flex items-center gap-3 sm:gap-3.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet rounded-2xl shrink-0"
+          className="group flex items-center gap-3.5 sm:gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet rounded-2xl shrink-0"
           aria-label="UNNATI Home"
         >
-          {/* Logo Mark Container (Crisp 48–52px) */}
-          <div className="relative flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-100 to-orange-50 p-1 border-2 border-purple-200/85 shadow-soft-md transition-all duration-300 group-hover:border-unnati-violet group-hover:shadow-glow-violet shrink-0">
+          {/* Authentic Logo Mark Container (54–56px) */}
+          <div className="relative flex h-13 w-13 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-100/90 via-white to-orange-50/80 p-1.5 border-2 border-purple-200/90 shadow-soft-md transition-all duration-300 group-hover:border-unnati-violet group-hover:shadow-glow-violet shrink-0">
             <Image 
               src="/logo.png" 
               alt="UNNATI Official Logo" 
-              width={46} 
-              height={46} 
-              className="h-8 w-8 sm:h-10 sm:w-10 object-contain" 
+              width={52} 
+              height={52} 
+              className="h-10 w-10 sm:h-11 sm:w-11 object-contain transition-transform duration-300 group-hover:scale-105" 
               priority
             />
           </div>
 
-          {/* Wordmark Stack */}
+          {/* Wordmark Stack with High Readability */}
           <div className="flex flex-col">
-            <div className="flex items-center gap-1.5 leading-none">
-              <span className="font-heading text-xl sm:text-2xl font-black tracking-tight text-unnati-indigo group-hover:text-unnati-violet transition-colors">
+            <div className="flex items-center gap-2 leading-none">
+              <span className="font-heading text-2xl sm:text-[26px] font-black tracking-tight text-unnati-indigo group-hover:text-unnati-violet transition-colors">
                 UNNATI
               </span>
-              <span className="text-[11px] sm:text-xs font-bold text-purple-700 font-sans">
+              <span className="text-xs sm:text-[13px] font-bold text-purple-700 font-sans tracking-normal">
                 (उन्नति)
               </span>
               <span className="inline-block h-2 w-2 rounded-full bg-unnati-saffron animate-pulse" />
             </div>
-            <span className="text-[10px] sm:text-[11px] font-bold tracking-wide text-slate-500 uppercase mt-0.5">
+            <span className="text-[11px] sm:text-[12px] font-bold tracking-wider text-slate-500 uppercase mt-1">
               Your Growth Companion
             </span>
           </div>
         </Link>
 
         {/* ========================================================
-            CENTRE: PRIMARY NAVIGATION (Consistent Typography & Spacing)
+            GROUP B: PRIMARY NAVIGATION (Cerebrium / Trionn Discipline)
            ======================================================== */}
         <nav 
-          className="hidden md:flex items-center gap-2 lg:gap-3 pl-2"
+          className="hidden md:flex items-center gap-1.5 lg:gap-2 xl:gap-3"
           aria-label="Main Navigation"
         >
           {currentLinks.map((link) => {
@@ -143,13 +143,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
               <Link
                 key={link.label}
                 href={link.href}
-                className={`flex items-center gap-2 px-3 lg:px-3.5 py-2 rounded-xl text-[14px] lg:text-[15px] font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-[14.5px] font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet ${
                   active
                     ? "bg-purple-100/90 text-unnati-indigo border border-purple-200 shadow-soft-sm font-bold"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
+                    : "text-slate-600 hover:text-unnati-indigo hover:bg-slate-100/80"
                 }`}
               >
-                <Icon className={`h-4 w-4 shrink-0 ${active ? "text-unnati-saffron" : "text-slate-400 group-hover:text-slate-600"}`} />
+                <Icon className={`h-[17px] w-[17px] shrink-0 transition-colors ${active ? "text-unnati-saffron" : "text-slate-400 group-hover:text-unnati-indigo"}`} />
                 <span>{link.label}</span>
               </Link>
             );
@@ -157,21 +157,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
         </nav>
 
         {/* ========================================================
-            RIGHT: ACCOUNT & CONVERSION ACTIONS
+            GROUP C: ACCOUNT & CONVERSION ACTIONS (Epiminds / SharpLink Hierarchy)
            ======================================================== */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3.5">
           
-          {/* AI Career Mentor Trigger */}
+          {/* Distinctive Secondary Action: AI Career Mentor Trigger */}
           <button
             onClick={handleOpenCompanion}
-            className="group relative hidden sm:flex items-center gap-2 rounded-xl border border-purple-200/90 bg-purple-50/90 px-3.5 py-2 text-xs sm:text-sm font-bold text-unnati-indigo shadow-soft-sm hover:border-purple-300 hover:bg-purple-100 transition-all cursor-pointer h-10 sm:h-11 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet"
+            className="group relative hidden sm:flex items-center gap-2 rounded-xl border border-purple-200/90 bg-purple-50/90 hover:bg-purple-100 px-3.5 sm:px-4 text-xs sm:text-[13.5px] font-bold text-unnati-indigo shadow-soft-sm hover:border-purple-300 transition-all cursor-pointer h-11 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet"
             title="Open 24/7 AI Career Mentor"
             aria-label="Open AI Career Mentor"
           >
             <Sparkles className="h-4 w-4 text-unnati-saffron animate-pulse" />
             <span>Ask AI Mentor</span>
-            <span className="rounded-full bg-orange-100 border border-orange-200 px-1.5 py-0.2 text-[10px] font-bold text-orange-800">
-              Free
+            <span className="rounded-full bg-emerald-100 border border-emerald-200 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800 tracking-wide">
+              24/7
             </span>
           </button>
 
@@ -181,28 +181,31 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
               <UserButton 
                 appearance={{
                   elements: {
-                    userButtonAvatarBox: "h-9 w-9 sm:h-10 sm:w-10 ring-2 ring-purple-300 hover:ring-purple-500 transition-all",
+                    userButtonAvatarBox: "h-10 w-10 ring-2 ring-purple-300 hover:ring-purple-500 transition-all",
                     userButtonPopoverCard: "bg-white border border-slate-200 text-slate-900 shadow-2xl"
                   }
                 }}
               />
             </div>
           ) : isLoaded && !isSignedIn ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              {/* Quiet Sign In Link */}
               <Link href="/sign-in">
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="hidden sm:inline-flex text-xs sm:text-sm font-bold h-10 sm:h-11 px-3.5"
+                  className="hidden sm:inline-flex text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 h-11 px-3.5"
                 >
                   Sign In
                 </Button>
               </Link>
+              
+              {/* Prominent Primary Conversion Button (Saffron Accent) */}
               <Link href="/onboarding">
                 <Button 
                   variant="saffron" 
                   size="sm" 
-                  className="btn-shimmer text-xs sm:text-sm py-2 px-3.5 sm:px-5 shadow-soft-md font-bold whitespace-nowrap h-10 sm:h-11 shadow-glow-saffron"
+                  className="btn-shimmer text-xs sm:text-sm py-2 px-4 sm:px-6 shadow-soft-md font-bold whitespace-nowrap h-11 rounded-xl shadow-glow-saffron text-white"
                 >
                   <span>Start Journey</span>
                   <ArrowRight className="h-4 w-4 ml-1.5 hidden xs:inline" />
@@ -210,13 +213,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
               </Link>
             </div>
           ) : (
-            <div className="h-10 w-24 bg-slate-100 rounded-xl animate-pulse" />
+            <div className="h-11 w-28 bg-slate-100 rounded-xl animate-pulse" />
           )}
 
-          {/* Mobile Menu Toggle Button (Touch target >= 44px) */}
+          {/* Mobile Menu Toggle Button (Touch target >= 48px) */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex md:hidden p-2.5 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet min-h-[44px] min-w-[44px] items-center justify-center cursor-pointer"
+            className="flex md:hidden p-2.5 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet min-h-[48px] min-w-[48px] items-center justify-center cursor-pointer"
             aria-expanded={mobileMenuOpen}
             aria-label="Toggle navigation menu"
           >
@@ -226,15 +229,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
       </div>
 
       {/* ========================================================
-          MOBILE NAVIGATION DRAWER (Full Overlay, Accessible)
+          MOBILE & TABLET NAVIGATION DRAWER (Full Overlay, Accessible)
          ======================================================== */}
       {mobileMenuOpen && (
         <div 
-          className="md:hidden fixed inset-x-0 top-[76px] bg-slate-900/40 backdrop-blur-sm z-40 h-[calc(100vh-76px)] overflow-y-auto animate-in fade-in duration-200"
+          className="md:hidden fixed inset-x-0 top-[80px] sm:top-[84px] bg-slate-900/40 backdrop-blur-sm z-40 h-[calc(100vh-80px)] overflow-y-auto animate-in fade-in duration-200"
           onClick={() => setMobileMenuOpen(false)}
         >
           <div 
-            className="bg-white border-b border-slate-200 px-5 pt-4 pb-8 shadow-2xl space-y-4 animate-in slide-in-from-top-4 duration-300"
+            className="bg-white border-b border-slate-200 px-5 pt-5 pb-8 shadow-2xl space-y-4 animate-in slide-in-from-top-4 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Nav Links Stack */}
@@ -247,7 +250,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
                     key={link.label}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-semibold min-h-[48px] transition-all ${
+                    className={`flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-[15px] font-semibold min-h-[48px] transition-all ${
                       active
                         ? "bg-purple-50 text-unnati-indigo border border-purple-200 font-bold"
                         : "text-slate-700 hover:bg-slate-50"
