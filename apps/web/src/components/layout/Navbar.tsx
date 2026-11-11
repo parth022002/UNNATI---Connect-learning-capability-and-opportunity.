@@ -17,7 +17,8 @@ import {
   ArrowRight, 
   HelpCircle, 
   Briefcase,
-  Layers
+  Layers,
+  Award
 } from "lucide-react";
 
 interface NavbarProps {
@@ -44,9 +45,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
   const authenticatedLinks = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/roadmap", label: "My Roadmap", icon: MapPin },
+    { href: "/examinations", label: "Examinations", icon: Award },
     { href: "/explore", label: "Career Pathways", icon: Compass },
     { href: "/assessments", label: "Skills Check", icon: FileCheck2 },
-    { href: "/#showcase", label: "Platform", icon: Layers },
   ];
 
   // Public visitor navigation items (Preserved items: How It Works, Career Pathways, Skills Check, FAQ)

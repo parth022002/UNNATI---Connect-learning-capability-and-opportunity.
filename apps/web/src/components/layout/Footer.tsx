@@ -202,6 +202,11 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/examinations" className="text-slate-600 hover:text-unnati-indigo transition-colors block">
+                  Examinations &amp; Certifications
+                </Link>
+              </li>
+              <li>
                 <Link href="/roadmap" className="text-slate-600 hover:text-unnati-indigo transition-colors block">
                   Progress Tracking
                 </Link>

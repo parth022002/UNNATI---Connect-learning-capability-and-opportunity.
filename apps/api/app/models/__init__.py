@@ -4,6 +4,14 @@ from app.models.skill import CanonicalSkill, SkillAlias, CandidateSkill
 from app.models.document import CandidateDocument
 from app.models.roadmap import CareerRoadmap, RoadmapMilestone
 from app.models.ecosystem import Institution, Cohort, CohortMember, Employer, Opportunity
+from app.models.examination import (
+    Examination,
+    ExamQuestion,
+    ExamAttempt,
+    ExamAttemptAnswer,
+    ExamProctoringEvent,
+    ExamCertificate,
+)
 
 __all__ = [
     "Base",
@@ -23,4 +31,11 @@ __all__ = [
     "CohortMember",
     "Employer",
     "Opportunity",
+    "Examination",
+    "ExamQuestion",
+    "ExamAttempt",
+    "ExamAttemptAnswer",
+    "ExamProctoringEvent",
+    "ExamCertificate",
 ]
+

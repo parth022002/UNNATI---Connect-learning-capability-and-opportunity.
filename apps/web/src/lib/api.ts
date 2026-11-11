@@ -637,6 +637,128 @@ export const api = {
   async getMarketIntelligence(sector: string = "technology"): Promise<MarketIntelligence> {
     return request<MarketIntelligence>(`/api/v1/analytics/market-intelligence?sector=${encodeURIComponent(sector)}`, { method: "GET" });
   },
+
+  // Examination & Assessment Integrity System
+  async getExaminations(track?: string, category?: string, token?: string | null): Promise<ExaminationSummary[]> {
+    const params = new URLSearchParams();
+    if (track && track !== "all") params.set("track", track);
+    if (category && category !== "all") params.set("category", category);
+    const query = params.toString() ? `?${params.toString()}` : "";
+    return request<ExaminationSummary[]>(`/api/v1/examinations${query}`, { method: "GET" }, token || undefined);
+  },
+
+  async getExaminationDetail(examId: string, token?: string | null): Promise<ExaminationSummary> {
+    return request<ExaminationSummary>(`/api/v1/examinations/${examId}`, { method: "GET" }, token || undefined);
+  },
+
+  async startExamination(
+    token: string,
+    examId: string,
+    data: { proctoring_consent: boolean; device_info?: Record<string, any> }
+  ): Promise<ExamSessionResponse> {
+    return request<ExamSessionResponse>(
+      `/api/v1/examinations/${examId}/start`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
+  async saveExamAnswer(
+    token: string,
+    attemptId: string,
+    data: {
+      question_id: string;
+      selected_options?: string[];
+      text_response?: string;
+      is_marked_for_review?: boolean;
+    }
+  ): Promise<{ success: boolean; question_id: string; saved_at: string }> {
+    return request<{ success: boolean; question_id: string; saved_at: string }>(
+      `/api/v1/examinations/attempts/${attemptId}/answers`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
+  async recordProctoringEvent(
+    token: string,
+    attemptId: string,
+    data: {
+      event_type: string;
+      severity?: string;
+      metadata_payload?: Record<string, any>;
+      client_timestamp?: string;
+    }
+  ): Promise<ProctoringEventItem> {
+    return request<ProctoringEventItem>(
+      `/api/v1/examinations/attempts/${attemptId}/proctoring-events`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
+  async submitExamination(
+    token: string,
+    attemptId: string,
+    feedbackNotes?: string
+  ): Promise<ExamResultDetail> {
+    return request<ExamResultDetail>(
+      `/api/v1/examinations/attempts/${attemptId}/submit`,
+      {
+        method: "POST",
+        body: JSON.stringify({ feedback_notes: feedbackNotes }),
+      },
+      token
+    );
+  },
+
+  async getExamResults(token: string, attemptId: string): Promise<ExamResultDetail> {
+    return request<ExamResultDetail>(`/api/v1/examinations/attempts/${attemptId}/results`, { method: "GET" }, token);
+  },
+
+  async verifyCertificate(certificateNumber: string): Promise<ExamCertificateData> {
+    return request<ExamCertificateData>(`/api/v1/examinations/certificates/${certificateNumber}`, { method: "GET" });
+  },
+
+  async getAdminReviews(token: string, risk?: string, status?: string): Promise<AdminReviewItem[]> {
+    const params = new URLSearchParams();
+    if (risk && risk !== "all") params.set("risk", risk);
+    if (status && status !== "all") params.set("status", status);
+    const query = params.toString() ? `?${params.toString()}` : "";
+    return request<AdminReviewItem[]>(`/api/v1/examinations/admin/reviews${query}`, { method: "GET" }, token);
+  },
+
+  async getAdminReviewDetail(token: string, attemptId: string): Promise<AdminReviewDetail> {
+    return request<AdminReviewDetail>(`/api/v1/examinations/admin/reviews/${attemptId}`, { method: "GET" }, token);
+  },
+
+  async recordAdminDecision(
+    token: string,
+    attemptId: string,
+    data: { decision: string; reviewer_notes: string }
+  ): Promise<AdminReviewDetail> {
+    return request<AdminReviewDetail>(
+      `/api/v1/examinations/admin/reviews/${attemptId}/decision`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
+  async getAdminExamAnalytics(token: string): Promise<ExamAnalyticsData> {
+    return request<ExamAnalyticsData>("/api/v1/examinations/admin/analytics", { method: "GET" }, token);
+  },
 };
 
 export interface CohortSummary {
@@ -743,3 +865,217 @@ export interface MarketIntelligence {
   curriculum_blind_spots: { blind_spot: string; curriculum_gap: string; impact: string }[];
   quarterly_insight: string;
 }
+
+// Examination & Assessment Integrity System Types
+export interface ExaminationSummary {
+  id: string;
+  title: string;
+  description?: string | null;
+  course_id?: string | null;
+  course_name: string;
+  module_name: string;
+  track: string;
+  category: "PRACTICE_QUIZ" | "MODULE_ASSESSMENT" | "FORMAL_EXAM" | "CERTIFICATION";
+  difficulty: "Foundational" | "Intermediate" | "Advanced";
+  total_marks: number;
+  passing_percentage: number;
+  duration_minutes: number;
+  max_attempts: number;
+  negative_marking_percentage: number;
+  proctoring_enabled: boolean;
+  proctoring_config: {
+    require_webcam: boolean;
+    require_microphone: boolean;
+    require_fullscreen: boolean;
+    block_tab_switch: boolean;
+    block_copy_paste: boolean;
+    max_tab_switches_warning?: number;
+    record_audio_spikes?: boolean;
+  };
+  certificate_eligible: boolean;
+  question_count: number;
+  user_attempts_count?: number;
+  user_best_score?: number | null;
+  user_has_passed?: boolean;
+}
+
+export interface ExamQuestionOptionItem {
+  id: string;
+  text: string;
+}
+
+export interface ExamQuestionItem {
+  id: string;
+  question_number: number;
+  question_type: "MCQ" | "MULTIPLE_SELECT" | "TRUE_FALSE" | "SHORT_ANSWER" | "DESCRIPTIVE" | "SCENARIO" | "CASE_STUDY" | "NUMERICAL" | "CODE";
+  prompt: string;
+  scenario?: string | null;
+  code_snippet?: string | null;
+  options?: ExamQuestionOptionItem[] | null;
+  marks: number;
+  competency_tag: string;
+  topic: string;
+}
+
+export interface SavedAnswerState {
+  question_id: string;
+  selected_options: string[];
+  text_response?: string | null;
+  is_marked_for_review: boolean;
+}
+
+export interface ExamSessionResponse {
+  attempt_id: string;
+  examination_id: string;
+  examination_title: string;
+  course_name: string;
+  attempt_number: number;
+  status: string;
+  started_at: string;
+  expires_at: string;
+  server_time: string;
+  time_remaining_seconds: number;
+  duration_minutes: number;
+  proctoring_enabled: boolean;
+  proctoring_config: Record<string, any>;
+  questions: ExamQuestionItem[];
+  saved_answers: Record<string, SavedAnswerState>;
+}
+
+export interface ProctoringEventItem {
+  id: string;
+  event_type: string;
+  severity: string;
+  timestamp: string;
+  metadata_payload: Record<string, any>;
+}
+
+export interface QuestionResultItem {
+  question_id: string;
+  question_number: number;
+  prompt: string;
+  question_type: string;
+  marks: number;
+  marks_awarded: number;
+  is_correct?: boolean | null;
+  selected_options: string[];
+  correct_answers: string[];
+  explanation?: string | null;
+  ai_feedback?: string | null;
+  competency_tag: string;
+  topic: string;
+}
+
+export interface CompetencyPerformanceItem {
+  competency_tag: string;
+  total_marks: number;
+  obtained_marks: number;
+  percentage: number;
+  proficiency_level: "Mastered" | "Proficient" | "Developing" | "Needs Focus";
+}
+
+export interface ExamResultDetail {
+  attempt_id: string;
+  examination_id: string;
+  title: string;
+  course_name: string;
+  module_name: string;
+  track: string;
+  attempt_number: number;
+  total_marks: number;
+  score_obtained: number;
+  percentage: number;
+  is_passed: boolean;
+  passing_percentage: number;
+  status: string;
+  started_at: string;
+  submitted_at: string;
+  time_taken_seconds: number;
+  question_breakdown: QuestionResultItem[];
+  competency_performance: CompetencyPerformanceItem[];
+  knowledge_gaps: string[];
+  strengths: string[];
+  ai_learning_recommendations?: {
+    status: string;
+    weak_areas: string[];
+    strong_areas: string[];
+    recommended_modules: {
+      competency: string;
+      title: string;
+      recommended_action: string;
+      estimated_hours: number;
+    }[];
+    practice_actions: string[];
+    revision_schedule: string;
+    suggest_retake: boolean;
+  } | null;
+  certificate_id?: string | null;
+  certificate_number?: string | null;
+  can_retake: boolean;
+  attempts_remaining: number;
+}
+
+export interface ExamCertificateData {
+  certificate_id: string;
+  certificate_number: string;
+  title: string;
+  recipient_name: string;
+  course_name: string;
+  score_percentage: number;
+  issued_at: string;
+  credential_hash: string;
+  verification_url: string;
+}
+
+export interface AdminReviewItem {
+  attempt_id: string;
+  user_id: string;
+  candidate_name: string;
+  candidate_email: string;
+  examination_title: string;
+  course_name: string;
+  attempt_number: number;
+  started_at: string;
+  submitted_at?: string | null;
+  score_obtained: number;
+  total_marks: number;
+  percentage: number;
+  is_passed: boolean;
+  status: string;
+  integrity_risk_category: "NORMAL" | "LOW" | "MODERATE" | "HIGH" | "INCONCLUSIVE";
+  event_count: number;
+  reviewer_decision: string;
+}
+
+export interface AdminReviewDetail {
+  attempt_id: string;
+  user_id: string;
+  candidate_name: string;
+  candidate_email: string;
+  examination_title: string;
+  course_name: string;
+  attempt_number: number;
+  status: string;
+  score_obtained: number;
+  percentage: number;
+  is_passed: boolean;
+  integrity_risk_category: string;
+  integrity_summary?: Record<string, any> | null;
+  events: ProctoringEventItem[];
+  reviewer_decision: string;
+  reviewer_notes?: string | null;
+  reviewed_by?: string | null;
+  reviewed_at?: string | null;
+}
+
+export interface ExamAnalyticsData {
+  total_examinations: number;
+  total_attempts: number;
+  completion_rate: number;
+  pass_rate: number;
+  average_score_percentage: number;
+  integrity_risk_distribution: Record<string, number>;
+  top_knowledge_gaps: { skill: string; frequency: number; track: string }[];
+  recent_flagged_count: number;
+}
+
