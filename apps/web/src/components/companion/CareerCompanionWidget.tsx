@@ -26,6 +26,8 @@ import {
   ChevronDown
 } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
+import { useAuth } from "@clerk/nextjs";
+import { api, getClerkApiToken } from "@/lib/api";
 
 interface Message {
   id: string;
@@ -42,6 +44,7 @@ interface Message {
 type UserCategory = "all" | "students" | "business" | "finance" | "tech" | "switchers";
 
 export const CareerCompanionWidget: React.FC = () => {
+  const { isSignedIn, getToken } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [footerOffset, setFooterOffset] = useState(0);
   const [isFooterCollisionHidden, setIsFooterCollisionHidden] = useState(false);
@@ -223,6 +226,34 @@ export const CareerCompanionWidget: React.FC = () => {
     if (!messageText) setInput("");
     setIsTyping(true);
 
+    // 1. Try Live Backend AI Companion Route
+    try {
+      let token: string | null = null;
+      if (isSignedIn) {
+        token = await getClerkApiToken(getToken);
+      }
+      const aiRes = await api.chatWithAI(textToSend, activeCategory, token);
+      if (aiRes && aiRes.reply) {
+        const companionMessage: Message = {
+          id: `companion-${Date.now()}`,
+          sender: "companion",
+          content: aiRes.reply,
+          timestamp: "Just now",
+          sources: aiRes.sources || ["UNNATI Mentorship Engine"],
+          suggestedAction: aiRes.suggested_action ? {
+            label: aiRes.suggested_action.label,
+            href: aiRes.suggested_action.href
+          } : undefined
+        };
+        setMessages((prev) => [...prev, companionMessage]);
+        setIsTyping(false);
+        return;
+      }
+    } catch (apiErr) {
+      console.warn("Backend AI chat fallback triggered:", apiErr);
+    }
+
+    // 2. Intelligent Client-Side Fallback Matching
     setTimeout(() => {
       let replyContent = "";
       let sources = ["UNNATI Career Mentorship Engine"];

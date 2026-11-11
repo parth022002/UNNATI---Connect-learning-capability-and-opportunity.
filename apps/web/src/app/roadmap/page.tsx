@@ -120,11 +120,71 @@ export default function RoadmapPage() {
     }
   };
 
-  const toggleTask = (taskKey: string) => {
+  // Sync initial module completion state from roadmap data
+  useEffect(() => {
+    if (activeRoadmap?.milestones) {
+      const initialMap: Record<string, boolean> = {};
+      activeRoadmap.milestones.forEach((m) => {
+        m.learning_modules.forEach((mod, idx) => {
+          if (mod.completed || m.status === "COMPLETED") {
+            initialMap[`${m.id}-mod-${idx}`] = true;
+          }
+        });
+      });
+      setCompletedTasks((prev) => ({ ...initialMap, ...prev }));
+    }
+  }, [activeRoadmap]);
+
+  const toggleTask = async (milestoneId: string, moduleIndex: number, currentDone: boolean) => {
+    const taskKey = `${milestoneId}-mod-${moduleIndex}`;
+    const nextDone = !currentDone;
+
+    // Optimistically update local toggle state
     setCompletedTasks((prev) => ({
       ...prev,
-      [taskKey]: !prev[taskKey]
+      [taskKey]: nextDone
     }));
+
+    // Update activeRoadmap state locally
+    if (activeRoadmap) {
+      const updatedMilestones = activeRoadmap.milestones.map((m) => {
+        if (m.id === milestoneId) {
+          const updatedMods = [...m.learning_modules];
+          if (updatedMods[moduleIndex]) {
+            updatedMods[moduleIndex] = { ...updatedMods[moduleIndex], completed: nextDone };
+          }
+          return { ...m, learning_modules: updatedMods };
+        }
+        return m;
+      });
+      setActiveRoadmap({ ...activeRoadmap, milestones: updatedMilestones });
+    }
+
+    // Persist to backend if signed in
+    if (isSignedIn && activeRoadmap) {
+      try {
+        const token = await getClerkApiToken(getToken);
+        if (token) {
+          const res = await api.toggleModuleProgress(token, activeRoadmap.id, milestoneId, moduleIndex, nextDone);
+          if (res.milestone_status) {
+            setActiveRoadmap((prev) => {
+              if (!prev) return null;
+              return {
+                ...prev,
+                milestones: prev.milestones.map((m) => {
+                  if (m.id === milestoneId) {
+                    return { ...m, status: res.milestone_status, learning_modules: res.learning_modules };
+                  }
+                  return m;
+                })
+              };
+            });
+          }
+        }
+      } catch (err) {
+        console.warn("Module progress sync error:", err);
+      }
+    }
   };
 
   if (!isLoaded || loading) {
@@ -161,7 +221,9 @@ export default function RoadmapPage() {
     );
   }
 
-  const readiness = gapData ? Math.round(gapData.readiness_score * 100) : 0;
+  const readiness = gapData 
+    ? Math.round(gapData.readiness_score > 1 ? gapData.readiness_score : gapData.readiness_score * 100) 
+    : 0;
 
   return (
     <div className="relative min-h-screen bg-warm-pattern text-slate-900 flex flex-col font-sans selection:bg-purple-200 selection:text-purple-900">
@@ -409,19 +471,42 @@ export default function RoadmapPage() {
                   <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
                     {/* Learning Modules with Checkbox Trackers */}
                     <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-                      <p className="text-xs font-bold uppercase tracking-wider text-purple-900 flex items-center gap-1.5 mb-3">
-                        <BookOpen className="h-3.5 w-3.5 text-orange-600" />
-                        Curated Learning Modules
-                      </p>
+                      {(() => {
+                        const completedCount = milestone.learning_modules.filter(
+                          (mod, idx) => completedTasks[`${milestone.id}-mod-${idx}`] || mod.completed || isCompleted
+                        ).length;
+                        const totalCount = milestone.learning_modules.length;
+                        const pct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+                        return (
+                          <>
+                            <div className="flex items-center justify-between mb-2">
+                              <p className="text-xs font-bold uppercase tracking-wider text-purple-900 flex items-center gap-1.5">
+                                <BookOpen className="h-3.5 w-3.5 text-orange-600" />
+                                Curated Learning Modules
+                              </p>
+                              <span className="text-[11px] font-mono font-bold text-slate-600">
+                                {completedCount} / {totalCount} completed ({pct}%)
+                              </span>
+                            </div>
+                            {/* Subtle Milestone Progress Bar */}
+                            <div className="w-full bg-slate-200 rounded-full h-1.5 mb-3 overflow-hidden">
+                              <div
+                                className="bg-emerald-600 h-1.5 rounded-full transition-all duration-300"
+                                style={{ width: `${pct}%` }}
+                              />
+                            </div>
+                          </>
+                        );
+                      })()}
                       <div className="space-y-2">
                         {milestone.learning_modules.map((mod, idx) => {
                           const taskKey = `${milestone.id}-mod-${idx}`;
-                          const isDone = completedTasks[taskKey] || isCompleted;
+                          const isDone = completedTasks[taskKey] || mod.completed || isCompleted;
                           return (
                             <div
                               key={idx}
-                              onClick={() => toggleTask(taskKey)}
-                              className={`flex items-center justify-between rounded-xl border p-2.5 text-xs transition cursor-pointer ${
+                              onClick={() => toggleTask(milestone.id, idx, !!isDone)}
+                              className={`flex items-center justify-between rounded-xl border p-2.5 text-xs transition cursor-pointer select-none ${
                                 isDone
                                   ? "border-emerald-200 bg-emerald-50 text-slate-700"
                                   : "border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
@@ -433,7 +518,7 @@ export default function RoadmapPage() {
                                 ) : (
                                   <Square className="h-4 w-4 text-slate-400 shrink-0" />
                                 )}
-                                <span className={isDone ? "line-through text-slate-400" : "font-medium"}>
+                                <span className={isDone ? "line-through text-slate-400 font-medium" : "font-medium"}>
                                   {mod.title}
                                 </span>
                               </div>

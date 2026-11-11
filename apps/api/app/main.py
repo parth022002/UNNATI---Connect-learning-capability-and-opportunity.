@@ -7,6 +7,8 @@ from app.api.routes.skills import router as skills_router
 from app.api.routes.documents import router as documents_router
 from app.api.routes.roadmaps import router as roadmaps_router
 from app.api.routes.webhooks import router as webhooks_router
+from app.api.routes.assessments import router as assessments_router
+from app.api.routes.ai import router as ai_router
 
 app = FastAPI(
     title="UNNATI (उन्नति) API",
@@ -41,6 +43,8 @@ app.include_router(users_router)
 app.include_router(skills_router)
 app.include_router(documents_router)
 app.include_router(roadmaps_router)
+app.include_router(assessments_router)
+app.include_router(ai_router)
 app.include_router(webhooks_router)
 
 @app.get("/")

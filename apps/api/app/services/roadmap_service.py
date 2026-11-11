@@ -212,9 +212,9 @@ def synthesize_career_roadmap(
         estimated_weeks=4,
         target_skills=phase_1_skills,
         learning_modules=[
-            {"title": "Core Syntax & Idiomatic Code Patterns", "duration_hours": 8, "type": "interactive"},
-            {"title": "Data Structures & Algorithmic Complexity", "duration_hours": 12, "type": "problem_solving"},
-            {"title": "Modern Tooling & Git Workflows", "duration_hours": 4, "type": "practical"}
+            {"title": "Core Syntax & Idiomatic Code Patterns", "duration_hours": 8, "type": "interactive", "completed": False},
+            {"title": "Data Structures & Algorithmic Complexity", "duration_hours": 12, "type": "problem_solving", "completed": False},
+            {"title": "Modern Tooling & Git Workflows", "duration_hours": 4, "type": "practical", "completed": False}
         ],
         project_deliverable={
             "title": f"{phase_1_skills[0]} High-Throughput CLI Utility",
@@ -235,9 +235,9 @@ def synthesize_career_roadmap(
         estimated_weeks=4,
         target_skills=phase_2_candidates,
         learning_modules=[
-            {"title": "Relational Modeling & Query Optimization", "duration_hours": 10, "type": "database"},
-            {"title": "Asynchronous RESTful APIs with Auth", "duration_hours": 12, "type": "backend"},
-            {"title": "Containerization & Local Dev Environments", "duration_hours": 6, "type": "devops"}
+            {"title": "Relational Modeling & Query Optimization", "duration_hours": 10, "type": "database", "completed": False},
+            {"title": "Asynchronous RESTful APIs with Auth", "duration_hours": 12, "type": "backend", "completed": False},
+            {"title": "Containerization & Local Dev Environments", "duration_hours": 6, "type": "devops", "completed": False}
         ],
         project_deliverable={
             "title": "Full-Stack Service with Authentication & Database",
@@ -258,9 +258,9 @@ def synthesize_career_roadmap(
         estimated_weeks=4,
         target_skills=phase_3_candidates,
         learning_modules=[
-            {"title": "Distributed Caching & In-Memory Queues", "duration_hours": 8, "type": "architecture"},
-            {"title": "System Design: Scalability & Fault Tolerance", "duration_hours": 10, "type": "system_design"},
-            {"title": "CI/CD Deployment & Monitoring", "duration_hours": 6, "type": "production"}
+            {"title": "Distributed Caching & In-Memory Queues", "duration_hours": 8, "type": "architecture", "completed": False},
+            {"title": "System Design: Scalability & Fault Tolerance", "duration_hours": 10, "type": "system_design", "completed": False},
+            {"title": "CI/CD Deployment & Monitoring", "duration_hours": 6, "type": "production", "completed": False}
         ],
         project_deliverable={
             "title": "Production-Grade Distributed Showcase App",

@@ -58,6 +58,19 @@ def record_audit_event(
     logger.info(f"Recorded tamper-evident audit event: {event_type} (Hash: {current_hash[:12]}...)")
     return event
 
+def log_action(
+    db: Session,
+    action: str,
+    user_id: Optional[uuid.UUID] = None,
+    resource_id: Optional[str] = None,
+    metadata: Optional[Dict[str, Any]] = None
+) -> AuditEvent:
+    """Convenience wrapper for recording audited actions with resource metadata."""
+    payload: Dict[str, Any] = {"resource_id": resource_id}
+    if metadata:
+        payload.update(metadata)
+    return record_audit_event(db=db, event_type=action, payload=payload, user_id=user_id)
+
 def verify_audit_chain(db: Session) -> Dict[str, Any]:
     """
     Performs full verification across the cryptographic audit hash chain.

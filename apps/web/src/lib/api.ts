@@ -168,12 +168,84 @@ export interface RoadmapMilestone {
     title: string;
     duration_hours: number;
     type: string;
+    completed?: boolean;
   }>;
   project_deliverable?: {
     title: string;
     description: string;
     rubric: string[];
   } | null;
+}
+
+export interface MilestoneProgressResponse {
+  roadmap_id: string;
+  milestone_id: string;
+  phase_number: number;
+  milestone_status: string;
+  completed_modules_count: number;
+  total_modules_count: number;
+  milestone_completion_percentage: number;
+  overall_roadmap_progress_percentage: number;
+  learning_modules: Array<{
+    title: string;
+    duration_hours: number;
+    type: string;
+    completed?: boolean;
+  }>;
+}
+
+export interface AssessmentQuestion {
+  id: number;
+  track: string;
+  skill: string;
+  difficulty: string;
+  prompt: string;
+  scenario?: string | null;
+  options: Array<{
+    id: string;
+    text: string;
+  }>;
+  estimated_minutes: number;
+}
+
+export interface AssessmentSubmissionResponse {
+  question_id: number;
+  is_correct: boolean;
+  correct_option_id: string;
+  score: number;
+  explanation: string;
+  practical_takeaway: string;
+  skill_update?: {
+    skill_name: string;
+    category: string;
+    state: string;
+    proficiency: number;
+    confidence: number;
+    evidence_count: number;
+  } | null;
+}
+
+export interface InterviewPrepQuestion {
+  id: number;
+  role: string;
+  track: string;
+  category: string;
+  question: string;
+  scenario?: string | null;
+  evaluation_rubric: string[];
+  sample_approach: string;
+  tips: string[];
+}
+
+export interface CompanionChatResponse {
+  reply: string;
+  sources: string[];
+  suggested_action?: {
+    label: string;
+    href: string;
+  } | null;
+  suggested_prompts: string[];
+  learner_context_used?: any;
 }
 
 export interface CareerRoadmap {
@@ -442,5 +514,94 @@ export const api = {
 
   async getRoadmapById(token: string, roadmapId: string): Promise<CareerRoadmap> {
     return request<CareerRoadmap>(`/api/v1/roadmaps/${roadmapId}`, { method: "GET" }, token);
+  },
+
+  async updateMilestoneStatus(
+    token: string,
+    roadmapId: string,
+    milestoneId: string,
+    status: string
+  ): Promise<RoadmapMilestone> {
+    return request<RoadmapMilestone>(
+      `/api/v1/roadmaps/${roadmapId}/milestones/${milestoneId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ status }),
+      },
+      token
+    );
+  },
+
+  async toggleModuleProgress(
+    token: string,
+    roadmapId: string,
+    milestoneId: string,
+    moduleIndex: number,
+    completed?: boolean
+  ): Promise<MilestoneProgressResponse> {
+    return request<MilestoneProgressResponse>(
+      `/api/v1/roadmaps/${roadmapId}/milestones/${milestoneId}/modules/${moduleIndex}/toggle`,
+      {
+        method: "POST",
+        body: JSON.stringify({ completed }),
+      },
+      token
+    );
+  },
+
+  // Assessments & Evidence Capture (Phase 4)
+  async getAssessmentQuestions(track?: string, difficulty?: string): Promise<AssessmentQuestion[]> {
+    const params = new URLSearchParams();
+    if (track && track !== "all") params.set("track", track);
+    if (difficulty) params.set("difficulty", difficulty);
+    const queryStr = params.toString() ? `?${params.toString()}` : "";
+    return request<AssessmentQuestion[]>(`/api/v1/assessments/questions${queryStr}`, { method: "GET" });
+  },
+
+  async submitAssessmentQuestion(
+    token: string,
+    data: {
+      question_id: number;
+      selected_option_id: string;
+      time_taken_seconds?: number;
+    }
+  ): Promise<AssessmentSubmissionResponse> {
+    return request<AssessmentSubmissionResponse>(
+      "/api/v1/assessments/submit",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
+  async getInterviewPrep(role?: string, track?: string): Promise<InterviewPrepQuestion[]> {
+    const params = new URLSearchParams();
+    if (role) params.set("role", role);
+    if (track && track !== "all") params.set("track", track);
+    const queryStr = params.toString() ? `?${params.toString()}` : "";
+    return request<InterviewPrepQuestion[]>(`/api/v1/assessments/interview-prep${queryStr}`, { method: "GET" });
+  },
+
+  // Formative RAG Career Companion AI (Phase 4)
+  async chatWithAI(
+    message: string,
+    category?: string,
+    token?: string | null,
+    targetRole?: string
+  ): Promise<CompanionChatResponse> {
+    return request<CompanionChatResponse>(
+      "/api/v1/ai/chat",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          message,
+          category: category || "all",
+          target_role: targetRole,
+        }),
+      },
+      token
+    );
   },
 };

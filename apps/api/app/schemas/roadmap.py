@@ -25,6 +25,23 @@ class GenerateRoadmapRequest(BaseModel):
     target_role: Optional[str] = None
     weekly_hours: int = 10
 
+class UpdateMilestoneStatusRequest(BaseModel):
+    status: str # LOCKED, IN_PROGRESS, COMPLETED
+
+class ToggleModuleProgressRequest(BaseModel):
+    completed: Optional[bool] = None # If None, toggles current state
+
+class MilestoneProgressResponse(BaseModel):
+    roadmap_id: uuid.UUID
+    milestone_id: uuid.UUID
+    phase_number: int
+    milestone_status: str
+    completed_modules_count: int
+    total_modules_count: int
+    milestone_completion_percentage: float
+    overall_roadmap_progress_percentage: float
+    learning_modules: List[Dict[str, Any]]
+
 class RoadmapMilestoneResponse(BaseModel):
     id: uuid.UUID
     phase_number: int
