@@ -123,3 +123,4 @@ def test_market_intelligence():
     assert "trend_direction" in first_skill
     assert "curriculum_blind_spots" in intel
     assert "quarterly_insight" in intel
+

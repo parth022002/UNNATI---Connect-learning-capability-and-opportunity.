@@ -83,3 +83,4 @@ class Opportunity(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     status: Mapped[str] = mapped_column(String(30), default="ACTIVE", nullable=False)
 
     employer: Mapped["Employer"] = relationship("Employer", back_populates="opportunities")
+

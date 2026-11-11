@@ -114,3 +114,4 @@ class MarketIntelligenceResponse(BaseModel):
     surging_skills: List[MarketSkillTrend]
     curriculum_blind_spots: List[Dict[str, Any]]
     quarterly_insight: str
+

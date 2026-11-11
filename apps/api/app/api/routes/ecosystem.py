@@ -101,3 +101,4 @@ def get_intelligence(
     - Curriculum blind spots actionable by academic leaders
     """
     return get_market_intelligence(sector)
+
