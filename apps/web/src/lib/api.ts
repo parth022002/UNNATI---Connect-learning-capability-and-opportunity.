@@ -604,4 +604,142 @@ export const api = {
       token
     );
   },
+
+  // Institution & Campus Analytics (Phase 5.1)
+  async getInstitutionSummary(): Promise<InstitutionSummary> {
+    return request<InstitutionSummary>("/api/v1/institution/summary", { method: "GET" });
+  },
+
+  async getCohortAnalytics(cohortId: string): Promise<CohortAnalytics> {
+    return request<CohortAnalytics>(`/api/v1/institution/cohorts/${cohortId}/analytics`, { method: "GET" });
+  },
+
+  // Employer Talent Discovery & Opportunities (Phase 5.2)
+  async searchTalentPool(filter: {
+    target_role?: string;
+    required_skills?: string[];
+    min_readiness_score?: number;
+    has_capstone?: boolean;
+    limit?: number;
+  }): Promise<TalentSearchResponse> {
+    return request<TalentSearchResponse>("/api/v1/talent/candidates/search", {
+      method: "POST",
+      body: JSON.stringify(filter),
+    });
+  },
+
+  async getOpportunities(sector?: string): Promise<OpportunityItem[]> {
+    const query = sector && sector !== "all" ? `?sector=${encodeURIComponent(sector)}` : "";
+    return request<OpportunityItem[]>(`/api/v1/talent/opportunities${query}`, { method: "GET" });
+  },
+
+  // Labor Market Intelligence (Phase 5.3)
+  async getMarketIntelligence(sector: string = "technology"): Promise<MarketIntelligence> {
+    return request<MarketIntelligence>(`/api/v1/analytics/market-intelligence?sector=${encodeURIComponent(sector)}`, { method: "GET" });
+  },
 };
+
+export interface CohortSummary {
+  id: string;
+  name: string;
+  department: string;
+  target_degree: string;
+  graduation_year: number;
+  total_students: number;
+  average_readiness_score: number;
+}
+
+export interface InstitutionSummary {
+  id: string;
+  name: string;
+  code: string;
+  institution_type: string;
+  domain?: string | null;
+  location?: string | null;
+  is_verified: boolean;
+  contact_email?: string | null;
+  cohorts: CohortSummary[];
+}
+
+export interface CohortDistributionTier {
+  tier: string;
+  count: number;
+  percentage: number;
+}
+
+export interface CurriculumGapItem {
+  skill_name: string;
+  category: string;
+  importance: string;
+  affected_students_count: number;
+  gap_percentage: number;
+  recommended_action: string;
+}
+
+export interface CohortAnalytics {
+  cohort_id: string;
+  cohort_name: string;
+  department: string;
+  total_learners: number;
+  average_readiness_score: number;
+  job_ready_percentage: number;
+  active_roadmaps_count: number;
+  distribution: CohortDistributionTier[];
+  top_curriculum_gaps: CurriculumGapItem[];
+  top_target_roles: { role: string; interested_percentage: number }[];
+}
+
+export interface CandidateTalentProfile {
+  candidate_id: string;
+  anonymized_identifier: string;
+  target_role: string;
+  headline?: string | null;
+  readiness_score: number;
+  experience_years: number;
+  verified_skills: string[];
+  assessed_skills: string[];
+  inferred_skills: string[];
+  match_percentage: number;
+  capstone_completed: boolean;
+  dpdp_consent_verified: boolean;
+}
+
+export interface TalentSearchResponse {
+  total_matches: number;
+  filter_criteria: Record<string, any>;
+  candidates: CandidateTalentProfile[];
+}
+
+export interface OpportunityItem {
+  id: string;
+  title: string;
+  role_category: string;
+  location: string;
+  employment_type: string;
+  min_readiness_score: number;
+  required_skills: string[];
+  description?: string | null;
+  salary_range?: string | null;
+  company_name: string;
+  is_verified_company: boolean;
+  status: string;
+  created_at: string;
+  matched_candidates_count: number;
+}
+
+export interface MarketSkillTrend {
+  skill_name: string;
+  category: string;
+  industry_demand_index: number;
+  supply_in_cohorts: number;
+  market_gap: number;
+  trend_direction: string;
+}
+
+export interface MarketIntelligence {
+  sector: string;
+  top_demanded_roles: { role: string; growth_yoy: string; median_ctc: string }[];
+  surging_skills: MarketSkillTrend[];
+  curriculum_blind_spots: { blind_spot: string; curriculum_gap: string; impact: string }[];
+  quarterly_insight: string;
+}

@@ -3,6 +3,7 @@ from app.models.user import User, UserProfile, EducationRecord, ExperienceRecord
 from app.models.skill import CanonicalSkill, SkillAlias, CandidateSkill
 from app.models.document import CandidateDocument
 from app.models.roadmap import CareerRoadmap, RoadmapMilestone
+from app.models.ecosystem import Institution, Cohort, CohortMember, Employer, Opportunity
 
 __all__ = [
     "Base",
@@ -17,4 +18,9 @@ __all__ = [
     "CandidateDocument",
     "CareerRoadmap",
     "RoadmapMilestone",
+    "Institution",
+    "Cohort",
+    "CohortMember",
+    "Employer",
+    "Opportunity",
 ]
