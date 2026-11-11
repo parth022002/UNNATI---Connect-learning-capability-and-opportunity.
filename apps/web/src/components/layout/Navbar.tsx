@@ -47,6 +47,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
   const authenticatedLinks = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/roadmap", label: "My Roadmap", icon: MapPin },
+    { href: "/jobs", label: "Jobs", icon: Briefcase },
     { href: "/interviews", label: "Interviews", icon: Video },
     { href: "/resumes", label: "Resume Studio", icon: FileText },
     { href: "/examinations", label: "Examinations", icon: Award },

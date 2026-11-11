@@ -358,3 +358,4 @@ def delete_interview_session(
     db.delete(session)
     db.commit()
     return None
+

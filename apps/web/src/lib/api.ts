@@ -991,6 +991,101 @@ export const api = {
   async deleteInterviewSession(token: string, sessionId: string): Promise<void> {
     return request<void>(`/api/v1/interviews/sessions/${sessionId}`, { method: "DELETE" }, token);
   },
+
+  // ============================================================================
+  // GLOBAL JOB DISCOVERY & RECOMMENDATION APIS
+  // ============================================================================
+
+  async getJobDashboard(token: string): Promise<JobDiscoveryDashboardData> {
+    return request<JobDiscoveryDashboardData>("/api/v1/jobs/dashboard", { method: "GET" }, token);
+  },
+
+  async searchJobs(token: string, filterReq: JobSearchFilterRequest): Promise<JobSearchResponse> {
+    return request<JobSearchResponse>(
+      "/api/v1/jobs/search",
+      {
+        method: "POST",
+        body: JSON.stringify(filterReq),
+      },
+      token
+    );
+  },
+
+  async getJobDetail(token: string, jobId: string): Promise<CanonicalJobDetail> {
+    return request<CanonicalJobDetail>(`/api/v1/jobs/${jobId}`, { method: "GET" }, token);
+  },
+
+  async trackApplyRedirect(token: string, jobId: string): Promise<JobRedirectValidationResponse> {
+    return request<JobRedirectValidationResponse>(
+      `/api/v1/jobs/${jobId}/apply`,
+      {
+        method: "POST",
+      },
+      token
+    );
+  },
+
+  async saveJob(token: string, jobId: string, notes?: string): Promise<{ status: string; saved_id: string }> {
+    return request<{ status: string; saved_id: string }>(
+      `/api/v1/jobs/${jobId}/save`,
+      {
+        method: "POST",
+        body: JSON.stringify({ notes }),
+      },
+      token
+    );
+  },
+
+  async removeSavedJob(token: string, jobId: string): Promise<void> {
+    return request<void>(`/api/v1/jobs/${jobId}/save`, { method: "DELETE" }, token);
+  },
+
+  async getSavedJobs(token: string): Promise<SavedJobItem[]> {
+    return request<SavedJobItem[]>("/api/v1/jobs/user/saved", { method: "GET" }, token);
+  },
+
+  async getJobApplications(token: string): Promise<JobApplicationActivityItem[]> {
+    return request<JobApplicationActivityItem[]>("/api/v1/jobs/user/applications", { method: "GET" }, token);
+  },
+
+  async updateJobApplicationStatus(
+    token: string,
+    jobId: string,
+    data: { status: string; candidate_notes?: string; follow_up_date?: string }
+  ): Promise<JobApplicationActivityItem> {
+    return request<JobApplicationActivityItem>(
+      `/api/v1/jobs/${jobId}/application-status`,
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
+  async getJobPreferences(token: string): Promise<UserJobPreferencesData | null> {
+    return request<UserJobPreferencesData | null>("/api/v1/jobs/user/preferences", { method: "GET" }, token);
+  },
+
+  async updateJobPreferences(token: string, data: any): Promise<UserJobPreferencesData> {
+    return request<UserJobPreferencesData>(
+      "/api/v1/jobs/user/preferences",
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
+  async getJobSources(): Promise<JobSourceItem[]> {
+    return request<JobSourceItem[]>("/api/v1/jobs/admin/sources", { method: "GET" });
+  },
+
+  async triggerJobSync(token: string, sourceCode?: string): Promise<any> {
+    const url = sourceCode ? `/api/v1/jobs/admin/sync?source_code=${encodeURIComponent(sourceCode)}` : "/api/v1/jobs/admin/sync";
+    return request<any>(url, { method: "POST" }, token);
+  },
 };
 
 export interface CohortSummary {
@@ -1663,5 +1758,200 @@ export interface InterviewStudioDashboardData {
     recommended_difficulty: string;
   }[];
   active_session?: InterviewSessionListItem | null;
+}
+
+// ============================================================================
+// GLOBAL JOB DISCOVERY & RECOMMENDATION INTERFACES
+// ============================================================================
+
+export interface JobSourceItem {
+  id: string;
+  name: string;
+  source_code: string;
+  source_type: string;
+  region: string;
+  integration_method: string;
+  is_active: boolean;
+  last_sync_at?: string | null;
+  last_sync_status: string;
+  total_jobs_ingested: number;
+  compliance_notes?: string | null;
+}
+
+export interface ExternalJobReferenceItem {
+  id: string;
+  source_id: string;
+  portal_name: string;
+  external_job_id: string;
+  external_url: string;
+  portal_job_title: string;
+  portal_posted_at?: string | null;
+  is_primary_source: boolean;
+}
+
+export interface JobMatchSkillItem {
+  skill: string;
+  evidence_state: string;
+  confidence: number;
+}
+
+export interface JobMissingSkillItem {
+  skill: string;
+  is_mandatory: boolean;
+  in_candidate_roadmap: boolean;
+  suggested_roadmap_module?: string | null;
+}
+
+export interface JobMatchDetail {
+  overall_match_percentage: number;
+  skills_match_score: number;
+  role_relevance_score: number;
+  experience_compatibility_score: number;
+  education_compatibility_score: number;
+  career_alignment_score: number;
+  matched_skills: JobMatchSkillItem[];
+  missing_skills: JobMissingSkillItem[];
+  recommendation_explanation: string;
+  potential_concerns: string[];
+  learning_recommendations: {
+    skill: string;
+    module_title: string;
+    urgency: string;
+    roadmap_link: string;
+  }[];
+}
+
+export interface CanonicalJobListItem {
+  id: string;
+  title: string;
+  company_name: string;
+  company_logo_url?: string | null;
+  city?: string | null;
+  state_region?: string | null;
+  country: string;
+  workplace_type: string;
+  employment_type: string;
+  experience_min_years: number;
+  experience_max_years?: number | null;
+  experience_level: string;
+  salary_min?: number | null;
+  salary_max?: number | null;
+  salary_currency: string;
+  salary_period: string;
+  category: string;
+  industry?: string | null;
+  required_skills: string[];
+  preferred_skills: string[];
+  posted_at: string;
+  last_verified_at: string;
+  status: string;
+  primary_application_url: string;
+  is_direct_employer: boolean;
+  primary_source_name: string;
+  external_sources_count: number;
+  match_score?: number | null;
+}
+
+export interface CanonicalJobDetail extends CanonicalJobListItem {
+  description_raw: string;
+  description_clean: string;
+  responsibilities: string[];
+  min_qualifications?: string | null;
+  external_references: ExternalJobReferenceItem[];
+  match_analysis?: JobMatchDetail | null;
+  is_saved: boolean;
+  application_status?: string | null;
+}
+
+export interface JobSearchFilterRequest {
+  q?: string;
+  roles?: string[];
+  skills?: string[];
+  cities?: string[];
+  workplace_types?: string[];
+  experience_levels?: string[];
+  employment_types?: string[];
+  sources?: string[];
+  min_salary?: number;
+  max_salary?: number;
+  category?: string;
+  is_direct_employer_only?: boolean;
+  posted_within_days?: number;
+  sort_by?: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface JobSearchResponse {
+  jobs: CanonicalJobListItem[];
+  total: number;
+  page: number;
+  limit: number;
+  total_pages: number;
+  applied_filters: Record<string, any>;
+  parsed_natural_language?: Record<string, any> | null;
+  available_facets: Record<string, string[]>;
+}
+
+export interface SavedJobItem {
+  id: string;
+  user_id: string;
+  canonical_job_id: string;
+  notes?: string | null;
+  reminder_at?: string | null;
+  created_at: string;
+  job: CanonicalJobListItem;
+}
+
+export interface JobApplicationActivityItem {
+  id: string;
+  user_id: string;
+  canonical_job_id: string;
+  source_name: string;
+  redirect_url: string;
+  status: string;
+  applied_at?: string | null;
+  last_status_change_at: string;
+  candidate_notes?: string | null;
+  follow_up_date?: string | null;
+  job: CanonicalJobListItem;
+}
+
+export interface JobRedirectValidationResponse {
+  job_id: string;
+  destination_url: string;
+  destination_domain: string;
+  portal_name: string;
+  is_trusted_domain: boolean;
+  tracked_status: string;
+  message: string;
+}
+
+export interface UserJobPreferencesData {
+  id: string;
+  user_id: string;
+  target_roles: string[];
+  preferred_locations: string[];
+  workplace_types: string[];
+  preferred_industries: string[];
+  min_salary?: number | null;
+  salary_currency: string;
+  employment_types: string[];
+  experience_level: string;
+  open_to_relocation: boolean;
+  notify_new_matches: boolean;
+  updated_at: string;
+}
+
+export interface JobDiscoveryDashboardData {
+  total_active_jobs: number;
+  best_matches: CanonicalJobListItem[];
+  recent_opportunities: CanonicalJobListItem[];
+  skills_in_learning_opportunities: CanonicalJobListItem[];
+  entry_level_opportunities: CanonicalJobListItem[];
+  remote_opportunities: CanonicalJobListItem[];
+  saved_jobs_count: number;
+  applications_active_count: number;
+  user_target_role?: string | null;
 }
 

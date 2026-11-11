@@ -24,6 +24,16 @@ from app.models.interview import (
     InterviewQuestion,
     InterviewTurn,
 )
+from app.models.job import (
+    JobSource,
+    CanonicalJob,
+    ExternalJobReference,
+    JobSyncLog,
+    UserJobPreferences,
+    SavedJob,
+    JobApplicationActivity,
+    UserJobSearchHistory,
+)
 
 __all__ = [
     "Base",
@@ -57,5 +67,13 @@ __all__ = [
     "InterviewSession",
     "InterviewQuestion",
     "InterviewTurn",
+    "JobSource",
+    "CanonicalJob",
+    "ExternalJobReference",
+    "JobSyncLog",
+    "UserJobPreferences",
+    "SavedJob",
+    "JobApplicationActivity",
+    "UserJobSearchHistory",
 ]
 

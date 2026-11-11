@@ -150,3 +150,4 @@ class InterviewTurn(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     # Relationships
     session: Mapped["InterviewSession"] = relationship("InterviewSession", back_populates="turns")
     question: Mapped["InterviewQuestion"] = relationship("InterviewQuestion", back_populates="turns")
+

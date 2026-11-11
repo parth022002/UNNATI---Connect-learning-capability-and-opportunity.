@@ -141,3 +141,4 @@ class InterviewStudioDashboardResponse(BaseModel):
     primary_growth_area: str
     recommended_interview: Dict[str, Any]
     recent_sessions: List[InterviewSessionSummaryResponse]
+

@@ -612,3 +612,4 @@ def get_interview_studio_dashboard(user_id: uuid.UUID, db: Session) -> Dict[str,
         },
         "recent_sessions": sessions[:6]
     }
+

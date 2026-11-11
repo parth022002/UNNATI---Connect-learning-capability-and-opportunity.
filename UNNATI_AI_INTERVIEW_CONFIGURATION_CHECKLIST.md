@@ -81,3 +81,4 @@ The service links weak competencies scored `< 3.5` directly to curated UNNATI up
    apps/api/.venv/Scripts/python.exe -m pytest apps/api/tests/test_interviews.py -v
    ```
    All 6 tests must pass.
+

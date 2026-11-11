@@ -355,3 +355,4 @@ def test_interview_studio_dashboard_metrics(db_session: Session, interview_test_
     assert "recommended_interview" in dash
     assert "recent_sessions" in dash
     assert dash["overall_readiness_score"] >= 0.0
+
