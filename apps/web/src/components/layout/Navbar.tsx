@@ -28,17 +28,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
   const pathname = usePathname();
   const { isSignedIn, isLoaded } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  // Scroll detection for navbar elevation & frosted glass transition
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
-    };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // Keyboard accessibility: Escape key closes mobile menu
   useEffect(() => {
@@ -83,13 +72,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
   };
 
   return (
-    <header 
-      className={`sticky top-0 z-50 w-full transition-all duration-200 bg-white ${
-        isScrolled 
-          ? "border-b-2 border-purple-200 shadow-soft-md" 
-          : "border-b-2 border-slate-200/90 shadow-soft-sm"
-      }`}
-    >
+    <header className="relative z-30 w-full bg-white border-b-2 border-slate-200/90 shadow-soft-sm">
       <div className="mx-auto flex h-[78px] sm:h-[82px] max-w-7xl items-center justify-between px-3.5 sm:px-6 lg:px-8">
         
         {/* ========================================================
@@ -218,7 +201,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
          ======================================================== */}
       {mobileMenuOpen && (
         <div 
-          className="lg:hidden fixed inset-x-0 top-[76px] sm:top-[82px] bg-slate-900/40 backdrop-blur-sm z-40 h-[calc(100vh-76px)] sm:h-[calc(100vh-82px)] overflow-y-auto animate-in fade-in duration-200"
+          className="lg:hidden fixed inset-x-0 top-[78px] sm:top-[82px] bg-slate-900/40 backdrop-blur-sm z-40 h-[calc(100vh-78px)] sm:h-[calc(100vh-82px)] overflow-y-auto animate-in fade-in duration-200"
           onClick={() => setMobileMenuOpen(false)}
         >
           <div 

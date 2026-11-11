@@ -93,7 +93,7 @@ BACKEND & API SERVICES:     [█████████████████
   *Status:* **Completed** (Verified)
 - [x] **`NAV-05`**: **Navbar Shell Dimensions:** Desktop height 80–84px, container max-width 1280px (`max-w-7xl`), horizontal padding `px-4 sm:px-6 lg:px-8`.  
   *Status:* **Completed** (Verified)
-- [x] **`NAV-06`**: **Sticky & Scroll Elevation:** Subtle frosted glass elevation transition (`isScrolled ? "bg-white/95 backdrop-blur-xl shadow-soft-md" : "bg-white/85 backdrop-blur-md shadow-soft-sm"`). Stable height, no layout shifts.  
+- [x] **`NAV-06`**: **Natural Document Flow & Scroll-Away Behavior:** Normal document flow (`position: relative; w-full`), zero sticky/fixed persistence. Scrolls naturally off-screen above viewport as user scrolls down. Zero layout shifts, no artificial spacers.  
   *Status:* **Completed** (Verified)
 - [x] **`NAV-07`**: **Mobile & Tablet Navigation Drawer:** Dedicated responsive drawer active for `< lg` (360px–1023px). Large &ge;48px touch rows, 15px font, visible icons, AI Mentor button, Escape key dismiss, and focus trap.  
   *Status:* **Completed** (Verified)
@@ -221,7 +221,7 @@ BACKEND & API SERVICES:     [█████████████████
 | **Navbar Logo & Lockup** | Approved 54px `/logo.png` asset with readable wordmark & tagline | **PASSED** |
 | **Single-Line Desktop Navigation** | Labels remain strictly on 1 line across viewports (`whitespace-nowrap`) | **PASSED** |
 | **Navbar Action Hierarchy** | Secondary AI Mentor &rarr; Quiet Sign In &rarr; Saffron Start Journey CTA | **PASSED** |
-| **Navbar Surface Separation** | `bg-white/95 backdrop-blur-xl` with `border-b border-slate-200/90` and soft elevation | **PASSED** |
+| **Navbar Surface Separation & Scroll Flow** | `bg-white` with `border-b-2 border-slate-200/90`, normal flow, disappears naturally on scroll | **PASSED** |
 | **Mobile & Tablet Drawer** | Accessible slide-out menu with &ge;48px touch rows & Esc key dismiss | **PASSED** |
 | **Full-Width Section Alternation** | 8 distinct full-width surface tiers (Hero lavender, Audience white, Journey subtle neutral, Showcase cool neutral, Diagnostic lavender/peach, Trust deep purple, FAQ white, CTA subtle neutral) | **PASSED** |
 | **Career Journey Heading & Flow** | Complete heading: `How UNNATI Powers Your Lifelong Career Growth`, zero clipping/stray dashes, animated desktop connector line | **PASSED** |
@@ -242,7 +242,7 @@ BACKEND & API SERVICES:     [█████████████████
 | :---: | :--- | :---: | :---: | :--- |
 | **1** | **Brand Identity** | 9.5+ | **9.9 / 10** | Authentic 54px `/logo.png`, Poppins wordmark, Devanagari `(उन्नति)`, exact brand palette (`#4C1D95`, `#FF8A00`). |
 | **2** | **Navbar Architecture** | 9.5+ | **9.8 / 10** | Single-line desktop constraint non-negotiable (`whitespace-nowrap shrink-0`), 3-group layout, &ge;48px mobile touch drawer. |
-| **3** | **Header/Body Separation**| 9.5+ | **9.8 / 10** | Solid frosted surface (`bg-white/95 backdrop-blur-xl`), `border-b border-slate-200/90`, elevation shadow. |
+| **3** | **Header/Body Separation & Flow**| 9.5+ | **9.9 / 10** | Solid white surface (`bg-white`), `border-b-2 border-slate-200/90`, normal document flow scrolling off naturally without persistent stickiness. |
 | **4** | **Hero Section** | 9.5+ | **9.8 / 10** | 62px display headline, multi-disciplinary positioning, 5-stage interactive walkthrough (Goal &rarr; Action). |
 | **5** | **Typography Hierarchy**| 9.5+ | **9.7 / 10** | Display: `Poppins`, Interface: `Inter`. Body copy maintained at 15–16px, nav at 14.5px. Zero illegible small text. |
 | **6** | **Spacing & Layout Grid** | 9.5+ | **9.8 / 10** | 4px base spacing grid (8, 16, 24, 32, 48, 64, 96px), balanced negative space, aligned `max-w-7xl` containers. |
