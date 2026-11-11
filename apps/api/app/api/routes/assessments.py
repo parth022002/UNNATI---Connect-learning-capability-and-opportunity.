@@ -13,6 +13,8 @@ from app.schemas.assessment import (
     SkillUpdateDetail,
     InterviewPrepQuestionResponse
 )
+from app.schemas.learning import AssessmentReadinessRequest, AssessmentReadinessResponse
+from app.services.learning_service import evaluate_assessment_readiness
 from app.services.skill_service import assess_candidate_skill
 from app.services.audit_service import log_action
 
@@ -246,6 +248,7 @@ def get_assessment_questions(
         )
     return results
 
+
 @router.post("/submit", response_model=AssessmentSubmissionResponse)
 def submit_assessment_answer(
     submission: AssessmentSubmissionRequest,
@@ -328,4 +331,20 @@ def get_interview_prep(
             continue
         results.append(InterviewPrepQuestionResponse(**item))
     return results
+
+
+@router.post("/readiness", response_model=AssessmentReadinessResponse)
+def assess_readiness(
+    req: AssessmentReadinessRequest,
+    current_user: User = Depends(get_db_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Evaluates learner readiness selection before formal assessment:
+    - Option A: KNOW_TOPIC -> Confirms and prepares pre-exam instructions
+    - Option B: NEED_TO_LEARN -> Recommends free & paid structured learning pathway
+    - Option C: WANT_DIAGNOSTIC -> Offers low-stakes unproctored diagnostic assessment
+    """
+    return evaluate_assessment_readiness(db=db, user=current_user, req=req)
+
 

@@ -1086,6 +1086,67 @@ export const api = {
     const url = sourceCode ? `/api/v1/jobs/admin/sync?source_code=${encodeURIComponent(sourceCode)}` : "/api/v1/jobs/admin/sync";
     return request<any>(url, { method: "POST" }, token);
   },
+
+  // ============================================================================
+  // LEARNING RESOURCE DISCOVERY & ASSESSMENT READINESS APIS
+  // ============================================================================
+
+  async getLearningResources(
+    filterReq?: LearningResourceFilterRequest,
+    token?: string
+  ): Promise<LearningResourceListResponse> {
+    const params = new URLSearchParams();
+    if (filterReq?.skill) params.set("skill", filterReq.skill);
+    if (filterReq?.topic) params.set("topic", filterReq.topic);
+    if (filterReq?.category) params.set("category", filterReq.category);
+    if (filterReq?.pricing_type && filterReq.pricing_type !== "ALL") params.set("pricing_type", filterReq.pricing_type);
+    if (filterReq?.platform) params.set("platform", filterReq.platform);
+    if (filterReq?.difficulty) params.set("difficulty", filterReq.difficulty);
+    if (filterReq?.resource_type) params.set("resource_type", filterReq.resource_type);
+    if (filterReq?.has_certificate_only) params.set("has_certificate_only", "true");
+    if (filterReq?.search_query) params.set("search_query", filterReq.search_query);
+    if (filterReq?.sort_by) params.set("sort_by", filterReq.sort_by);
+    if (filterReq?.page) params.set("page", filterReq.page.toString());
+    if (filterReq?.limit) params.set("limit", filterReq.limit.toString());
+    const queryStr = params.toString() ? `?${params.toString()}` : "";
+    return request<LearningResourceListResponse>(`/api/v1/learning/resources${queryStr}`, { method: "GET" }, token);
+  },
+
+  async getLearningResourceDetail(resourceId: string, token?: string): Promise<LearningResourceItem> {
+    return request<LearningResourceItem>(`/api/v1/learning/resources/${resourceId}`, { method: "GET" }, token);
+  },
+
+  async getPersonalizedLearningSequence(skill: string, targetRole?: string, token?: string): Promise<PersonalizedLearningSequence> {
+    const params = new URLSearchParams({ skill });
+    if (targetRole) params.set("target_role", targetRole);
+    return request<PersonalizedLearningSequence>(`/api/v1/learning/recommendations?${params.toString()}`, { method: "GET" }, token);
+  },
+
+  async checkAssessmentReadiness(token: string, req: AssessmentReadinessRequest): Promise<AssessmentReadinessResponse> {
+    return request<AssessmentReadinessResponse>(
+      "/api/v1/learning/readiness",
+      {
+        method: "POST",
+        body: JSON.stringify(req),
+      },
+      token
+    );
+  },
+
+  async updateLearningProgress(token: string, resourceId: string, req: UpdateLearningProgressRequest): Promise<UserLearningProgressItem> {
+    return request<UserLearningProgressItem>(
+      `/api/v1/learning/resources/${resourceId}/progress`,
+      {
+        method: "POST",
+        body: JSON.stringify(req),
+      },
+      token
+    );
+  },
+
+  async getMyLearningDashboard(token: string): Promise<LearningDashboardSummary> {
+    return request<LearningDashboardSummary>("/api/v1/learning/my-learning", { method: "GET" }, token);
+  },
 };
 
 export interface CohortSummary {
@@ -1225,6 +1286,8 @@ export interface ExaminationSummary {
   user_best_score?: number | null;
   user_has_passed?: boolean;
 }
+
+export type ExaminationPublicSummary = ExaminationSummary;
 
 export interface ExamQuestionOptionItem {
   id: string;
@@ -1953,5 +2016,140 @@ export interface JobDiscoveryDashboardData {
   saved_jobs_count: number;
   applications_active_count: number;
   user_target_role?: string | null;
+}
+
+// ============================================================================
+// LEARNING RESOURCE & ASSESSMENT READINESS INTERFACES
+// ============================================================================
+
+export interface LearningResourceItem {
+  id: string;
+  title: string;
+  platform_name: string;
+  description?: string | null;
+  instructor_or_provider: string;
+  topic: string;
+  skill_name: string;
+  skill_category: string;
+  difficulty: string;
+  language: string;
+  pricing_type: string; // FREE, PAID, FREEMIUM, SUBSCRIPTION, FREE_TRIAL
+  price_amount?: number | null;
+  price_currency: string;
+  duration_hours?: number | null;
+  rating?: number | null;
+  reviews_count?: number | null;
+  has_certificate: boolean;
+  resource_type: string; // VIDEO_COURSE, INTERACTIVE, DOCUMENTATION, PROJECT, EXERCISE
+  url: string;
+  source_url?: string | null;
+  sequence_stage: string;
+  key_concepts_covered: string[];
+  why_recommended?: string | null;
+  is_active: boolean;
+  last_verified_at: string;
+  user_status?: string | null; // SAVED, STARTED, IN_PROGRESS, COMPLETED
+  user_progress_percentage?: number | null;
+}
+
+export interface LearningResourceFilterRequest {
+  skill?: string;
+  topic?: string;
+  category?: string;
+  pricing_type?: string;
+  platform?: string;
+  difficulty?: string;
+  resource_type?: string;
+  has_certificate_only?: boolean;
+  search_query?: string;
+  sort_by?: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface LearningResourceListResponse {
+  resources: LearningResourceItem[];
+  total: number;
+  page: number;
+  limit: number;
+  total_pages: number;
+  available_platforms: { name: string; count: number }[];
+  available_pricing_types: { type: string; count: number }[];
+  available_difficulties: { difficulty: string; count: number }[];
+}
+
+export interface SequenceStagePlan {
+  stage_name: string;
+  description: string;
+  concepts: string[];
+  recommended_free_resources: LearningResourceItem[];
+  recommended_paid_resources: LearningResourceItem[];
+  estimated_hours: number;
+}
+
+export interface PersonalizedLearningSequence {
+  skill_name: string;
+  target_role?: string | null;
+  current_proficiency_estimate: string;
+  target_proficiency: string;
+  overall_explanation: string;
+  stages: SequenceStagePlan[];
+  estimated_total_hours: number;
+  free_alternative_available: boolean;
+  roadmap_bridge_milestone?: string | null;
+}
+
+export interface UserLearningProgressItem {
+  id: string;
+  resource_id: string;
+  status: string; // SAVED, STARTED, IN_PROGRESS, COMPLETED
+  progress_percentage: number;
+  notes?: string | null;
+  certificate_url?: string | null;
+  user_rating?: number | null;
+  started_at?: string | null;
+  completed_at?: string | null;
+  last_accessed_at: string;
+  resource: LearningResourceItem;
+}
+
+export interface UpdateLearningProgressRequest {
+  status: string; // SAVED, STARTED, IN_PROGRESS, COMPLETED
+  progress_percentage?: number;
+  notes?: string;
+  certificate_url?: string;
+  user_rating?: number;
+}
+
+export interface AssessmentReadinessRequest {
+  topic_or_skill: string;
+  target_difficulty?: string;
+  readiness_choice: "KNOW_TOPIC" | "NEED_TO_LEARN" | "WANT_DIAGNOSTIC";
+  examination_id?: string;
+  notes?: string;
+}
+
+export interface AssessmentReadinessResponse {
+  readiness_choice: string;
+  status: string;
+  message: string;
+  topic_or_skill: string;
+  target_difficulty: string;
+  can_proceed_to_assessment: boolean;
+  examination_id?: string | null;
+  examination_details?: any;
+  diagnostic_exam_id?: string | null;
+  learning_recommendations?: PersonalizedLearningSequence | null;
+  saved_log_id?: string | null;
+}
+
+export interface LearningDashboardSummary {
+  total_saved: number;
+  total_in_progress: number;
+  total_completed: number;
+  estimated_hours_invested: number;
+  skills_in_learning: string[];
+  recent_resources: UserLearningProgressItem[];
+  recommended_next_actions: { action: string; title: string; description: string }[];
 }
 

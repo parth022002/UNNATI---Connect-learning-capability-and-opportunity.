@@ -14,6 +14,7 @@ from app.api.routes.examinations import router as examinations_router
 from app.api.routes.resumes import router as resumes_router
 from app.api.routes.interviews import router as interviews_router
 from app.api.routes.jobs import router as jobs_router
+from app.api.routes.learning import router as learning_router
 
 app = FastAPI(
     title="UNNATI (उन्नति) API",
@@ -56,6 +57,7 @@ app.include_router(examinations_router)
 app.include_router(resumes_router)
 app.include_router(interviews_router)
 app.include_router(jobs_router)
+app.include_router(learning_router)
 
 @app.get("/")
 async def root():

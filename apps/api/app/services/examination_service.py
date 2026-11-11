@@ -824,18 +824,50 @@ def generate_learning_recommendations(
     weak_competencies: List[str],
     strong_competencies: List[str],
     exam_track: str,
-    percentage: float
+    percentage: float,
+    db: Optional[Session] = None
 ) -> Dict[str, Any]:
     """Generates structured AI learning recommendations and roadmaps for identified knowledge gaps."""
     recommendation_modules = []
     practice_actions = []
 
     for comp in weak_competencies:
+        free_courses = []
+        paid_courses = []
+        if db:
+            from app.models.learning import LearningResource
+            matching_resources = db.scalars(
+                select(LearningResource).where(
+                    LearningResource.is_active == True,
+                    or_(
+                        LearningResource.skill_name.ilike(f"%{comp}%"),
+                        LearningResource.topic.ilike(f"%{comp}%")
+                    )
+                ).limit(4)
+            ).all()
+
+            for r in matching_resources:
+                item_dict = {
+                    "id": str(r.id),
+                    "title": r.title,
+                    "platform": r.platform_name,
+                    "pricing": r.pricing_type,
+                    "url": r.url,
+                    "duration_hours": r.duration_hours,
+                    "rating": r.rating
+                }
+                if r.pricing_type == "FREE":
+                    free_courses.append(item_dict)
+                else:
+                    paid_courses.append(item_dict)
+
         recommendation_modules.append({
             "competency": comp,
             "title": f"Targeted Sprint: {comp}",
             "recommended_action": "Complete interactive diagnostic exercises and review foundational notes.",
-            "estimated_hours": 3
+            "estimated_hours": 3,
+            "free_courses": free_courses,
+            "paid_courses": paid_courses
         })
         practice_actions.append(f"Attempt 5 scenario practice questions in {comp}.")
 
@@ -988,7 +1020,8 @@ def finalize_attempt_submission(
         weak_competencies=weak_competencies,
         strong_competencies=strong_competencies,
         exam_track=exam.track,
-        percentage=attempt.percentage
+        percentage=attempt.percentage,
+        db=db
     )
 
     # Issue Certificate if Eligible & Passed

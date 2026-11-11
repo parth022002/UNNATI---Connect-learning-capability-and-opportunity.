@@ -34,6 +34,11 @@ from app.models.job import (
     JobApplicationActivity,
     UserJobSearchHistory,
 )
+from app.models.learning import (
+    LearningResource,
+    UserLearningProgress,
+    AssessmentReadinessLog,
+)
 
 __all__ = [
     "Base",
@@ -75,5 +80,8 @@ __all__ = [
     "SavedJob",
     "JobApplicationActivity",
     "UserJobSearchHistory",
+    "LearningResource",
+    "UserLearningProgress",
+    "AssessmentReadinessLog",
 ]
 
