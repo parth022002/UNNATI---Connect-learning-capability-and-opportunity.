@@ -217,7 +217,7 @@ export default function DashboardPage() {
   if (!isLoaded || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-warm-pattern text-slate-900">
-        <BackgroundAtmosphere />
+        <BackgroundAtmosphere variant="dashboard" />
         <div className="relative z-10 flex flex-col items-center gap-3">
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-purple-800 border-t-transparent shadow-md" />
           <p className="text-sm font-semibold text-purple-900">Loading your Growth Companion dashboard...</p>
@@ -229,7 +229,7 @@ export default function DashboardPage() {
   if (!isSignedIn) {
     return (
       <div className="relative flex min-h-screen flex-col items-center justify-center bg-warm-pattern px-6 text-center text-slate-900">
-        <BackgroundAtmosphere />
+        <BackgroundAtmosphere variant="dashboard" />
         <div className="relative z-10 w-full max-w-md clean-card rounded-3xl p-8 shadow-xl">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-800 to-orange-500 p-3 shadow-md">
             <Image src="/logo.png" alt="UNNATI" width={48} height={48} className="object-contain" priority />
@@ -254,7 +254,7 @@ export default function DashboardPage() {
 
   return (
     <div className="relative min-h-screen bg-warm-pattern text-slate-900 flex flex-col font-sans selection:bg-purple-200 selection:text-purple-900">
-      <BackgroundAtmosphere />
+      <BackgroundAtmosphere variant="dashboard" />
       <Navbar onOpenCompanion={() => setIsCompanionOpen(true)} />
 
       <main className="relative z-10 flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-8">

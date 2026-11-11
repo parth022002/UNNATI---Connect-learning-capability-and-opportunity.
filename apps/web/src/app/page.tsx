@@ -248,7 +248,7 @@ export default function HomePage() {
 
   return (
     <div className="relative min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans selection:bg-purple-100 selection:text-unnati-indigo">
-      <BackgroundAtmosphere />
+      <BackgroundAtmosphere variant="landing" />
       <Navbar onOpenCompanion={() => setIsCompanionOpen(true)} />
 
       <main className="relative z-10 flex-1">

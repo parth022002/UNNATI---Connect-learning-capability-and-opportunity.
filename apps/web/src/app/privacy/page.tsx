@@ -14,7 +14,7 @@ export default function PrivacyPolicyPage() {
 
   return (
     <div className="relative min-h-screen bg-warm-pattern text-slate-900 flex flex-col font-sans selection:bg-purple-200 selection:text-purple-900">
-      <BackgroundAtmosphere />
+      <BackgroundAtmosphere variant="privacy" />
       <Navbar onOpenCompanion={() => setIsCompanionOpen(true)} />
 
       {/* Hero Header */}

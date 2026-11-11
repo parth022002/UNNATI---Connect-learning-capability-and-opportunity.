@@ -196,3 +196,42 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
 }
+
+/* ========================================================
+   WEBSITE-WIDE BACKGROUND ANIMATION SYSTEM KEYFRAMES
+   Smooth, GPU-accelerated, lightweight, reduced-motion safe
+   ======================================================== */
+@keyframes ambientParticle {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate3d(12px, -18px, 0) scale(1.15);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate3d(-10px, 14px, 0) scale(0.9);
+    opacity: 0.35;
+  }
+}
+
+@keyframes flowDash {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -200;
+  }
+}
+
+.animate-flow-dash {
+  animation: flowDash 28s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-flow-dash,
+  [style*="ambientParticle"] {
+    animation: none !important;
+  }
+}

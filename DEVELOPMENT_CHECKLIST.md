@@ -161,19 +161,25 @@ BACKEND & API SERVICES:     [█████████████████
 
 ---
 
-## 8. Phase 7 — Background Animation & Scroll Storytelling
+## 8. Phase 7 — Website-Wide Animated Background System & Scroll Storytelling
 
-- [x] **`MOT-01`**: 7-Stage ambient color progression: Hero (lavender/peach) &rarr; Audience (warm sand) &rarr; Journey (moving light) &rarr; Showcase (lavender/peach) &rarr; Diagnostic (purple focus) &rarr; Trust (midnight) &rarr; CTA/Footer (saffron horizon).  
+- [x] **`MOT-01`**: Master Website-Wide Background System ([`AnimatedBackground.tsx`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/web/src/components/background/AnimatedBackground.tsx)) deployed across all 10 application routes (`/`, `/explore`, `/assessments`, `/dashboard`, `/roadmap`, `/onboarding`, `/privacy`, `/sign-in`, `/sign-up`, `not-found.tsx`).  
   *Status:* **Completed** (Verified)
-- [x] **`MOT-02`**: Slow-moving organic gradient orbs (`animate-ambient-drift-1` [26s], `animate-ambient-drift-2` [32s]).  
+- [x] **`MOT-02`**: Multi-layered depth architecture:
+  - Layer 1: Geometric Grid & Trajectory Rings ([`GeometricGrid.tsx`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/web/src/components/background/GeometricGrid.tsx))
+  - Layer 2: Ambient Gradient Orbs with Organic Drift ([`GradientOrbs.tsx`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/web/src/components/background/GradientOrbs.tsx))
+  - Layer 3: Career Progression & Trajectory Wave Lines ([`ConnectionPaths.tsx`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/web/src/components/background/ConnectionPaths.tsx))
+  - Layer 4: Organic Floating Micro-Particles ([`FloatingParticles.tsx`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/web/src/components/background/FloatingParticles.tsx))  
   *Status:* **Completed** (Verified)
-- [x] **`MOT-03`**: Technical grid overlay (`bg-grid-soft`) with radial vignette mask (`ellipse_at_center,black_40%,transparent_80%`).  
+- [x] **`MOT-03`**: Route-Specific Presets (`landing`, `auth`, `onboarding`, `dashboard`, `explore`, `assessments`, `roadmap`, `privacy`, `not-found`) with tailored palettes, particle counts, and trajectory geometry.  
   *Status:* **Completed** (Verified)
-- [x] **`MOT-04`**: GPU-accelerated scroll reveal component ([`ScrollReveal.tsx`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/web/src/components/ui/ScrollReveal.tsx)) using `IntersectionObserver`.  
+- [x] **`MOT-04`**: Passive scroll parallax with `requestAnimationFrame` dampening on orbs and trajectory waves.  
   *Status:* **Completed** (Verified)
-- [x] **`MOT-05`**: Strict `prefers-reduced-motion` compliance across all CSS animations and transitions.  
+- [x] **`MOT-05`**: Strict `prefers-reduced-motion` compliance across all CSS keyframes (`ambientDrift1`, `ambientDrift2`, `ambientParticle`, `flowDash`).  
   *Status:* **Completed** (Verified)
-- [x] **`MOT-06`**: Performance optimization: all ambient layers use `pointer-events-none` and `will-change: transform`.  
+- [x] **`MOT-06`**: Comprehensive documentation delivered:
+  - [`BACKGROUND_ANIMATION_CHECKLIST.md`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/BACKGROUND_ANIMATION_CHECKLIST.md)
+  - [`ANIMATION_DESIGN_SYSTEM.md`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/ANIMATION_DESIGN_SYSTEM.md)  
   *Status:* **Completed** (Verified)
 
 ---

@@ -23,7 +23,7 @@ export default function NotFound() {
 
   return (
     <div className="relative min-h-screen bg-warm-pattern text-slate-900 flex flex-col font-sans selection:bg-purple-200 selection:text-purple-900">
-      <BackgroundAtmosphere />
+      <BackgroundAtmosphere variant="not-found" />
       <Navbar onOpenCompanion={() => setIsCompanionOpen(true)} />
 
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20">

@@ -274,7 +274,7 @@ export default function AssessmentTakingPage() {
 
   return (
     <div className="relative min-h-screen bg-warm-pattern text-slate-900 flex flex-col font-sans selection:bg-purple-200 selection:text-purple-900">
-      <BackgroundAtmosphere />
+      <BackgroundAtmosphere variant="assessments" />
       <Navbar onOpenCompanion={() => setIsCompanionOpen(true)} />
 
       <main className="relative z-10 flex-1 mx-auto max-w-4xl w-full px-4 sm:px-6 lg:px-8 py-10">

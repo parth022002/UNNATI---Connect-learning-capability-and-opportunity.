@@ -8,7 +8,7 @@ import { ArrowLeft } from "lucide-react";
 export default function SignInPage() {
   return (
     <div className="relative min-h-screen bg-warm-pattern text-slate-900 flex flex-col justify-between py-10 px-4 sm:px-6">
-      <BackgroundAtmosphere />
+      <BackgroundAtmosphere variant="auth" />
 
       {/* Top Brand Nav */}
       <div className="relative z-10 mx-auto max-w-md w-full flex items-center justify-between mb-6">

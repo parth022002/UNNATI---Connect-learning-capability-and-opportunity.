@@ -215,7 +215,7 @@ export default function OnboardingPage() {
   if (!isLoaded) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-warm-pattern text-slate-900">
-        <BackgroundAtmosphere />
+        <BackgroundAtmosphere variant="onboarding" />
         <div className="relative z-10 flex flex-col items-center gap-3">
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-purple-800 border-t-transparent shadow-md" />
           <p className="text-sm font-semibold text-purple-900">Preparing Onboarding Journey...</p>
@@ -226,7 +226,7 @@ export default function OnboardingPage() {
 
   return (
     <div className="relative min-h-screen bg-warm-pattern text-slate-900 flex flex-col font-sans selection:bg-purple-200 selection:text-purple-900">
-      <BackgroundAtmosphere />
+      <BackgroundAtmosphere variant="onboarding" />
 
       {/* Header with High-Visibility Logo */}
       <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/90 backdrop-blur-xl">
