@@ -43,7 +43,8 @@ type UserCategory = "all" | "students" | "business" | "finance" | "tech" | "swit
 
 export const CareerCompanionWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(true);
+  const [footerOffset, setFooterOffset] = useState(0);
+  const [isFooterCollisionHidden, setIsFooterCollisionHidden] = useState(false);
   const [activeCategory, setActiveCategory] = useState<UserCategory>("all");
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -64,11 +65,63 @@ export const CareerCompanionWidget: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Listen to global open event (e.g. from Navbar button)
+  // Footer collision detection & repositioning via IntersectionObserver & scroll metrics
+  useEffect(() => {
+    const checkFooterCollision = () => {
+      const footer = document.querySelector("footer");
+      if (!footer) return;
+
+      const footerRect = footer.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      // When the footer enters the viewport
+      if (footerRect.top < viewportHeight) {
+        const visibleFooterHeight = viewportHeight - footerRect.top;
+        const spaceAboveFooter = footerRect.top;
+
+        // If adequate space does NOT exist (< 150px remaining above footer)
+        if (spaceAboveFooter < 150) {
+          setIsFooterCollisionHidden(true);
+          setFooterOffset(0);
+        } else {
+          // Adequate space exists: elevate launcher above the footer
+          setIsFooterCollisionHidden(false);
+          // Elevate so launcher stays 16px cleanly above the top of the footer
+          setFooterOffset(visibleFooterHeight + 16);
+        }
+      } else {
+        // Footer is entirely below viewport
+        setIsFooterCollisionHidden(false);
+        setFooterOffset(0);
+      }
+    };
+
+    window.addEventListener("scroll", checkFooterCollision, { passive: true });
+    window.addEventListener("resize", checkFooterCollision, { passive: true });
+    checkFooterCollision();
+
+    // IntersectionObserver for reliable threshold notifications
+    const footer = document.querySelector("footer");
+    let observer: IntersectionObserver | null = null;
+    if (footer && typeof IntersectionObserver !== "undefined") {
+      observer = new IntersectionObserver(
+        () => checkFooterCollision(),
+        { threshold: [0, 0.05, 0.1, 0.25, 0.5, 0.75, 1.0] }
+      );
+      observer.observe(footer);
+    }
+
+    return () => {
+      window.removeEventListener("scroll", checkFooterCollision);
+      window.removeEventListener("resize", checkFooterCollision);
+      observer?.disconnect();
+    };
+  }, []);
+
+  // Listen to global open event (e.g. from footer link or action triggers)
   useEffect(() => {
     const handleOpen = () => {
       setIsOpen(true);
-      setShowTooltip(false);
     };
     window.addEventListener("open-unnati-companion", handleOpen);
     window.addEventListener("open-companion", handleOpen);
@@ -272,69 +325,50 @@ export const CareerCompanionWidget: React.FC = () => {
 
   return (
     <>
-      {/* 1. FLOATING LAUNCHER BUTTON (Bottom-Right) */}
-      <div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2">
-        
-        {/* Welcome Tooltip Bubble (Dismissible / Auto-appears for new visitors) */}
-        {!isOpen && showTooltip && (
-          <div className="hidden sm:flex items-center gap-2 rounded-2xl bg-white border border-purple-200/90 py-2 px-3.5 shadow-xl shadow-purple-900/10 text-xs text-slate-700 animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
-            <span>
-              👋 Need career guidance? <strong className="text-unnati-indigo">Ask UNNATI AI!</strong>
-            </span>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowTooltip(false);
-              }}
-              className="text-slate-400 hover:text-slate-600 ml-1 p-0.5 rounded cursor-pointer"
-              title="Dismiss"
-            >
-              <X className="h-3 w-3" />
-            </button>
-          </div>
-        )}
-
-        {/* Floating Launcher Button */}
+      {/* 1. FLOATING LAUNCHER BUTTON (Compact Circular 48–54px, Footer Collision-Aware) */}
+      <div 
+        className={`fixed z-40 transition-all duration-300 ease-out motion-reduce:transition-none ${
+          isFooterCollisionHidden ? "opacity-0 scale-75 pointer-events-none" : "opacity-100 scale-100"
+        }`}
+        style={{
+          bottom: `max(1.25rem, env(safe-area-inset-bottom))`,
+          right: `max(1.25rem, env(safe-area-inset-right))`,
+          transform: footerOffset > 0 ? `translateY(-${footerOffset}px)` : undefined
+        }}
+      >
         <button
-          onClick={() => {
-            setIsOpen(!isOpen);
-            setShowTooltip(false);
-          }}
-          className={`group relative flex items-center gap-2.5 rounded-full px-4 py-3 sm:px-5 sm:py-3.5 bg-gradient-to-r from-unnati-indigo via-purple-700 to-unnati-violet text-white shadow-xl shadow-purple-900/30 hover:shadow-purple-900/45 border-2 border-white/90 ring-2 ring-purple-400/50 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer ${
-            isOpen ? "ring-purple-600 bg-slate-900" : ""
+          onClick={() => setIsOpen(!isOpen)}
+          className={`group relative flex items-center justify-center rounded-full h-12 w-12 sm:h-[52px] sm:w-[52px] bg-unnati-indigo hover:bg-unnati-violet text-white shadow-soft-lg shadow-purple-950/25 hover:shadow-xl hover:shadow-purple-950/35 border-2 border-white ring-2 ring-purple-300/50 hover:ring-purple-400 active:scale-95 transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-4 focus-visible:ring-unnati-violet focus-visible:ring-offset-2 ${
+            isOpen ? "bg-slate-900 ring-slate-400" : ""
           }`}
-          aria-label={isOpen ? "Close UNNATI AI Chatbot" : "Open UNNATI AI Career Chatbot"}
-          title="Open UNNATI AI Career Mentor"
+          aria-label={isOpen ? "Close UNNATI AI Assistant" : "Ask UNNATI AI"}
+          aria-expanded={isOpen}
+          title={isOpen ? "Close UNNATI AI" : "Ask UNNATI AI"}
         >
-          {/* Logo / Sparkles icon */}
-          <div className="relative flex h-7 w-7 items-center justify-center rounded-full bg-white/20 p-1">
-            <Image
-              src="/logo.png"
-              alt="UNNATI"
-              width={24}
-              height={24}
-              className="object-contain"
-            />
-          </div>
-
-          <div className="flex flex-col text-left">
-            <div className="flex items-center gap-1.5 leading-tight">
-              <span className="font-heading text-xs sm:text-sm font-bold tracking-tight">
-                Ask UNNATI AI
-              </span>
-              <Sparkles className="h-3.5 w-3.5 text-unnati-saffron animate-pulse" />
-            </div>
-            <span className="text-[10px] text-purple-200 font-medium">
-              Career &amp; Growth Companion
+          {/* Small Tooltip on Hover (Desktop only, "Ask UNNATI") */}
+          {!isOpen && (
+            <span 
+              role="tooltip"
+              className="pointer-events-none absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-slate-900/90 backdrop-blur-sm text-white px-2.5 py-1 text-xs font-semibold shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden sm:block"
+            >
+              Ask UNNATI
             </span>
-          </div>
+          )}
 
-          {/* Online beacon */}
-          <span className="relative flex h-2.5 w-2.5 ml-1">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-          </span>
+          {/* White Chat Icon (or Close X when open) */}
+          {isOpen ? (
+            <X className="h-5 w-5 sm:h-5.5 sm:w-5.5 text-white transition-transform duration-200 group-hover:rotate-90" />
+          ) : (
+            <MessageSquare className="h-5 w-5 sm:h-5.5 sm:w-5.5 text-white transition-transform duration-200 group-hover:scale-110" />
+          )}
+
+          {/* Small AI Indicator (Saffron accent beacon on top right) */}
+          {!isOpen && (
+            <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5 sm:h-3 sm:w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-unnati-saffron opacity-75 motion-reduce:hidden" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-unnati-saffron border-2 border-white" />
+            </span>
+          )}
         </button>
       </div>
 
@@ -343,7 +377,11 @@ export const CareerCompanionWidget: React.FC = () => {
         <div 
           role="dialog"
           aria-label="UNNATI AI Career Chatbot"
-          className="fixed bottom-20 right-3 sm:right-6 sm:bottom-24 z-40 w-[calc(100vw-1.5rem)] sm:w-[440px] md:w-[470px] h-[600px] sm:h-[640px] max-h-[85vh] bg-white border-2 border-purple-200/90 rounded-3xl shadow-2xl shadow-slate-900/30 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200"
+          className="fixed z-40 w-[calc(100vw-1.5rem)] sm:w-[440px] md:w-[470px] h-[580px] sm:h-[620px] max-h-[82vh] bg-white border-2 border-purple-200/90 rounded-3xl shadow-2xl shadow-slate-900/30 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200 motion-reduce:animate-none"
+          style={{
+            bottom: `max(5rem, calc(env(safe-area-inset-bottom) + 4.5rem))`,
+            right: `max(0.75rem, env(safe-area-inset-right))`,
+          }}
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-purple-100 bg-gradient-to-r from-purple-50 via-white to-orange-50/50 shrink-0">
@@ -384,11 +422,11 @@ export const CareerCompanionWidget: React.FC = () => {
               </button>
               <button
                 onClick={() => setIsOpen(false)}
-                title="Minimize chatbot"
+                title="Close chatbot"
                 className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
                 aria-label="Close chatbot"
               >
-                <ChevronDown className="h-5 w-5" />
+                <X className="h-5 w-5" />
               </button>
             </div>
           </div>

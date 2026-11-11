@@ -60,12 +60,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
     { href: "/#showcase", label: "Platform", icon: Layers },
   ];
 
-  // Public visitor navigation items (Single-line, restrained, calm)
+  // Public visitor navigation items (Preserved items: How It Works, Career Pathways, Skills Check, FAQ)
   const publicLinks = [
     { href: "/#how-it-works", label: "How It Works", icon: Briefcase },
     { href: "/explore", label: "Career Pathways", icon: Compass },
     { href: "/assessments", label: "Skills Check", icon: FileCheck2 },
-    { href: "/#showcase", label: "Platform", icon: Layers },
     { href: "/#faq", label: "FAQ", icon: HelpCircle },
   ];
 
@@ -158,24 +157,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
         </nav>
 
         {/* ========================================================
-            GROUP C: ACCOUNT & CONVERSION ACTIONS (Single-Line Enforced)
+            GROUP C: ACCOUNT & CONVERSION ACTIONS (Sign In + Get Started)
            ======================================================== */}
         <div className="flex items-center gap-2 sm:gap-2.5 xl:gap-3 shrink-0 whitespace-nowrap">
-          
-          {/* Distinctive Secondary Action: AI Career Mentor Trigger */}
-          <button
-            onClick={handleOpenCompanion}
-            className="group relative hidden xl:flex items-center gap-2 rounded-xl border border-purple-200/90 bg-purple-50/90 hover:bg-purple-100 px-3 py-1.5 text-xs xl:text-[13px] font-bold text-unnati-indigo shadow-soft-sm hover:border-purple-300 transition-all cursor-pointer h-10 xl:h-11 shrink-0 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet"
-            title="Open 24/7 AI Career Mentor"
-            aria-label="Open AI Career Mentor"
-          >
-            <Sparkles className="h-3.5 w-3.5 text-unnati-saffron animate-pulse shrink-0" />
-            <span className="whitespace-nowrap shrink-0">Ask AI Mentor</span>
-            <span className="rounded-full bg-emerald-100 border border-emerald-200 px-1.5 py-0.5 text-[9.5px] font-extrabold text-emerald-800 tracking-wide shrink-0">
-              24/7
-            </span>
-          </button>
-
           {/* User Authentication Status */}
           {isLoaded && isSignedIn ? (
             <div className="flex items-center gap-2 pl-2 border-l border-slate-200 shrink-0">
@@ -195,20 +179,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-xs sm:text-[13px] font-bold text-slate-600 hover:text-slate-900 h-10 px-3 shrink-0 whitespace-nowrap"
+                  className="text-xs sm:text-[13px] font-bold text-slate-600 hover:text-slate-900 h-10 px-3.5 shrink-0 whitespace-nowrap"
                 >
                   <span className="whitespace-nowrap">Sign In</span>
                 </Button>
               </Link>
               
-              {/* Prominent Primary Conversion Button (Saffron Accent) */}
+              {/* Prominent Primary Conversion Button (Saffron Accent: Get Started) */}
               <Link href="/onboarding" className="hidden sm:inline-flex shrink-0">
                 <Button 
                   variant="saffron" 
                   size="sm" 
                   className="btn-shimmer text-xs sm:text-[13px] py-2 px-3.5 sm:px-4 xl:px-5 shadow-soft-md font-bold whitespace-nowrap shrink-0 h-10 xl:h-11 rounded-xl shadow-glow-saffron text-white"
                 >
-                  <span className="whitespace-nowrap">Start Journey</span>
+                  <span className="whitespace-nowrap">Get Started</span>
                   <ArrowRight className="h-3.5 w-3.5 ml-1 hidden xs:inline shrink-0" />
                 </Button>
               </Link>
@@ -241,7 +225,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
             className="bg-white border-b border-slate-200 px-5 pt-5 pb-8 shadow-2xl space-y-4 animate-in slide-in-from-top-4 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Nav Links Stack */}
+            {/* Nav Links Stack (How It Works, Career Pathways, Skills Check, FAQ) */}
             <div className="flex flex-col space-y-1.5">
               {currentLinks.map((link) => {
                 const active = isActive(link.href);
@@ -262,35 +246,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
                   </Link>
                 );
               })}
-              {/* Additional Deep Route Links in Mobile Drawer */}
-              <Link
-                href="/#showcase"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-[15px] font-semibold min-h-[48px] text-slate-700 hover:bg-slate-50 transition-all"
-              >
-                <Layers className="h-5 w-5 text-unnati-violet shrink-0" />
-                <span className="whitespace-nowrap">Platform Tour</span>
-              </Link>
             </div>
 
-            {/* Mobile AI Mentor Trigger */}
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                handleOpenCompanion();
-              }}
-              className="flex items-center justify-between w-full px-4 py-3.5 rounded-2xl border-2 border-purple-200 bg-gradient-to-r from-purple-50 via-white to-orange-50/50 text-unnati-indigo text-sm font-bold min-h-[48px] shadow-soft-sm cursor-pointer"
-            >
-              <div className="flex items-center gap-2.5">
-                <Sparkles className="h-4 w-4 text-unnati-saffron animate-pulse" />
-                <span>Ask UNNATI AI Mentor</span>
-              </div>
-              <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">
-                Online
-              </span>
-            </button>
-
-            {/* Mobile Auth & CTA Row */}
+            {/* Mobile Auth & CTA Row (Sign In + Get Started) */}
             {!isSignedIn && (
               <div className="pt-2 border-t border-slate-100 flex flex-col gap-2.5">
                 <Link
@@ -300,9 +258,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
                 >
                   <Button 
                     variant="saffron" 
-                    className="w-full justify-center text-sm font-bold py-3.5 rounded-2xl shadow-glow-saffron btn-shimmer"
+                    className="w-full justify-center text-sm font-bold py-3.5 rounded-2xl shadow-glow-saffron btn-shimmer text-white"
                   >
-                    <span>Start Free Journey</span>
+                    <span>Get Started</span>
                     <ArrowRight className="h-4 w-4 ml-1.5" />
                   </Button>
                 </Link>
@@ -313,7 +271,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
                 >
                   <Button 
                     variant="outline" 
-                    className="w-full justify-center text-sm font-bold py-3 rounded-2xl text-slate-700"
+                    className="w-full justify-center text-sm font-bold py-3 rounded-2xl text-slate-700 hover:bg-slate-50"
                   >
                     Sign In
                   </Button>

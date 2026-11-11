@@ -320,8 +320,8 @@ export const Footer: React.FC = () => {
       {/* ========================================================
           FOOTER BOTTOM STRIP (Full-Width Divider & Developer Credit)
          ======================================================== */}
-      <div className="border-t border-slate-200/90 bg-slate-100/70 py-6 pb-28 sm:pb-8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-600 sm:pr-40">
+      <div className="border-t border-slate-200/90 bg-slate-100/70 py-6 sm:py-7">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-600">
           
           {/* Left: Copyright */}
           <div className="flex items-center gap-2">
