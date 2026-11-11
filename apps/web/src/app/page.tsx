@@ -56,38 +56,50 @@ export default function HomePage() {
     {
       title: "Students & Freshers",
       subtitle: "College & University Learners",
+      pill: "🎓 College & Placements",
       icon: GraduationCap,
       description: "Connect your coursework to real industry expectations, discover what degrees lead to which roles, and prepare for campus placements without guesswork.",
       highlight: "Coursework-to-role skill mapping",
       href: "/onboarding?persona=student",
-      ctaLabel: "Start Student Path"
+      ctaLabel: "Start Student Path",
+      cardBg: "hover:border-purple-300",
+      iconBg: "bg-purple-100 text-unnati-indigo border-purple-200"
     },
     {
       title: "Recent Graduates",
       subtitle: "0 – 1 Year Post-Degree",
+      pill: "🎯 Entry-Level Bridge",
       icon: Award,
       description: "Overcome the 'experience paradox'. Identify exactly which tools high-growth employers require, and build verified capstone projects that prove competence.",
       highlight: "Hands-on capstone sprint rubrics",
       href: "/onboarding?persona=graduate",
-      ctaLabel: "Bridge Experience Gap"
+      ctaLabel: "Bridge Experience Gap",
+      cardBg: "hover:border-orange-300",
+      iconBg: "bg-orange-100 text-orange-700 border-orange-200"
     },
     {
       title: "Working Professionals",
       subtitle: "2 – 6+ Years Experience",
+      pill: "💼 Leadership & Scale",
       icon: Briefcase,
       description: "Target higher-impact specialties or cross-functional leadership. Identify exact capability gaps for senior roles across Management, Tech, and Strategy.",
       highlight: "Benchmark gaps for senior roles",
       href: "/onboarding?persona=professional",
-      ctaLabel: "Explore Upgrades"
+      ctaLabel: "Explore Upgrades",
+      cardBg: "hover:border-indigo-300",
+      iconBg: "bg-indigo-100 text-indigo-700 border-indigo-200"
     },
     {
       title: "Career Switchers",
       subtitle: "Transitioning Disciplines",
+      pill: "🔄 Skill Pivot",
       icon: Compass,
       description: "Moving from non-tech to analytics, or operations to product management? Map your transferable strengths and take targeted prerequisite roadmaps.",
       highlight: "Transferable skill mapping",
       href: "/onboarding?persona=switcher",
-      ctaLabel: "Plan Career Pivot"
+      ctaLabel: "Plan Career Pivot",
+      cardBg: "hover:border-amber-300",
+      iconBg: "bg-amber-100 text-amber-700 border-amber-200"
     }
   ];
 
@@ -319,13 +331,20 @@ export default function HomePage() {
               <ScrollReveal direction="up" delayMs={150}>
                 <div className="clean-card p-5 sm:p-7 md:p-8 bg-white border-2 border-purple-100 shadow-soft-xl relative overflow-hidden">
                   
-                  {/* Stepper Header */}
+                  {/* Stepper Header with Authentic App Window Chrome */}
                   <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
-                    <div className="flex items-center gap-2.5">
-                      <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="font-heading text-xs font-bold uppercase tracking-wider text-slate-700">
-                        Interactive Walkthrough
-                      </span>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 pr-2 border-r border-slate-200">
+                        <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="font-heading text-[11px] font-bold tracking-wider text-slate-700 uppercase">
+                          UNNATI Engine • v2.4
+                        </span>
+                      </div>
                     </div>
                     <Badge variant="violet" className="text-[10px] py-0.5 px-2.5 font-bold">
                       Step {activeHeroStep + 1} of 5
@@ -351,10 +370,11 @@ export default function HomePage() {
                   </div>
 
                   {/* Step Card Content */}
-                  <div className="rounded-2xl bg-gradient-to-br from-purple-50/70 via-white to-orange-50/40 border border-purple-100 p-5 min-h-[235px] flex flex-col justify-between transition-all duration-300">
+                  <div className="rounded-2xl bg-gradient-to-br from-purple-50/70 via-white to-orange-50/40 border border-purple-100 p-5 min-h-[245px] flex flex-col justify-between transition-all duration-300">
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-unnati-saffron">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-unnati-saffron flex items-center gap-1.5">
+                          <span className="h-1.5 w-1.5 rounded-full bg-unnati-saffron" />
                           {heroSteps[activeHeroStep].tag}
                         </span>
                         <span className="text-[10px] bg-purple-100 text-unnati-indigo px-2.5 py-0.5 rounded-md font-bold">
@@ -368,6 +388,19 @@ export default function HomePage() {
                         {heroSteps[activeHeroStep].content.sub}
                       </p>
                     </div>
+
+                    {/* Step 3 (Gaps) Visual Readiness Progress Bar */}
+                    {activeHeroStep === 2 && (
+                      <div className="mt-3 pt-3 border-t border-purple-100/80">
+                        <div className="flex items-center justify-between text-[11px] font-bold mb-1.5">
+                          <span className="text-slate-600">Current Career Readiness</span>
+                          <span className="text-emerald-700 font-extrabold">76% of Benchmark</span>
+                        </div>
+                        <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full w-[76%]" />
+                        </div>
+                      </div>
+                    )}
 
                     <div className="mt-4 pt-3.5 border-t border-purple-100/80 space-y-2">
                       {heroSteps[activeHeroStep].content.metrics.map((m, i) => (
@@ -466,19 +499,25 @@ export default function HomePage() {
                 <ScrollReveal key={idx} direction="up" delayMs={idx * 90}>
                   <Card 
                     hoverEffect
-                    className="clean-card h-full p-8 flex flex-col justify-between bg-white border border-slate-200/90 shadow-soft-sm group hover:border-purple-300 transition-all duration-300"
+                    className={`clean-card h-full p-7 sm:p-8 flex flex-col justify-between bg-white border border-slate-200/90 shadow-soft-sm group ${aud.cardBg} transition-all duration-300 relative overflow-hidden`}
                   >
                     <div>
-                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-100 text-unnati-indigo border border-purple-200 mb-6 group-hover:bg-purple-200 transition-colors">
-                        <Icon className="h-6 w-6" />
+                      <div className="flex items-center justify-between mb-6">
+                        <div className={`flex h-13 w-13 sm:h-14 sm:w-14 items-center justify-center rounded-2xl border shadow-soft-sm ${aud.iconBg} group-hover:scale-105 transition-all`}>
+                          <Icon className="h-6 w-6" />
+                        </div>
+                        <span className="text-[10.5px] font-bold text-slate-500 bg-slate-100/90 border border-slate-200/80 px-2.5 py-1 rounded-full">
+                          {aud.pill}
+                        </span>
                       </div>
-                      <h3 className="font-heading text-xl font-bold text-slate-900 mb-1.5">
+                      
+                      <h3 className="font-heading text-xl font-bold text-slate-900 mb-1.5 group-hover:text-unnati-indigo transition-colors">
                         {aud.title}
                       </h3>
                       <p className="text-xs font-bold text-unnati-saffron mb-3.5">
                         {aud.subtitle}
                       </p>
-                      <p className="text-[14.5px] text-slate-600 leading-relaxed mb-6">
+                      <p className="text-[14px] text-slate-600 leading-relaxed mb-6 font-normal">
                         {aud.description}
                       </p>
                     </div>
@@ -489,7 +528,7 @@ export default function HomePage() {
                       </span>
                       <Link 
                         href={aud.href} 
-                        className="inline-flex items-center justify-center w-full px-4 py-3 rounded-xl bg-purple-50 hover:bg-purple-100 text-unnati-indigo border border-purple-200 text-xs font-bold transition-all"
+                        className="inline-flex items-center justify-center w-full px-4 py-3 rounded-xl bg-purple-50 hover:bg-purple-100 text-unnati-indigo border border-purple-200/90 text-xs font-bold transition-all shadow-soft-sm"
                       >
                         <span>{aud.ctaLabel}</span>
                         <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
@@ -523,8 +562,32 @@ export default function HomePage() {
               </div>
             </ScrollReveal>
 
-            {/* Desktop Animated Connector Line */}
-            <div className="hidden lg:block absolute top-[280px] left-[6%] right-[6%] h-[2px] bg-gradient-to-r from-purple-300 via-orange-300 to-emerald-300 z-0 opacity-40" />
+            {/* Desktop Signature Milestone Progression Spine */}
+            <div className="hidden lg:grid grid-cols-6 gap-5 mb-10 relative">
+              {/* Connecting Line Track */}
+              <div className="absolute top-[18px] left-[7%] right-[7%] h-[3px] bg-gradient-to-r from-purple-300 via-orange-300 to-emerald-400 z-0 rounded-full" />
+              {[
+                { num: "01", label: "Direction" },
+                { num: "02", label: "Skills" },
+                { num: "03", label: "Gaps" },
+                { num: "04", label: "Roadmap" },
+                { num: "05", label: "Proof" },
+                { num: "06", label: "Loop ↻" }
+              ].map((node, i) => (
+                <div key={i} className="flex flex-col items-center relative z-10 group cursor-default">
+                  <div className={`h-9 w-9 rounded-full flex items-center justify-center font-bold text-xs border-2 shadow-soft-sm transition-all duration-300 ${
+                    i === 5 
+                      ? "bg-purple-900 border-unnati-saffron text-white ring-4 ring-orange-200" 
+                      : "bg-white border-purple-200 text-unnati-indigo group-hover:border-unnati-violet group-hover:scale-110"
+                  }`}>
+                    <span>{node.num}</span>
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-2 group-hover:text-unnati-indigo transition-colors">
+                    {node.label}
+                  </span>
+                </div>
+              ))}
+            </div>
 
             {/* Connected Journey Grid: 1 Col on Mobile (Vertical Timeline), 3 Col on Tablet, 6 Col on Desktop */}
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-5 relative z-10">
@@ -532,23 +595,26 @@ export default function HomePage() {
                 {
                   num: "01",
                   title: "Discover Direction",
-                  desc: "Explore 20+ pathways across Business, Analytics, Finance, Design, and Tech.",
+                  tag: "Path Exploration",
+                  desc: "Explore 20+ pathways across Business, Analytics, Finance, Design, and Tech with real compensation benchmarks.",
                   icon: Compass,
                   color: "text-purple-600",
                   bg: "bg-purple-50"
                 },
                 {
                   num: "02",
-                  title: "Ingest Baseline",
-                  desc: "Extract verified coursework, projects, and skills from your resume or syllabus.",
+                  title: "Understand Skills",
+                  tag: "4-Tier Ledger",
+                  desc: "Extract coursework, projects, and skills into verified ledger: Self-Reported, Resume, Assessed, and Verified.",
                   icon: Layers,
                   color: "text-indigo-600",
                   bg: "bg-indigo-50"
                 },
                 {
                   num: "03",
-                  title: "Pinpoint Gaps",
-                  desc: "Compare profile against industry benchmarks to identify exact skills to strengthen.",
+                  title: "Identify Gaps",
+                  tag: "Bayesian Delta",
+                  desc: "Compare your profile against target role benchmarks to pinpoint high-impact capability gaps with precision.",
                   icon: Target,
                   color: "text-orange-600",
                   bg: "bg-orange-50"
@@ -556,7 +622,8 @@ export default function HomePage() {
                 {
                   num: "04",
                   title: "Build Roadmap",
-                  desc: "Follow an ordered, 3-phase milestone plan tailored to your weekly study hours.",
+                  tag: "Topological DAG",
+                  desc: "Follow an ordered 3-phase milestone curriculum tailored to your weekly schedule so foundations precede advanced work.",
                   icon: MapPin,
                   color: "text-violet-600",
                   bg: "bg-violet-50"
@@ -564,7 +631,8 @@ export default function HomePage() {
                 {
                   num: "05",
                   title: "Demonstrate",
-                  desc: "Complete practical capstones and diagnostic checks to earn Verified status.",
+                  tag: "Proof of Work",
+                  desc: "Build hands-on capstones and complete 10-minute diagnostic checks to earn Verified competency status.",
                   icon: Award,
                   color: "text-emerald-600",
                   bg: "bg-emerald-50"
@@ -572,7 +640,8 @@ export default function HomePage() {
                 {
                   num: "06",
                   title: "Grow & Reassess",
-                  desc: "Update your Bayesian competency profile continuously as you level up.",
+                  tag: "Lifelong Loop",
+                  desc: "Update your competency profile continuously as you advance, unlocking senior benchmarks and higher trajectory.",
                   icon: RefreshCw,
                   color: "text-purple-700",
                   bg: "bg-purple-100"
@@ -581,40 +650,52 @@ export default function HomePage() {
                 const Icon = step.icon;
                 return (
                   <ScrollReveal key={idx} direction="up" delayMs={idx * 80}>
-                    <div className="h-full p-6 rounded-3xl bg-white border border-slate-200/90 shadow-soft-sm hover:shadow-soft-md hover:border-purple-300 flex flex-col justify-between relative group transition-all duration-300">
-                      <div>
+                    <div className="h-full p-6 rounded-3xl bg-white border border-slate-200/90 shadow-soft-sm hover:shadow-soft-md hover:border-purple-300 flex flex-col justify-between relative group transition-all duration-300 overflow-hidden">
+                      {/* Watermarked Background Digit */}
+                      <span className="absolute right-3 -bottom-1 font-heading text-6xl font-black text-slate-100/80 group-hover:text-purple-100/60 transition-colors pointer-events-none select-none z-0">
+                        {step.num}
+                      </span>
+
+                      <div className="relative z-10">
                         <div className="flex items-center justify-between mb-4">
                           <span className="font-heading text-3xl font-black text-unnati-indigo">
                             {step.num}
                           </span>
-                          <div className={`flex h-9 w-9 items-center justify-center rounded-xl bg-purple-50 border border-purple-100 shadow-soft-sm ${step.color}`}>
+                          <div className={`flex h-9 w-9 items-center justify-center rounded-xl bg-purple-50 border border-purple-100 shadow-soft-sm ${step.color} group-hover:scale-105 transition-transform`}>
                             <Icon className="h-4.5 w-4.5" />
                           </div>
                         </div>
-                        <h3 className="font-heading text-[16px] font-bold text-slate-900 mb-2">
+
+                        <span className="inline-block text-[10px] uppercase font-bold tracking-wider text-unnati-saffron mb-1">
+                          {step.tag}
+                        </span>
+                        
+                        <h3 className="font-heading text-[16px] font-bold text-slate-900 mb-2 group-hover:text-unnati-indigo transition-colors">
                           {step.title}
                         </h3>
-                        <p className="text-[13.5px] text-slate-600 leading-relaxed">
+                        <p className="text-[13px] text-slate-600 leading-relaxed font-normal">
                           {step.desc}
                         </p>
                       </div>
 
-                      {idx === 5 ? (
-                        <div className="mt-4 pt-3 border-t border-purple-200/80 flex items-center justify-between text-[11px] font-bold text-unnati-indigo">
-                          <span className="flex items-center gap-1.5">
-                            <RefreshCw className="h-3.5 w-3.5 animate-spin text-unnati-saffron" />
-                            <span>Continuous Loop ↻</span>
-                          </span>
-                          <span className="text-[10px] bg-purple-100 text-unnati-indigo px-2 py-0.5 rounded-full font-bold">
-                            Adaptive
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="mt-4 pt-3 border-t border-slate-200/70 flex items-center justify-between text-[11px] font-bold text-slate-400 group-hover:text-unnati-indigo transition-colors">
-                          <span>Stage {step.num} of 06</span>
-                          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 text-unnati-saffron" />
-                        </div>
-                      )}
+                      <div className="relative z-10 pt-4 mt-2">
+                        {idx === 5 ? (
+                          <div className="pt-3 border-t border-purple-200/80 flex items-center justify-between text-[11px] font-bold text-unnati-indigo">
+                            <span className="flex items-center gap-1.5">
+                              <RefreshCw className="h-3.5 w-3.5 animate-spin text-unnati-saffron" />
+                              <span>Continuous Loop ↻</span>
+                            </span>
+                            <span className="text-[10px] bg-purple-100 text-unnati-indigo px-2 py-0.5 rounded-full font-bold">
+                              Adaptive
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="pt-3 border-t border-slate-200/70 flex items-center justify-between text-[11px] font-bold text-slate-400 group-hover:text-unnati-indigo transition-colors">
+                            <span>Stage {step.num} of 06</span>
+                            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 text-unnati-saffron" />
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </ScrollReveal>
                 );
@@ -712,21 +793,60 @@ export default function HomePage() {
 
                   <div className="lg:col-span-6 p-6 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-3.5">
                     <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                      <span className="font-bold text-sm text-slate-800">Skill Competency Ledger</span>
+                      <div>
+                        <span className="font-bold text-sm text-slate-800">Skill Competency Ledger</span>
+                        <p className="text-[11px] text-slate-500">Live Bayesian profile confidence</p>
+                      </div>
                       <Badge variant="success" className="text-[10px]">Active Profile</Badge>
                     </div>
-                    <div className="space-y-2.5">
-                      <div className="p-3.5 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
-                        <span className="font-semibold text-slate-800">Product Roadmapping</span>
-                        <span className="px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold">Assessed (85%)</span>
+
+                    {/* Overall Readiness Metric Banner */}
+                    <div className="p-3.5 rounded-xl bg-gradient-to-r from-purple-100/90 to-indigo-100/90 border border-purple-200 flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-9 w-9 rounded-lg bg-white flex items-center justify-center font-bold text-unnati-indigo shadow-soft-sm">
+                          78%
+                        </div>
+                        <div>
+                          <p className="font-bold text-slate-900 text-xs">Overall Role Readiness</p>
+                          <p className="text-[11px] text-slate-600">+12% boost from diagnostic check</p>
+                        </div>
                       </div>
-                      <div className="p-3.5 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
-                        <span className="font-semibold text-slate-800">SQL &amp; Data Extraction</span>
-                        <span className="px-2.5 py-1 rounded-md bg-purple-100 text-unnati-indigo text-[10px] font-bold">Inferred from Resume</span>
+                      <Badge variant="violet" className="text-[10px] font-bold">Verified</Badge>
+                    </div>
+
+                    {/* 4-Tier Competency Rows */}
+                    <div className="space-y-2">
+                      <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between shadow-soft-sm">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                          <span className="font-semibold text-slate-800 text-[12.5px]">Product Roadmapping &amp; PRDs</span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold">Assessed (88%)</span>
                       </div>
-                      <div className="p-3.5 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
-                        <span className="font-semibold text-slate-800">Financial Modeling</span>
-                        <span className="px-2.5 py-1 rounded-md bg-orange-100 text-orange-800 text-[10px] font-bold">Recommended to Learn</span>
+                      <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between shadow-soft-sm">
+                        <div className="flex items-center gap-2">
+                          <Layers className="h-4 w-4 text-purple-600 shrink-0" />
+                          <span className="font-semibold text-slate-800 text-[12.5px]">SQL &amp; Data Extraction</span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded-md bg-purple-100 text-unnati-indigo text-[10px] font-bold">Inferred from Resume (75%)</span>
+                      </div>
+                      <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between shadow-soft-sm">
+                        <div className="flex items-center gap-2">
+                          <Target className="h-4 w-4 text-orange-600 shrink-0" />
+                          <span className="font-semibold text-slate-800 text-[12.5px]">Unit Economics &amp; FP&amp;A</span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded-md bg-orange-100 text-orange-800 text-[10px] font-bold">Priority Gap to Learn</span>
+                      </div>
+                    </div>
+
+                    {/* Weekly Study Hours Progress */}
+                    <div className="pt-2 border-t border-slate-200">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 mb-1">
+                        <span>Weekly Study Goal Progress</span>
+                        <span className="font-bold text-unnati-indigo">6.5 / 8 hrs (81%)</span>
+                      </div>
+                      <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-unnati-indigo rounded-full w-[81%]" />
                       </div>
                     </div>
                   </div>
@@ -770,14 +890,44 @@ export default function HomePage() {
                   </div>
 
                   <div className="lg:col-span-6 p-6 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-3.5">
-                    <div className="p-4 bg-white rounded-xl border border-purple-200 shadow-soft-sm">
-                      <span className="text-[10px] uppercase font-bold text-unnati-saffron">Featured Pathway</span>
-                      <h4 className="font-heading text-base font-bold text-slate-900 mt-1">Product &amp; Business Strategy Lead</h4>
-                      <p className="text-xs text-slate-500 mt-1 leading-relaxed">Connects engineering execution, UX empathy, and market metrics.</p>
-                      <div className="mt-4 flex items-center justify-between text-xs font-bold text-slate-700 pt-3 border-t border-slate-100">
-                        <span>Typical Range: ₹14L – ₹28L CTC</span>
-                        <span className="text-emerald-700 font-semibold">Bridge Time: ~6 Weeks</span>
+                    <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+                      <div>
+                        <span className="font-bold text-sm text-slate-800">Career Comparison Engine</span>
+                        <p className="text-[11px] text-slate-500">Side-by-side transition analysis</p>
                       </div>
+                      <Badge variant="saffron" className="text-[10px]">Comparative</Badge>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div className="p-3 bg-white rounded-xl border border-purple-200 shadow-soft-sm">
+                        <span className="text-[9.5px] uppercase font-bold text-unnati-indigo">Current Baseline</span>
+                        <h5 className="font-heading font-bold text-slate-900 text-xs mt-1">Data Analyst</h5>
+                        <p className="text-[11px] text-slate-500 mt-0.5">₹14.5L Median CTC</p>
+                      </div>
+                      <div className="p-3 bg-purple-50/80 rounded-xl border border-purple-300 shadow-soft-sm">
+                        <span className="text-[9.5px] uppercase font-bold text-unnati-saffron">Target Career</span>
+                        <h5 className="font-heading font-bold text-slate-900 text-xs mt-1">Product Manager</h5>
+                        <p className="text-[11px] text-slate-500 mt-0.5">₹18.0L Median CTC</p>
+                      </div>
+                    </div>
+
+                    {/* Transferable Skills Banner */}
+                    <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1.5 shadow-soft-sm">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="font-bold text-slate-800">Transferable Skill Overlap</span>
+                        <span className="font-black text-emerald-600">64% Match</span>
+                      </div>
+                      <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500 rounded-full w-[64%]" />
+                      </div>
+                      <p className="text-[11px] text-slate-500 pt-0.5">
+                        Shared strengths in SQL, metrics analysis, and stakeholder storytelling transfer directly.
+                      </p>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-purple-100/70 border border-purple-200 flex items-center justify-between font-bold text-unnati-indigo text-xs">
+                      <span>Estimated Bridge Effort:</span>
+                      <span className="text-unnati-saffron font-black">~6 Weeks (8 hrs/wk)</span>
                     </div>
                   </div>
                 </div>
@@ -821,14 +971,25 @@ export default function HomePage() {
 
                   <div className="lg:col-span-6 p-6 rounded-2xl bg-purple-50/70 border border-purple-200 text-xs space-y-3.5">
                     <div className="flex items-center justify-between text-xs font-bold text-unnati-indigo pb-2.5 border-b border-purple-200">
-                      <span>Scenario: Product Metric Prioritization</span>
+                      <span>Scenario Challenge #104</span>
                       <Badge variant="saffron" className="text-[10px]">10 Min Check</Badge>
                     </div>
-                    <p className="text-slate-700 leading-relaxed font-medium text-xs sm:text-[13px]">
+                    <p className="text-slate-800 leading-relaxed font-semibold text-xs sm:text-[13px]">
                       &quot;Your e-commerce application experiences a 25% checkout drop-off at the payment step. Which analytical approach should you prioritize first?&quot;
                     </p>
-                    <div className="p-3.5 rounded-xl bg-white border border-purple-200 font-semibold text-unnati-indigo text-xs">
-                      ✓ Diagnostic Answer: Inspect payment failure codes &amp; conduct funnel friction audit.
+                    <div className="space-y-2">
+                      <div className="p-2.5 rounded-lg bg-white/70 border border-slate-200 text-slate-500 text-[11.5px] flex items-center gap-2">
+                        <span className="h-3.5 w-3.5 rounded-full border border-slate-300 flex items-center justify-center text-[9px]">A</span>
+                        <span>Immediately add an exit-intent discount modal.</span>
+                      </div>
+                      <div className="p-3 rounded-xl bg-purple-100/90 border-2 border-unnati-violet text-unnati-indigo text-xs font-bold flex items-center gap-2 shadow-soft-sm">
+                        <span className="h-4 w-4 rounded-full bg-unnati-indigo text-white flex items-center justify-center text-[10px]">✓</span>
+                        <span>Audit payment gateway error logs &amp; funnel latency breakdown.</span>
+                      </div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-semibold text-[11px] flex items-center justify-between">
+                      <span>Formative Feedback: Evaluates root cause before treating symptoms.</span>
+                      <span className="font-bold text-emerald-700">+8% Verified</span>
                     </div>
                   </div>
                 </div>
@@ -871,25 +1032,47 @@ export default function HomePage() {
                   </div>
 
                   <div className="lg:col-span-6 p-6 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2.5">
-                    <div className="p-4 bg-white rounded-xl border border-slate-200">
-                      <div className="flex items-center justify-between font-bold text-unnati-indigo text-xs sm:text-sm">
-                        <span>Phase 1: Foundations</span>
-                        <span className="text-emerald-700 font-semibold">100% Completed</span>
+                    <div className="p-3.5 bg-white rounded-xl border border-slate-200 flex items-center justify-between shadow-soft-sm">
+                      <div className="flex items-center gap-2.5">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                        <div>
+                          <span className="font-bold text-slate-800 text-xs sm:text-sm">Phase 1: Foundations</span>
+                          <p className="text-[11px] text-slate-500">Core business &amp; analytical frameworks</p>
+                        </div>
                       </div>
-                      <p className="text-slate-500 text-xs mt-1">Core business modeling and analytical workflows.</p>
+                      <span className="text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md font-bold text-[10px]">100% Done</span>
                     </div>
-                    <div className="p-4 bg-white rounded-xl border-2 border-purple-300">
+
+                    <div className="p-4 bg-white rounded-xl border-2 border-purple-300 shadow-soft-sm space-y-2.5">
                       <div className="flex items-center justify-between font-bold text-unnati-indigo text-xs sm:text-sm">
                         <span>Phase 2: Applied Capability</span>
-                        <span className="text-orange-600 font-semibold">In Progress (60%)</span>
+                        <span className="text-orange-600 font-black text-xs">60% In Progress</span>
                       </div>
-                      <p className="text-slate-500 text-xs mt-1">Hands-on user research &amp; unit economics metrics sprint.</p>
+                      <div className="space-y-1.5 pt-1 text-[11.5px]">
+                        <div className="flex items-center gap-2 text-slate-700">
+                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                          <span>Module 2.1: North Star Metric Decomposition</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-unnati-indigo font-bold">
+                          <Zap className="h-3.5 w-3.5 text-unnati-saffron shrink-0 animate-pulse" />
+                          <span>Module 2.2: A/B Testing Cohorts &amp; Statistical Power</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-slate-400">
+                          <span className="h-3.5 w-3.5 rounded-full border border-slate-300 shrink-0" />
+                          <span>Module 2.3: Cohort Retention Curves in SQL</span>
+                        </div>
+                      </div>
+                      <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden mt-1">
+                        <div className="h-full bg-gradient-to-r from-unnati-indigo to-unnati-violet rounded-full w-[60%]" />
+                      </div>
                     </div>
-                    <div className="p-4 bg-white rounded-xl border border-slate-200">
-                      <div className="flex items-center justify-between font-bold text-slate-500 text-xs sm:text-sm">
-                        <span>Phase 3: Industry Capstone</span>
-                        <span>Locked (Complete Phase 2)</span>
+
+                    <div className="p-3.5 bg-white rounded-xl border border-slate-200 flex items-center justify-between opacity-80">
+                      <div>
+                        <span className="font-bold text-slate-600 text-xs sm:text-sm">Phase 3: Industry Capstone</span>
+                        <p className="text-[11px] text-slate-400">Full-Funnel Product Strategy Deliverable</p>
                       </div>
+                      <span className="text-slate-500 text-[10px] font-semibold bg-slate-100 px-2 py-0.5 rounded-md">Locked</span>
                     </div>
                   </div>
                 </div>

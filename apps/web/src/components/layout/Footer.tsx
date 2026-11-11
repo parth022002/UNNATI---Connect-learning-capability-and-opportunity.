@@ -329,9 +329,10 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Centre: Tasteful Developer Credit (Designed & Developed by Part Ahuja) */}
-          <div className="order-3 md:order-2 flex items-center gap-1.5 font-medium text-slate-700 bg-white/90 border border-slate-200 px-4 py-1.5 rounded-full shadow-soft-sm">
-            <span className="text-slate-500">Designed &amp; Developed by</span>
-            <span className="font-bold text-unnati-indigo">Part Ahuja</span>
+          <div className="order-3 md:order-2 inline-flex items-center gap-2 font-medium text-slate-700 bg-white border border-slate-300/90 px-4 py-1.5 rounded-full shadow-soft-sm hover:border-purple-300 transition-colors">
+            <span className="h-2 w-2 rounded-full bg-unnati-saffron animate-pulse shrink-0" />
+            <span className="text-slate-500 text-xs">Designed &amp; Developed by</span>
+            <span className="font-bold text-unnati-indigo text-xs tracking-tight">Part Ahuja</span>
           </div>
 
           {/* Right: Legal & Compliance Links */}

@@ -34,7 +34,7 @@ BACKEND & API SERVICES:     [█████████████████
 | **8. Background & Scroll Motion** | 6 | 6 | 0 | Completed | 21hrs-inspired 7-stage ambient progression & reduced-motion support |
 | **9. Responsive Quality Assurance** | 10 | 10 | 0 | Completed | 360px, 375px, 390px, 430px, 768px, 1024px, 1280px, 1366px, 1440px, 1920px |
 | **10. Accessibility (WCAG 2.2 AA)** | 8 | 8 | 0 | Completed | Contrast ratios &ge; 4.5:1, semantic landmarks, keyboard focus rings |
-| **11. Performance & Engineering QA** | 8 | 8 | 0 | Completed | 13/13 static routes generated, 0 type errors, 9/9 pytest passed |
+| **11. Performance & Engineering QA** | 8 | 8 | 0 | Completed | 13/13 static routes generated, 0 type errors, 16/16 pytest passed |
 | **12. Documentation & Compliance** | 6 | 6 | 0 | Completed | DPDP Act 2025/2026 notices, credentials guide, development checklist |
 | **TOTAL** | **84** | **84** | **0** | **100%** | **Flagship Production Quality Achieved** |
 
@@ -209,7 +209,7 @@ BACKEND & API SERVICES:     [█████████████████
   *Status:* **Completed** (Verified)
 - [x] **`PERF-01`**: Next.js production build: compiles with exit code 0 (`13/13` static pages generated, TypeScript & ESLint validated).  
   *Status:* **Completed** (Verified)
-- [x] **`PERF-02`**: Backend test suite: pytest passes with exit code 0 (`9/9` passed in 13.55s).  
+- [x] **`PERF-02`**: Backend test suite: pytest passes with exit code 0 (`16/16` passed in 22.08s).  
   *Status:* **Completed** (Verified)
 
 ---
@@ -232,7 +232,7 @@ BACKEND & API SERVICES:     [█████████████████
 | **Continuous Career Journey** | 6 stages visually connected with continuous loop indicator at Stage 6 | **PASSED** |
 | **Career Diagnostic Metrics** | Explicit separation of Median vs Range, responsible skill wording | **PASSED** |
 | **Privacy & DPDP Compliance** | Bilingual consent modal, appointed GRO contact, 72-hour erasure policy | **PASSED** |
-| **Build & Test Integrity** | 13/13 Next.js pages generated, 0 type errors, 9/9 backend tests passed | **PASSED** |
+| **Build & Test Integrity** | 13/13 Next.js pages generated, 0 type errors, 16/16 backend tests passed | **PASSED** |
 
 ---
 
@@ -277,7 +277,7 @@ BACKEND & API SERVICES:     [█████████████████
 | **Protected Footer Content** | Links, social icons, copyright, and developer credit unblocked | **PASSED** | `Designed & Developed by Part Ahuja` and all sub-footer links remain 100% visible and unblocked. |
 | **Chatbot Functionality** | Preserves state, history, suggestions, and clear close | **PASSED** | Verified full conversation flow, category filters, quick prompts, and escape/button dismissal. |
 | **Responsive QA (7 Viewports)**| Zero horizontal overflow across all required resolutions | **PASSED** | 360px, 390px, 411px, 768px, 1024px, 1440px, 1920px: `hasOverflow = false` across all. |
-| **Automated Test Suites** | 13/13 static routes generated, 0 type errors, 9/9 pytest | **PASSED** | Build: exit code 0; Typecheck: exit code 0; Pytest: 9/9 passed in 13.74s. |
+| **Automated Test Suites** | 13/13 static routes generated, 0 type errors, 16/16 pytest | **PASSED** | Build: exit code 0; Typecheck: exit code 0; Pytest: 16/16 passed in 22.08s. |
 
 ---
 
