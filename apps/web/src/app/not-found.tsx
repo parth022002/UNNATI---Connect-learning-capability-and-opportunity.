@@ -8,6 +8,7 @@ import { BackgroundAtmosphere } from "@/components/layout/BackgroundAtmosphere";
 import { CareerCompanionDrawer } from "@/components/companion/CareerCompanionDrawer";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { CountUpNumber, StaggerContainer, StaggerItem } from "@/components/motion";
 import {
   Compass,
   Home,
@@ -39,7 +40,7 @@ export default function NotFound() {
           {/* Large Error Stat */}
           <div className="space-y-3">
             <div className="font-heading text-7xl sm:text-8xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-800 via-indigo-700 to-amber-600">
-              404
+              <CountUpNumber value={404} durationMs={800} />
             </div>
             <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
               Career Direction Not Found
@@ -50,20 +51,24 @@ export default function NotFound() {
           </div>
 
           {/* Primary Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <Link href="/" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full sm:w-auto font-semibold shadow-md shadow-purple-900/10">
-                <Home className="h-4 w-4 mr-2" />
-                Return to Home
-              </Button>
-            </Link>
-            <Link href="/explore" className="w-full sm:w-auto">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto font-semibold border-slate-300 hover:bg-slate-50">
-                <Compass className="h-4 w-4 mr-2 text-purple-700" />
-                Explore Career Pathways
-              </Button>
-            </Link>
-          </div>
+          <StaggerContainer delayStepMs={80} className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <StaggerItem index={0} direction="up" className="w-full sm:w-auto">
+              <Link href="/" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full sm:w-auto font-semibold shadow-md shadow-purple-900/10">
+                  <Home className="h-4 w-4 mr-2" />
+                  Return to Home
+                </Button>
+              </Link>
+            </StaggerItem>
+            <StaggerItem index={1} direction="up" className="w-full sm:w-auto">
+              <Link href="/explore" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto font-semibold border-slate-300 hover:bg-slate-50">
+                  <Compass className="h-4 w-4 mr-2 text-purple-700" />
+                  Explore Career Pathways
+                </Button>
+              </Link>
+            </StaggerItem>
+          </StaggerContainer>
 
           {/* Quick Shortcuts */}
           <div className="pt-6 border-t border-slate-200/80 text-left">

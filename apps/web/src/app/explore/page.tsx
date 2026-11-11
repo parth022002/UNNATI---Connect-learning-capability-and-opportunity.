@@ -9,6 +9,7 @@ import { CareerCompanionDrawer } from "@/components/companion/CareerCompanionDra
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { StaggerContainer, StaggerItem, CountUpNumber } from "@/components/motion";
 import { 
   Search, 
   ArrowUpRight, 
@@ -308,107 +309,108 @@ export default function ExploreCareersPage() {
         </div>
 
         {/* Roles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {filteredRoles.map((role) => {
+        <StaggerContainer delayStepMs={60} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {filteredRoles.map((role, rIdx) => {
             const isCompared = selectedForComparison.includes(role.id);
             return (
-              <Card
-                key={role.id}
-                hoverEffect
-                className="clean-card rounded-3xl p-6 flex flex-col justify-between transition-all duration-300"
-              >
-                <div>
-                  {/* Top Badge & Match Meter */}
-                  <div className="flex items-center justify-between mb-3">
-                    <Badge variant="violet" className="text-[11px] font-semibold">
-                      {role.sector}
-                    </Badge>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-bold text-emerald-700">
-                        {role.matchScore}% Match
-                      </span>
-                      <div className="w-12 h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-emerald-500 rounded-full"
-                          style={{ width: `${role.matchScore}%` }}
-                        />
+              <StaggerItem key={role.id} index={rIdx} direction="up">
+                <Card
+                  hoverEffect
+                  className="clean-card rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 h-full"
+                >
+                  <div>
+                    {/* Top Badge & Match Meter */}
+                    <div className="flex items-center justify-between mb-3">
+                      <Badge variant="violet" className="text-[11px] font-semibold">
+                        {role.sector}
+                      </Badge>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-emerald-700">
+                          <CountUpNumber value={role.matchScore} suffix="% Match" />
+                        </span>
+                        <div className="w-12 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-emerald-500 rounded-full"
+                            style={{ width: `${role.matchScore}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Title & Description */}
+                    <h3 className="font-heading text-lg font-bold text-slate-900 mb-1 leading-snug">
+                      {role.title}
+                    </h3>
+                    <p className="text-[11px] font-semibold text-purple-700 mb-2">
+                      Ideal For: {role.targetAudience}
+                    </p>
+                    <p className="text-xs text-slate-600 mb-4 line-clamp-3 leading-relaxed">
+                      {role.description}
+                    </p>
+
+                    {/* Key Stats Bar */}
+                    <div className="grid grid-cols-3 gap-2 py-3 px-3 rounded-2xl bg-purple-50/60 border border-purple-100 mb-4 text-center">
+                      <div>
+                        <p className="text-[10px] text-slate-500 uppercase font-semibold">Median CTC</p>
+                        <p className="text-xs font-extrabold text-slate-900 mt-0.5">{role.medianCtc}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-slate-500 uppercase font-semibold">Outlook</p>
+                        <p className="text-xs font-extrabold text-emerald-700 mt-0.5">{role.growthRate}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-slate-500 uppercase font-semibold">Est. Bridge</p>
+                        <p className="text-xs font-extrabold text-orange-600 mt-0.5">{role.timeToBridgeWeeks} wks</p>
+                      </div>
+                    </div>
+
+                    {/* Core Skills Chips */}
+                    <div className="mb-4">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                        Core Capabilities
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {role.coreSkills.map((skill, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 border border-slate-200/80 text-[11px] font-medium"
+                          >
+                            {skill}
+                          </span>
+                        ))}
                       </div>
                     </div>
                   </div>
 
-                  {/* Title & Description */}
-                  <h3 className="font-heading text-lg font-bold text-slate-900 mb-1 leading-snug">
-                    {role.title}
-                  </h3>
-                  <p className="text-[11px] font-semibold text-purple-700 mb-2">
-                    Ideal For: {role.targetAudience}
-                  </p>
-                  <p className="text-xs text-slate-600 mb-4 line-clamp-3 leading-relaxed">
-                    {role.description}
-                  </p>
+                  {/* Card Action Footer */}
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-2 mt-2">
+                    <button
+                      onClick={() => toggleComparison(role.id)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors cursor-pointer ${
+                        isCompared
+                          ? "bg-purple-100 border-purple-300 text-purple-900"
+                          : "bg-white border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                      }`}
+                    >
+                      <Scale className="h-3.5 w-3.5" />
+                      {isCompared ? "Compared" : "Compare"}
+                    </button>
 
-                  {/* Key Stats Bar */}
-                  <div className="grid grid-cols-3 gap-2 py-3 px-3 rounded-2xl bg-purple-50/60 border border-purple-100 mb-4 text-center">
-                    <div>
-                      <p className="text-[10px] text-slate-500 uppercase font-semibold">Median CTC</p>
-                      <p className="text-xs font-extrabold text-slate-900 mt-0.5">{role.medianCtc}</p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-slate-500 uppercase font-semibold">Outlook</p>
-                      <p className="text-xs font-extrabold text-emerald-700 mt-0.5">{role.growthRate}</p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-slate-500 uppercase font-semibold">Est. Bridge</p>
-                      <p className="text-xs font-extrabold text-orange-600 mt-0.5">{role.timeToBridgeWeeks} wks</p>
-                    </div>
+                    <Button
+                      size="sm"
+                      variant="saffron"
+                      onClick={() => handleSetTargetRole(role)}
+                      className="text-xs py-1.5 px-3"
+                    >
+                      <Target className="h-3 w-3 mr-1" />
+                      Set as Target
+                    </Button>
                   </div>
-
-                  {/* Core Skills Chips */}
-                  <div className="mb-4">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-                      Core Capabilities
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {role.coreSkills.map((skill, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 border border-slate-200/80 text-[11px] font-medium"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Card Action Footer */}
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-2 mt-2">
-                  <button
-                    onClick={() => toggleComparison(role.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors cursor-pointer ${
-                      isCompared
-                        ? "bg-purple-100 border-purple-300 text-purple-900"
-                        : "bg-white border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                    }`}
-                  >
-                    <Scale className="h-3.5 w-3.5" />
-                    {isCompared ? "Compared" : "Compare"}
-                  </button>
-
-                  <Button
-                    size="sm"
-                    variant="saffron"
-                    onClick={() => handleSetTargetRole(role)}
-                    className="text-xs py-1.5 px-3"
-                  >
-                    <Target className="h-3 w-3 mr-1" />
-                    Set as Target
-                  </Button>
-                </div>
-              </Card>
+                </Card>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
 
         {/* Side-by-Side Comparison Modal */}
         {showCompareModal && comparedRoles.length >= 2 && (

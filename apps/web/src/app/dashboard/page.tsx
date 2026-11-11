@@ -11,6 +11,7 @@ import { CareerCompanionDrawer } from "@/components/companion/CareerCompanionDra
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { StaggerContainer, StaggerItem, CountUpNumber } from "@/components/motion";
 import { 
   Award, 
   BookOpen, 
@@ -333,7 +334,9 @@ export default function DashboardPage() {
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                   Profile Completeness
                 </span>
-                <span className="text-xl font-extrabold text-slate-900 font-mono">{completeness}%</span>
+                <span className="text-xl font-extrabold text-slate-900 font-mono">
+                  <CountUpNumber value={completeness} suffix="%" />
+                </span>
               </div>
 
               {/* Progress Bar */}
@@ -378,47 +381,59 @@ export default function DashboardPage() {
         </section>
 
         {/* Metric Cards Row */}
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
-          <Card hoverEffect className="p-5 clean-card">
-            <div className="flex items-center justify-between text-slate-500">
-              <span className="text-[11px] font-bold uppercase tracking-wider">Total Capabilities</span>
-              <Layers className="h-4 w-4 text-purple-700" />
-            </div>
-            <p className="mt-2 text-2xl font-black text-slate-900 font-mono">{skills.length}</p>
-            <p className="mt-1 text-[11px] text-slate-500">Across {new Set(skills.map(s => s.category)).size} domains</p>
-          </Card>
+        <StaggerContainer delayStepMs={80} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+          <StaggerItem index={0} direction="up">
+            <Card hoverEffect className="p-5 clean-card h-full">
+              <div className="flex items-center justify-between text-slate-500">
+                <span className="text-[11px] font-bold uppercase tracking-wider">Total Capabilities</span>
+                <Layers className="h-4 w-4 text-purple-700" />
+              </div>
+              <p className="mt-2 text-2xl font-black text-slate-900 font-mono">
+                <CountUpNumber value={skills.length} />
+              </p>
+              <p className="mt-1 text-[11px] text-slate-500">Across {new Set(skills.map(s => s.category)).size} domains</p>
+            </Card>
+          </StaggerItem>
 
-          <Card hoverEffect className="p-5 clean-card">
-            <div className="flex items-center justify-between text-slate-500">
-              <span className="text-[11px] font-bold uppercase tracking-wider">Evidence Backed</span>
-              <FileCheck2 className="h-4 w-4 text-sky-600" />
-            </div>
-            <p className="mt-2 text-2xl font-black text-sky-700 font-mono">
-              {skills.filter(s => s.state !== "CLAIMED").length}
-            </p>
-            <p className="mt-1 text-[11px] text-slate-500">Resume extracted or assessed</p>
-          </Card>
+          <StaggerItem index={1} direction="up">
+            <Card hoverEffect className="p-5 clean-card h-full">
+              <div className="flex items-center justify-between text-slate-500">
+                <span className="text-[11px] font-bold uppercase tracking-wider">Evidence Backed</span>
+                <FileCheck2 className="h-4 w-4 text-sky-600" />
+              </div>
+              <p className="mt-2 text-2xl font-black text-sky-700 font-mono">
+                <CountUpNumber value={skills.filter(s => s.state !== "CLAIMED").length} />
+              </p>
+              <p className="mt-1 text-[11px] text-slate-500">Resume extracted or assessed</p>
+            </Card>
+          </StaggerItem>
 
-          <Card hoverEffect className="p-5 clean-card">
-            <div className="flex items-center justify-between text-slate-500">
-              <span className="text-[11px] font-bold uppercase tracking-wider">Estimated Readiness</span>
-              <TrendingUp className="h-4 w-4 text-emerald-600" />
-            </div>
-            <p className="mt-2 text-2xl font-black text-emerald-700 font-mono">
-              {skills.length > 0 ? Math.min(95, Math.round((skills.length / 10) * 80)) : 25}%
-            </p>
-            <p className="mt-1 text-[11px] text-slate-500">Benchmark against target career</p>
-          </Card>
+          <StaggerItem index={2} direction="up">
+            <Card hoverEffect className="p-5 clean-card h-full">
+              <div className="flex items-center justify-between text-slate-500">
+                <span className="text-[11px] font-bold uppercase tracking-wider">Estimated Readiness</span>
+                <TrendingUp className="h-4 w-4 text-emerald-600" />
+              </div>
+              <p className="mt-2 text-2xl font-black text-emerald-700 font-mono">
+                <CountUpNumber value={skills.length > 0 ? Math.min(95, Math.round((skills.length / 10) * 80)) : 25} suffix="%" />
+              </p>
+              <p className="mt-1 text-[11px] text-slate-500">Benchmark against target career</p>
+            </Card>
+          </StaggerItem>
 
-          <Card hoverEffect className="p-5 clean-card">
-            <div className="flex items-center justify-between text-slate-500">
-              <span className="text-[11px] font-bold uppercase tracking-wider">Documents Ingested</span>
-              <FileText className="h-4 w-4 text-orange-600" />
-            </div>
-            <p className="mt-2 text-2xl font-black text-slate-900 font-mono">{documents.length}</p>
-            <p className="mt-1 text-[11px] text-slate-500">Processed by AI parser</p>
-          </Card>
-        </section>
+          <StaggerItem index={3} direction="up">
+            <Card hoverEffect className="p-5 clean-card h-full">
+              <div className="flex items-center justify-between text-slate-500">
+                <span className="text-[11px] font-bold uppercase tracking-wider">Documents Ingested</span>
+                <FileText className="h-4 w-4 text-orange-600" />
+              </div>
+              <p className="mt-2 text-2xl font-black text-slate-900 font-mono">
+                <CountUpNumber value={documents.length} />
+              </p>
+              <p className="mt-1 text-[11px] text-slate-500">Processed by AI parser</p>
+            </Card>
+          </StaggerItem>
+        </StaggerContainer>
 
         {/* Skills Inventory Section */}
         <section id="skills" className="mb-12">

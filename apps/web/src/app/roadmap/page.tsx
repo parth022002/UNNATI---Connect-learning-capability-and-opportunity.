@@ -11,6 +11,7 @@ import { CareerCompanionDrawer } from "@/components/companion/CareerCompanionDra
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { StaggerContainer, StaggerItem, CountUpNumber } from "@/components/motion";
 import { 
   ArrowLeft, 
   CheckCircle2, 
@@ -285,7 +286,9 @@ export default function RoadmapPage() {
             {/* Readiness Gauge Card */}
             <div className="flex flex-col items-center justify-center rounded-2xl bg-purple-50/70 border border-purple-100 p-6 text-center min-w-[210px]">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Readiness Score</span>
-              <div className="mt-1 text-4xl font-black text-emerald-700 font-mono">{readiness}%</div>
+              <div className="mt-1 text-4xl font-black text-emerald-700 font-mono">
+                <CountUpNumber value={readiness} suffix="%" />
+              </div>
               <p className="mt-1 text-xs text-slate-600">
                 {gapData ? `${gapData.skills_met_count} of ${gapData.total_skills_required} skills met` : "Calculating..."}
               </p>
@@ -393,13 +396,14 @@ export default function RoadmapPage() {
             </div>
           </div>
 
-          <div className="space-y-6">
-            {activeRoadmap?.milestones?.map((milestone) => {
+          <StaggerContainer delayStepMs={85} className="space-y-6">
+            {activeRoadmap?.milestones?.map((milestone, idx) => {
               const isLocked = milestone.status === "LOCKED";
               const isInProgress = milestone.status === "IN_PROGRESS";
               const isCompleted = milestone.status === "COMPLETED";
 
               return (
+                <StaggerItem key={milestone.id} index={idx} direction="up">
                 <div
                   key={milestone.id}
                   className={`clean-card rounded-3xl p-6 sm:p-7 transition-all duration-300 relative ${
@@ -575,9 +579,10 @@ export default function RoadmapPage() {
                     )}
                   </div>
                 </div>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerContainer>
         </section>
 
         {/* Skill Gap Matrix Table */}

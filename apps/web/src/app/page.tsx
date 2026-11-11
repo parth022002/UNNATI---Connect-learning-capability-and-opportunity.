@@ -8,6 +8,14 @@ import { Footer } from "@/components/layout/Footer";
 import { BackgroundAtmosphere } from "@/components/layout/BackgroundAtmosphere";
 import { CareerCompanionDrawer } from "@/components/companion/CareerCompanionDrawer";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { 
+  JourneyTimelineProgress, 
+  StaggerContainer, 
+  StaggerItem, 
+  ParallaxLayer, 
+  CountUpNumber, 
+  SectionTransition 
+} from "@/components/motion";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -263,72 +271,84 @@ export default function HomePage() {
             
             {/* Left Column: Core Positioning & Typography */}
             <div className="lg:col-span-7 space-y-6 text-left">
-              
-              {/* Campaign Badge */}
-              <div className="inline-flex items-center gap-2.5 rounded-full bg-purple-100/90 border border-purple-200/90 px-4 py-1.5 text-xs font-bold text-unnati-indigo shadow-soft-sm">
-                <Sparkles className="h-4 w-4 text-unnati-saffron animate-pulse" />
-                <span>Your Growth Companion</span>
-                <span className="h-1.5 w-1.5 rounded-full bg-unnati-saffron" />
-                <span className="text-slate-600 font-medium">Learn. Build. Grow. Succeed.</span>
-              </div>
+              <StaggerContainer delayStepMs={85}>
+                {/* Campaign Badge */}
+                <StaggerItem index={0} direction="up">
+                  <div className="inline-flex items-center gap-2.5 rounded-full bg-purple-100/90 border border-purple-200/90 px-4 py-1.5 text-xs font-bold text-unnati-indigo shadow-soft-sm mb-4">
+                    <Sparkles className="h-4 w-4 text-unnati-saffron animate-pulse" />
+                    <span>Your Growth Companion</span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-unnati-saffron" />
+                    <span className="text-slate-600 font-medium">Learn. Build. Grow. Succeed.</span>
+                  </div>
+                </StaggerItem>
 
-              {/* Aspirational Headline */}
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-[62px] font-black text-slate-900 tracking-tight leading-[1.12]">
-                Your career journey deserves a <br className="hidden sm:inline" />
-                <span className="text-gradient-indigo">clear, confident</span>{" "}
-                <br className="hidden sm:inline" />
-                <span className="text-gradient-saffron">direction forward.</span>
-              </h1>
+                {/* Aspirational Headline */}
+                <StaggerItem index={1} direction="up">
+                  <h1 className="font-heading text-4xl sm:text-5xl lg:text-[62px] font-black text-slate-900 tracking-tight leading-[1.12] mb-4">
+                    Your career journey deserves a <br className="hidden sm:inline" />
+                    <span className="text-gradient-indigo">clear, confident</span>{" "}
+                    <br className="hidden sm:inline" />
+                    <span className="text-gradient-saffron">direction forward.</span>
+                  </h1>
+                </StaggerItem>
 
-              {/* Subtitle */}
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl font-normal">
-                Discover your strengths, understand your skill gaps, and follow a personalised, step-by-step roadmap to the career you want — across <strong>Business, Management, Analytics, Finance, Design, and Technology</strong>.
-              </p>
+                {/* Subtitle */}
+                <StaggerItem index={2} direction="up">
+                  <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl font-normal mb-6">
+                    Discover your strengths, understand your skill gaps, and follow a personalised, step-by-step roadmap to the career you want — across <strong>Business, Management, Analytics, Finance, Design, and Technology</strong>.
+                  </p>
+                </StaggerItem>
 
-              {/* Primary Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
-                <Link href="/onboarding" className="w-full sm:w-auto">
-                  <Button 
-                    variant="saffron" 
-                    size="lg" 
-                    className="btn-shimmer w-full sm:w-auto text-base font-bold shadow-soft-md shadow-glow-saffron h-13 px-7 sm:px-8 rounded-2xl text-white justify-center"
-                  >
-                    <span>Start Your Free Journey</span>
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </Link>
-                <Link href="/explore" className="w-full sm:w-auto">
-                  <Button 
-                    variant="outline" 
-                    size="lg" 
-                    className="w-full sm:w-auto text-base font-semibold h-13 px-7 sm:px-8 rounded-2xl hover:border-purple-300 bg-white/80 justify-center"
-                  >
-                    <Compass className="h-4 w-4 mr-2 text-unnati-violet" /> 
-                    <span>Explore 20+ Career Paths</span>
-                  </Button>
-                </Link>
-              </div>
+                {/* Primary Action Buttons */}
+                <StaggerItem index={3} direction="up">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+                    <Link href="/onboarding" className="w-full sm:w-auto">
+                      <Button 
+                        variant="saffron" 
+                        size="lg" 
+                        className="btn-shimmer w-full sm:w-auto text-base font-bold shadow-soft-md shadow-glow-saffron h-13 px-7 sm:px-8 rounded-2xl text-white justify-center"
+                      >
+                        <span>Start Your Free Journey</span>
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    </Link>
+                    <Link href="/explore" className="w-full sm:w-auto">
+                      <Button 
+                        variant="outline" 
+                        size="lg" 
+                        className="w-full sm:w-auto text-base font-semibold h-13 px-7 sm:px-8 rounded-2xl hover:border-purple-300 bg-white/80 justify-center"
+                      >
+                        <Compass className="h-4 w-4 mr-2 text-unnati-violet" /> 
+                        <span>Explore 20+ Career Paths</span>
+                      </Button>
+                    </Link>
+                  </div>
+                </StaggerItem>
 
-              {/* Trust Indicators (Desktop view - rendered under CTAs) */}
-              <div className="hidden lg:flex pt-6 border-t border-slate-200/80 flex-wrap items-center gap-6 text-xs text-slate-500 font-medium">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                  <span>DPDP Act (India 2026) Compliant</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-unnati-indigo" />
-                  <span>For Students, Grads &amp; Professionals</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Lock className="h-4 w-4 text-orange-600" />
-                  <span>72-Hour Data Erasure Guarantee</span>
-                </div>
-              </div>
+                {/* Trust Indicators (Desktop view - rendered under CTAs) */}
+                <StaggerItem index={4} direction="up">
+                  <div className="hidden lg:flex pt-6 mt-6 border-t border-slate-200/80 flex-wrap items-center gap-6 text-xs text-slate-500 font-medium">
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="h-4 w-4 text-emerald-600" />
+                      <span>DPDP Act (India 2026) Compliant</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Users className="h-4 w-4 text-unnati-indigo" />
+                      <span>For Students, Grads &amp; Professionals</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Lock className="h-4 w-4 text-orange-600" />
+                      <span>72-Hour Data Erasure Guarantee</span>
+                    </div>
+                  </div>
+                </StaggerItem>
+              </StaggerContainer>
             </div>
 
             {/* Right Column: Hero Stepped Product Preview */}
             <div className="lg:col-span-5">
-              <ScrollReveal direction="up" delayMs={150}>
+              <ParallaxLayer speed={-0.03}>
+                <ScrollReveal direction="up" delayMs={150}>
                 <div className="clean-card p-5 sm:p-7 md:p-8 bg-white border-2 border-purple-100 shadow-soft-xl relative overflow-hidden">
                   
                   {/* Stepper Header with Authentic App Window Chrome */}
@@ -394,7 +414,9 @@ export default function HomePage() {
                       <div className="mt-3 pt-3 border-t border-purple-100/80">
                         <div className="flex items-center justify-between text-[11px] font-bold mb-1.5">
                           <span className="text-slate-600">Current Career Readiness</span>
-                          <span className="text-emerald-700 font-extrabold">76% of Benchmark</span>
+                          <span className="text-emerald-700 font-extrabold">
+                            <CountUpNumber value={76} suffix="% of Benchmark" />
+                          </span>
                         </div>
                         <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
                           <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full w-[76%]" />
@@ -450,6 +472,7 @@ export default function HomePage() {
 
                 </div>
               </ScrollReveal>
+            </ParallaxLayer>
 
               {/* Mobile Trust Indicators (rendered in requested sequence below the preview card on mobile) */}
               <div className="lg:hidden mt-8 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-center gap-4 text-xs text-slate-500 font-medium">
@@ -472,6 +495,8 @@ export default function HomePage() {
           </div>
         </section>
 
+        <SectionTransition fromColor="#FCFAFF" toColor="#ffffff" pattern="line" />
+
         {/* ========================================================
             SECTION 2: AUDIENCE PATHWAYS (Who UNNATI Helps)
             Surface: Pure white with clean subtle boundary
@@ -492,11 +517,11 @@ export default function HomePage() {
             </div>
           </ScrollReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StaggerContainer delayStepMs={95} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {audiences.map((aud, idx) => {
               const Icon = aud.icon;
               return (
-                <ScrollReveal key={idx} direction="up" delayMs={idx * 90}>
+                <StaggerItem key={idx} index={idx} direction="up">
                   <Card 
                     hoverEffect
                     className={`clean-card h-full p-7 sm:p-8 flex flex-col justify-between bg-white border border-slate-200/90 shadow-soft-sm group ${aud.cardBg} transition-all duration-300 relative overflow-hidden`}
@@ -535,10 +560,10 @@ export default function HomePage() {
                       </Link>
                     </div>
                   </Card>
-                </ScrollReveal>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerContainer>
           </div>
         </section>
 
@@ -562,147 +587,12 @@ export default function HomePage() {
               </div>
             </ScrollReveal>
 
-            {/* Desktop Signature Milestone Progression Spine */}
-            <div className="hidden lg:grid grid-cols-6 gap-5 mb-10 relative">
-              {/* Connecting Line Track */}
-              <div className="absolute top-[18px] left-[7%] right-[7%] h-[3px] bg-gradient-to-r from-purple-300 via-orange-300 to-emerald-400 z-0 rounded-full" />
-              {[
-                { num: "01", label: "Direction" },
-                { num: "02", label: "Skills" },
-                { num: "03", label: "Gaps" },
-                { num: "04", label: "Roadmap" },
-                { num: "05", label: "Proof" },
-                { num: "06", label: "Loop ↻" }
-              ].map((node, i) => (
-                <div key={i} className="flex flex-col items-center relative z-10 group cursor-default">
-                  <div className={`h-9 w-9 rounded-full flex items-center justify-center font-bold text-xs border-2 shadow-soft-sm transition-all duration-300 ${
-                    i === 5 
-                      ? "bg-purple-900 border-unnati-saffron text-white ring-4 ring-orange-200" 
-                      : "bg-white border-purple-200 text-unnati-indigo group-hover:border-unnati-violet group-hover:scale-110"
-                  }`}>
-                    <span>{node.num}</span>
-                  </div>
-                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-2 group-hover:text-unnati-indigo transition-colors">
-                    {node.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Connected Journey Grid: 1 Col on Mobile (Vertical Timeline), 3 Col on Tablet, 6 Col on Desktop */}
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-5 relative z-10">
-              {[
-                {
-                  num: "01",
-                  title: "Discover Direction",
-                  tag: "Path Exploration",
-                  desc: "Explore 20+ pathways across Business, Analytics, Finance, Design, and Tech with real compensation benchmarks.",
-                  icon: Compass,
-                  color: "text-purple-600",
-                  bg: "bg-purple-50"
-                },
-                {
-                  num: "02",
-                  title: "Understand Skills",
-                  tag: "4-Tier Ledger",
-                  desc: "Extract coursework, projects, and skills into verified ledger: Self-Reported, Resume, Assessed, and Verified.",
-                  icon: Layers,
-                  color: "text-indigo-600",
-                  bg: "bg-indigo-50"
-                },
-                {
-                  num: "03",
-                  title: "Identify Gaps",
-                  tag: "Bayesian Delta",
-                  desc: "Compare your profile against target role benchmarks to pinpoint high-impact capability gaps with precision.",
-                  icon: Target,
-                  color: "text-orange-600",
-                  bg: "bg-orange-50"
-                },
-                {
-                  num: "04",
-                  title: "Build Roadmap",
-                  tag: "Topological DAG",
-                  desc: "Follow an ordered 3-phase milestone curriculum tailored to your weekly schedule so foundations precede advanced work.",
-                  icon: MapPin,
-                  color: "text-violet-600",
-                  bg: "bg-violet-50"
-                },
-                {
-                  num: "05",
-                  title: "Demonstrate",
-                  tag: "Proof of Work",
-                  desc: "Build hands-on capstones and complete 10-minute diagnostic checks to earn Verified competency status.",
-                  icon: Award,
-                  color: "text-emerald-600",
-                  bg: "bg-emerald-50"
-                },
-                {
-                  num: "06",
-                  title: "Grow & Reassess",
-                  tag: "Lifelong Loop",
-                  desc: "Update your competency profile continuously as you advance, unlocking senior benchmarks and higher trajectory.",
-                  icon: RefreshCw,
-                  color: "text-purple-700",
-                  bg: "bg-purple-100"
-                }
-              ].map((step, idx) => {
-                const Icon = step.icon;
-                return (
-                  <ScrollReveal key={idx} direction="up" delayMs={idx * 80}>
-                    <div className="h-full p-6 rounded-3xl bg-white border border-slate-200/90 shadow-soft-sm hover:shadow-soft-md hover:border-purple-300 flex flex-col justify-between relative group transition-all duration-300 overflow-hidden">
-                      {/* Watermarked Background Digit */}
-                      <span className="absolute right-3 -bottom-1 font-heading text-6xl font-black text-slate-100/80 group-hover:text-purple-100/60 transition-colors pointer-events-none select-none z-0">
-                        {step.num}
-                      </span>
-
-                      <div className="relative z-10">
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="font-heading text-3xl font-black text-unnati-indigo">
-                            {step.num}
-                          </span>
-                          <div className={`flex h-9 w-9 items-center justify-center rounded-xl bg-purple-50 border border-purple-100 shadow-soft-sm ${step.color} group-hover:scale-105 transition-transform`}>
-                            <Icon className="h-4.5 w-4.5" />
-                          </div>
-                        </div>
-
-                        <span className="inline-block text-[10px] uppercase font-bold tracking-wider text-unnati-saffron mb-1">
-                          {step.tag}
-                        </span>
-                        
-                        <h3 className="font-heading text-[16px] font-bold text-slate-900 mb-2 group-hover:text-unnati-indigo transition-colors">
-                          {step.title}
-                        </h3>
-                        <p className="text-[13px] text-slate-600 leading-relaxed font-normal">
-                          {step.desc}
-                        </p>
-                      </div>
-
-                      <div className="relative z-10 pt-4 mt-2">
-                        {idx === 5 ? (
-                          <div className="pt-3 border-t border-purple-200/80 flex items-center justify-between text-[11px] font-bold text-unnati-indigo">
-                            <span className="flex items-center gap-1.5">
-                              <RefreshCw className="h-3.5 w-3.5 animate-spin text-unnati-saffron" />
-                              <span>Continuous Loop ↻</span>
-                            </span>
-                            <span className="text-[10px] bg-purple-100 text-unnati-indigo px-2 py-0.5 rounded-full font-bold">
-                              Adaptive
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="pt-3 border-t border-slate-200/70 flex items-center justify-between text-[11px] font-bold text-slate-400 group-hover:text-unnati-indigo transition-colors">
-                            <span>Stage {step.num} of 06</span>
-                            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 text-unnati-saffron" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </ScrollReveal>
-                );
-              })}
-            </div>
+            {/* Interactive Scroll-Driven Career Growth Journey Timeline */}
+            <JourneyTimelineProgress />
           </div>
         </section>
+
+        <SectionTransition fromColor="#F6F7FC" toColor="#F8FAFC" pattern="line" />
 
         {/* ========================================================
             SECTION 4: PRODUCT SHOWCASE (Epiminds / Cerebrium Working Tools)
@@ -725,31 +615,32 @@ export default function HomePage() {
           </ScrollReveal>
 
           {/* Feature Showcase Tabs */}
-          <div className="flex flex-wrap justify-center gap-2.5 mb-10">
+          <StaggerContainer delayStepMs={60} className="flex flex-wrap justify-center gap-2.5 mb-10">
             {[
               { id: "dashboard", label: "Learner Dashboard", icon: LayoutDashboard },
               { id: "explore", label: "Career Discovery", icon: Compass },
               { id: "assessments", label: "Diagnostic Checks", icon: FileCheck2 },
               { id: "roadmap", label: "3-Phase Roadmap", icon: MapPin },
               { id: "companion", label: "AI Career Mentor", icon: MessageSquare },
-            ].map((tab) => {
+            ].map((tab, idx) => {
               const Icon = tab.icon;
               return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveShowcaseTab(tab.id as any)}
-                  className={`flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                    activeShowcaseTab === tab.id
-                      ? "bg-unnati-indigo text-white shadow-soft-md"
-                      : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
-                  }`}
-                >
-                  <Icon className="h-4 w-4 shrink-0" />
-                  <span className="whitespace-nowrap">{tab.label}</span>
-                </button>
+                <StaggerItem key={tab.id} index={idx} direction="up">
+                  <button
+                    onClick={() => setActiveShowcaseTab(tab.id as any)}
+                    className={`flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                      activeShowcaseTab === tab.id
+                        ? "bg-unnati-indigo text-white shadow-soft-md scale-105"
+                        : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-purple-300"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4 shrink-0" />
+                    <span className="whitespace-nowrap">{tab.label}</span>
+                  </button>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerContainer>
 
           {/* Showcase Display Card */}
           <ScrollReveal direction="up" delayMs={100}>
@@ -1144,6 +1035,8 @@ export default function HomePage() {
           </div>
         </section>
 
+        <SectionTransition fromColor="#F8FAFC" toColor="#FAF7FF" pattern="line" />
+
         {/* ========================================================
             SECTION 5: INTERACTIVE SKILL GAP DIAGNOSTIC
             Surface: Subtle lavender and peach ambient gradient
@@ -1165,21 +1058,22 @@ export default function HomePage() {
           </ScrollReveal>
 
           {/* Domain Tabs (5 Multi-Disciplinary Tracks) */}
-          <div className="flex flex-wrap justify-center gap-2.5 mb-10">
-            {(["business", "data", "finance", "design", "tech"] as const).map((key) => (
-              <button
-                key={key}
-                onClick={() => setSelectedDemoDomain(key)}
-                className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                  selectedDemoDomain === key
-                    ? "bg-unnati-indigo text-white shadow-soft-md"
-                    : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200"
-                }`}
-              >
-                <span className="whitespace-nowrap">{domainDemos[key].domain}</span>
-              </button>
+          <StaggerContainer delayStepMs={60} className="flex flex-wrap justify-center gap-2.5 mb-10">
+            {(["business", "data", "finance", "design", "tech"] as const).map((key, idx) => (
+              <StaggerItem key={key} index={idx} direction="up">
+                <button
+                  onClick={() => setSelectedDemoDomain(key)}
+                  className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                    selectedDemoDomain === key
+                      ? "bg-unnati-indigo text-white shadow-soft-md scale-105"
+                      : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-purple-300"
+                  }`}
+                >
+                  <span className="whitespace-nowrap">{domainDemos[key].domain}</span>
+                </button>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
 
           {/* Interactive Calculation Card */}
           <ScrollReveal direction="up" delayMs={100}>
@@ -1198,7 +1092,9 @@ export default function HomePage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 py-8 border-b border-slate-100 text-center">
                 <div>
                   <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Estimated Readiness</p>
-                  <p className="font-heading text-4xl sm:text-5xl font-black text-emerald-600 mt-2">{currentDemo.readinessPct}%</p>
+                  <p className="font-heading text-4xl sm:text-5xl font-black text-emerald-600 mt-2">
+                    <CountUpNumber value={currentDemo.readinessPct} suffix="%" />
+                  </p>
                   <p className="text-xs text-slate-400 mt-1">Based on sample candidate profile</p>
                 </div>
                 <div>
@@ -1218,14 +1114,16 @@ export default function HomePage() {
                 <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-4">
                   Recommended Skills to Strengthen Your Profile:
                 </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                <StaggerContainer delayStepMs={70} className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                   {currentDemo.skillsToLearn.map((skill, idx) => (
-                    <div key={idx} className="p-4 rounded-xl bg-purple-50/70 border border-purple-200 text-xs sm:text-[13px] font-semibold text-unnati-indigo flex items-center gap-2.5">
-                      <CheckCircle2 className="h-4 w-4 text-unnati-saffron shrink-0" />
-                      <span>{skill}</span>
-                    </div>
+                    <StaggerItem key={idx} index={idx} direction="up">
+                      <div className="p-4 rounded-xl bg-purple-50/70 border border-purple-200 text-xs sm:text-[13px] font-semibold text-unnati-indigo flex items-center gap-2.5 hover:border-purple-300 transition-colors">
+                        <CheckCircle2 className="h-4 w-4 text-unnati-saffron shrink-0" />
+                        <span>{skill}</span>
+                      </div>
+                    </StaggerItem>
                   ))}
-                </div>
+                </StaggerContainer>
               </div>
 
               {/* How Readiness is Calculated Callout */}
@@ -1257,6 +1155,8 @@ export default function HomePage() {
           </div>
         </section>
 
+        <SectionTransition fromColor="#ffffff" toColor="#2A0E5C" pattern="none" />
+
         {/* ========================================================
             SECTION 6: TRUST, ETHICS & DATA PROTECTION (Deep Brand Purple)
             Surface: Deep brand purple
@@ -1277,8 +1177,8 @@ export default function HomePage() {
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <ScrollReveal direction="up" delayMs={0}>
+            <StaggerContainer delayStepMs={120} className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <StaggerItem index={0} direction="up">
                 <div className="p-7 rounded-2xl bg-white/5 border border-white/10 h-full">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300 font-bold mb-4">
                     <ShieldCheck className="h-6 w-6" />
@@ -1288,9 +1188,9 @@ export default function HomePage() {
                     Classified as Non-Annex III formative mentorship under AI governance. We provide guidance for candidate self-growth—never automated rejection or high-risk employee monitoring.
                   </p>
                 </div>
-              </ScrollReveal>
+              </StaggerItem>
 
-              <ScrollReveal direction="up" delayMs={100}>
+              <StaggerItem index={1} direction="up">
                 <div className="p-7 rounded-2xl bg-white/5 border border-white/10 h-full">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-500/20 text-orange-300 font-bold mb-4">
                     <Lock className="h-6 w-6" />
@@ -1300,9 +1200,9 @@ export default function HomePage() {
                     Your data belongs to you. When you request account deletion, all private documents and profile records are cryptographically wiped within 72 hours under DPDP Act requirements.
                   </p>
                 </div>
-              </ScrollReveal>
+              </StaggerItem>
 
-              <ScrollReveal direction="up" delayMs={200}>
+              <StaggerItem index={2} direction="up">
                 <div className="p-7 rounded-2xl bg-white/5 border border-white/10 h-full">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/20 text-purple-300 font-bold mb-4">
                     <CheckCheck className="h-6 w-6" />
@@ -1312,8 +1212,8 @@ export default function HomePage() {
                     We clearly distinguish between self-reported skills, AI-extracted background, and diagnostic checks. You can inspect or correct any detail at any time.
                   </p>
                 </div>
-              </ScrollReveal>
-            </div>
+              </StaggerItem>
+            </StaggerContainer>
 
             <div className="text-center pt-3">
               <Link href="/privacy" className="text-xs sm:text-sm text-purple-300 hover:text-white underline font-semibold">
@@ -1322,6 +1222,8 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        <SectionTransition fromColor="#2A0E5C" toColor="#ffffff" pattern="none" />
 
         {/* ========================================================
             SECTION 7: FREQUENTLY ASKED QUESTIONS
@@ -1343,37 +1245,38 @@ export default function HomePage() {
               </div>
             </ScrollReveal>
 
-            <div className="space-y-4">
+            <StaggerContainer delayStepMs={65} className="space-y-4">
               {faqs.map((faq, idx) => {
                 const isOpen = openFaqIndex === idx;
                 return (
-                  <div
-                    key={idx}
-                    className="clean-card overflow-hidden transition-all border border-slate-200 bg-white"
-                  >
-                    <button
-                      onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                      className="w-full flex items-center justify-between p-5 sm:p-6 text-left text-sm sm:text-base font-bold text-slate-900 hover:text-unnati-indigo transition-colors cursor-pointer"
-                      aria-expanded={isOpen}
-                    >
-                      <span>{faq.q}</span>
-                      {isOpen ? (
-                        <ChevronUp className="h-5 w-5 text-unnati-saffron shrink-0 ml-3" />
-                      ) : (
-                        <ChevronDown className="h-5 w-5 text-slate-400 shrink-0 ml-3" />
+                  <StaggerItem key={idx} index={idx} direction="up">
+                    <div className="clean-card overflow-hidden transition-all border border-slate-200 bg-white">
+                      <button
+                        onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                        className="w-full flex items-center justify-between p-5 sm:p-6 text-left text-sm sm:text-base font-bold text-slate-900 hover:text-unnati-indigo transition-colors cursor-pointer"
+                        aria-expanded={isOpen}
+                      >
+                        <span>{faq.q}</span>
+                        {isOpen ? (
+                          <ChevronUp className="h-5 w-5 text-unnati-saffron shrink-0 ml-3" />
+                        ) : (
+                          <ChevronDown className="h-5 w-5 text-slate-400 shrink-0 ml-3" />
+                        )}
+                      </button>
+                      {isOpen && (
+                        <div className="px-5 sm:px-6 pb-6 pt-0 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 animate-in fade-in duration-200">
+                          <p className="mt-3.5 leading-relaxed">{faq.a}</p>
+                        </div>
                       )}
-                    </button>
-                    {isOpen && (
-                      <div className="px-5 sm:px-6 pb-6 pt-0 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 animate-in fade-in duration-200">
-                        <p className="mt-3.5 leading-relaxed">{faq.a}</p>
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  </StaggerItem>
                 );
               })}
-            </div>
+            </StaggerContainer>
           </div>
         </section>
+
+        <SectionTransition fromColor="#ffffff" toColor="#F8FAFC" pattern="line" />
 
         {/* ========================================================
             SECTION 8: FINAL CONVERSION BANNER
@@ -1389,18 +1292,22 @@ export default function HomePage() {
                 <p className="text-sm sm:text-base text-purple-200 max-w-xl mx-auto mt-4 leading-relaxed">
                   Join students, graduates, and professionals building verifiable capability and moving toward the careers they deserve.
                 </p>
-                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Link href="/onboarding" className="w-full sm:w-auto">
-                    <Button variant="saffron" size="lg" className="btn-shimmer w-full sm:w-auto text-base font-bold shadow-soft-md shadow-glow-saffron h-13 px-8 rounded-2xl text-white">
-                      Get Started Free <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </Link>
-                  <Link href="/explore" className="w-full sm:w-auto">
-                    <Button variant="outline" size="lg" className="w-full sm:w-auto text-base font-semibold bg-white/10 hover:bg-white/20 text-white border-white/30 h-13 px-8 rounded-2xl">
-                      Explore Career Pathways
-                    </Button>
-                  </Link>
-                </div>
+                <StaggerContainer delayStepMs={100} className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <StaggerItem index={0} direction="up" className="w-full sm:w-auto">
+                    <Link href="/onboarding" className="w-full sm:w-auto">
+                      <Button variant="saffron" size="lg" className="btn-shimmer w-full sm:w-auto text-base font-bold shadow-soft-md shadow-glow-saffron h-13 px-8 rounded-2xl text-white">
+                        Get Started Free <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    </Link>
+                  </StaggerItem>
+                  <StaggerItem index={1} direction="up" className="w-full sm:w-auto">
+                    <Link href="/explore" className="w-full sm:w-auto">
+                      <Button variant="outline" size="lg" className="w-full sm:w-auto text-base font-semibold bg-white/10 hover:bg-white/20 text-white border-white/30 h-13 px-8 rounded-2xl">
+                        Explore Career Pathways
+                      </Button>
+                    </Link>
+                  </StaggerItem>
+                </StaggerContainer>
               </div>
             </ScrollReveal>
           </div>
