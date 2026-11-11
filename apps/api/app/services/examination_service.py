@@ -1339,3 +1339,4 @@ def get_examination_analytics(db: Session) -> Dict[str, Any]:
         ],
         "recent_flagged_count": recent_flagged
     }
+

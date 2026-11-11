@@ -12,6 +12,13 @@ from app.models.examination import (
     ExamProctoringEvent,
     ExamCertificate,
 )
+from app.models.resume import (
+    Resume,
+    ResumeVersion,
+    ResumeATSReport,
+    JobDescription,
+    ResumeJDMatch,
+)
 
 __all__ = [
     "Base",
@@ -37,5 +44,10 @@ __all__ = [
     "ExamAttemptAnswer",
     "ExamProctoringEvent",
     "ExamCertificate",
+    "Resume",
+    "ResumeVersion",
+    "ResumeATSReport",
+    "JobDescription",
+    "ResumeJDMatch",
 ]
 

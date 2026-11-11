@@ -759,6 +759,158 @@ export const api = {
   async getAdminExamAnalytics(token: string): Promise<ExamAnalyticsData> {
     return request<ExamAnalyticsData>("/api/v1/examinations/admin/analytics", { method: "GET" }, token);
   },
+
+  // ============================================================================
+  // RESUME INTELLIGENCE, ATS & JOB DESCRIPTION MATCHING APIS
+  // ============================================================================
+
+  async getResumes(token: string): Promise<ResumeListItem[]> {
+    return request<ResumeListItem[]>("/api/v1/resumes", { method: "GET" }, token);
+  },
+
+  async createResume(
+    token: string,
+    data: { title: string; target_role?: string; template_id?: string; import_from_profile?: boolean }
+  ): Promise<ResumeDetail> {
+    return request<ResumeDetail>("/api/v1/resumes", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }, token);
+  },
+
+  async uploadAndParseResume(
+    token: string,
+    file: File,
+    title?: string,
+    targetRole?: string,
+    templateId?: string
+  ): Promise<ResumeDetail> {
+    const formData = new FormData();
+    formData.append("file", file);
+    if (title) formData.append("title", title);
+    if (targetRole) formData.append("target_role", targetRole);
+    if (templateId) formData.append("template_id", templateId);
+
+    const res = await fetch(`${API_BASE_URL}/api/v1/resumes/upload-and-parse`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || "Failed to upload and parse resume.");
+    }
+    return res.json();
+  },
+
+  async getResumeDetail(token: string, resumeId: string): Promise<ResumeDetail> {
+    return request<ResumeDetail>(`/api/v1/resumes/${resumeId}`, { method: "GET" }, token);
+  },
+
+  async updateResume(
+    token: string,
+    resumeId: string,
+    data: { title?: string; target_role?: string; template_id?: string; is_primary?: boolean }
+  ): Promise<ResumeListItem> {
+    return request<ResumeListItem>(`/api/v1/resumes/${resumeId}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }, token);
+  },
+
+  async deleteResume(token: string, resumeId: string): Promise<void> {
+    return request<void>(`/api/v1/resumes/${resumeId}`, { method: "DELETE" }, token);
+  },
+
+  async duplicateResume(token: string, resumeId: string): Promise<ResumeDetail> {
+    return request<ResumeDetail>(`/api/v1/resumes/${resumeId}/duplicate`, { method: "POST" }, token);
+  },
+
+  async saveResumeVersion(token: string, resumeId: string, versionData: any): Promise<ResumeVersionData> {
+    return request<ResumeVersionData>(`/api/v1/resumes/${resumeId}/versions`, {
+      method: "POST",
+      body: JSON.stringify(versionData),
+    }, token);
+  },
+
+  async runResumeATSCheck(token: string, resumeId: string): Promise<ATSReportData> {
+    return request<ATSReportData>(`/api/v1/resumes/${resumeId}/ats-check`, { method: "POST" }, token);
+  },
+
+  async getResumeATSReports(token: string, resumeId: string): Promise<ATSReportData[]> {
+    return request<ATSReportData[]>(`/api/v1/resumes/${resumeId}/ats-reports`, { method: "GET" }, token);
+  },
+
+  async getAIAssistance(
+    token: string,
+    data: { action_type: string; context_text: string; role_or_target?: string }
+  ): Promise<{ action_type: string; original: string; enhanced: string; explanation: string; metrics_introduced: boolean }> {
+    return request<{ action_type: string; original: string; enhanced: string; explanation: string; metrics_introduced: boolean }>(
+      "/api/v1/resumes/ai-assist",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
+  async getJobDescriptions(token: string): Promise<JobDescriptionItem[]> {
+    return request<JobDescriptionItem[]>("/api/v1/resumes/job-descriptions", { method: "GET" }, token);
+  },
+
+  async createJobDescription(
+    token: string,
+    data: { title: string; company?: string; location?: string; raw_text: string; experience_requirement_years?: number }
+  ): Promise<JobDescriptionItem> {
+    return request<JobDescriptionItem>("/api/v1/resumes/job-descriptions", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }, token);
+  },
+
+  async uploadJobDescription(
+    token: string,
+    file: File,
+    title?: string,
+    company?: string
+  ): Promise<JobDescriptionItem> {
+    const formData = new FormData();
+    formData.append("file", file);
+    if (title) formData.append("title", title);
+    if (company) formData.append("company", company);
+
+    const res = await fetch(`${API_BASE_URL}/api/v1/resumes/job-descriptions/upload`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || "Failed to upload and parse job description.");
+    }
+    return res.json();
+  },
+
+  async deleteJobDescription(token: string, jdId: string): Promise<void> {
+    return request<void>(`/api/v1/resumes/job-descriptions/${jdId}`, { method: "DELETE" }, token);
+  },
+
+  async matchResumeWithJD(token: string, resumeId: string, jdId: string): Promise<ResumeJDMatchData> {
+    return request<ResumeJDMatchData>(`/api/v1/resumes/${resumeId}/match-jd/${jdId}`, { method: "POST" }, token);
+  },
+
+  async compareResumeMultipleJDs(token: string, resumeId: string): Promise<ResumeCompareMatrixData> {
+    return request<ResumeCompareMatrixData>(`/api/v1/resumes/${resumeId}/compare-jds`, { method: "POST" }, token);
+  },
+
+  getResumeExportUrl(resumeId: string, format: "pdf" | "docx"): string {
+    return `${API_BASE_URL}/api/v1/resumes/${resumeId}/export/${format}`;
+  },
 };
 
 export interface CohortSummary {
@@ -1077,5 +1229,194 @@ export interface ExamAnalyticsData {
   integrity_risk_distribution: Record<string, number>;
   top_knowledge_gaps: { skill: string; frequency: number; track: string }[];
   recent_flagged_count: number;
+}
+
+export interface ResumeListItem {
+  id: string;
+  user_id: string;
+  title: string;
+  target_role?: string | null;
+  is_primary: boolean;
+  template_id: string;
+  latest_ats_score?: number | null;
+  version_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PersonalInfoData {
+  full_name: string;
+  email: string;
+  phone: string;
+  location: string;
+  linkedin_url?: string;
+  github_url?: string;
+  portfolio_url?: string;
+}
+
+export interface WorkExperienceData {
+  id?: string;
+  company: string;
+  role: string;
+  location?: string;
+  start_date: string;
+  end_date?: string;
+  is_current: boolean;
+  highlights: string[];
+}
+
+export interface EducationData {
+  id?: string;
+  institution: string;
+  degree: string;
+  field: string;
+  start_year?: number;
+  end_year?: number;
+  grade?: string;
+}
+
+export interface ProjectData {
+  id?: string;
+  title: string;
+  role?: string;
+  description: string;
+  technologies: string[];
+  link?: string;
+  highlights: string[];
+}
+
+export interface CertificationData {
+  id?: string;
+  name: string;
+  issuer?: string;
+  issue_date?: string;
+  credential_id?: string;
+  credential_url?: string;
+}
+
+export interface InternshipData {
+  id?: string;
+  company: string;
+  role: string;
+  duration?: string;
+  highlights: string[];
+}
+
+export interface ResumeVersionData {
+  id: string;
+  resume_id: string;
+  version_number: number;
+  version_label: string;
+  template_id: string;
+  personal_info: PersonalInfoData;
+  professional_summary?: string | null;
+  headline?: string | null;
+  work_experience: WorkExperienceData[];
+  education: EducationData[];
+  technical_skills: string[];
+  business_skills: string[];
+  projects: ProjectData[];
+  internships: InternshipData[];
+  certifications: CertificationData[];
+  achievements: string[];
+  publications: Record<string, any>[];
+  leadership: Record<string, any>[];
+  languages: { language: string; proficiency: string }[];
+  section_config: Record<string, any>;
+  latest_ats_score?: number | null;
+  is_published: boolean;
+  created_at: string;
+}
+
+export interface ResumeDetail {
+  id: string;
+  user_id: string;
+  title: string;
+  target_role?: string | null;
+  is_primary: boolean;
+  template_id: string;
+  current_version?: ResumeVersionData | null;
+  versions: ResumeVersionData[];
+  latest_ats_score?: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ATSReportData {
+  id: string;
+  resume_id: string;
+  resume_version_id?: string | null;
+  overall_score: number;
+  readiness_level: "Exceptional" | "Competitive" | "Needs Improvement" | "Critical Issues";
+  dimension_scores: Record<string, number>;
+  formatting_warnings: { severity: "low" | "medium" | "high"; message: string }[];
+  missing_sections: string[];
+  weak_bullet_points: { original: string; section: string; context?: string; issue: string; suggestion: string }[];
+  grammar_spelling_issues: Record<string, any>[];
+  recommended_keywords: string[];
+  actionable_recommendations: { title: string; description: string }[];
+  created_at: string;
+}
+
+export interface JobDescriptionItem {
+  id: string;
+  user_id: string;
+  title: string;
+  company?: string | null;
+  location?: string | null;
+  employment_type?: string | null;
+  experience_requirement_years?: number | null;
+  source_url?: string | null;
+  raw_text: string;
+  extracted_intelligence: {
+    mandatory_skills?: string[];
+    preferred_skills?: string[];
+    tools_technologies?: string[];
+    domain_knowledge?: string[];
+    seniority_level?: string;
+    education_requirement?: string;
+    key_responsibilities?: string[];
+  };
+  created_at: string;
+}
+
+export interface ResumeJDMatchData {
+  id: string;
+  resume_id: string;
+  resume_version_id: string;
+  job_description_id: string;
+  job_title: string;
+  company?: string | null;
+  overall_match_score: number;
+  skill_alignment_score: number;
+  experience_alignment_score: number;
+  education_alignment_score: number;
+  project_relevance_score: number;
+  keyword_coverage_score: number;
+  matched_skills: { name: string; evidence_type: "DIRECT_EXPERIENCE" | "PROJECT" | "INFERRED"; evidence_label: string; is_mandatory: boolean; confidence: number }[];
+  partially_matched_skills: { name: string; matched_as?: string; reason: string; is_mandatory: boolean }[];
+  missing_skills: { name: string; is_mandatory: boolean; category: string }[];
+  mandatory_gaps: string[];
+  preferred_gaps: string[];
+  improvement_suggestions: { section: string; context?: string; original: string; suggested: string; reason: string; expected_impact: string }[];
+  learning_recommendations: { skill: string; module_name: string; roadmap_action: string; urgency: string; estimated_hours: number }[];
+  created_at: string;
+}
+
+export interface MultipleJDCompareItem {
+  job_id: string;
+  job_title: string;
+  company?: string | null;
+  overall_match_score: number;
+  strongest_area: string;
+  main_gap: string;
+  mandatory_unmet_count: number;
+}
+
+export interface ResumeCompareMatrixData {
+  resume_id: string;
+  resume_title: string;
+  target_role?: string | null;
+  comparisons: MultipleJDCompareItem[];
 }
 

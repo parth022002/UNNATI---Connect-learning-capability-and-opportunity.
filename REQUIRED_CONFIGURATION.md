@@ -1,19 +1,19 @@
 # UNNATI — Required Configuration & Services Guide
-## AI-Proctored Examination & Assessment Integrity System
+## AI Examinations, Resume Intelligence, ATS & Job Description Systems
 
-This document outlines all external services, environment variables, configuration parameters, and development fallbacks required to operate the UNNATI Examination & Proctoring System in development and production environments.
+This document outlines all external services, environment variables, configuration parameters, and development fallbacks required to operate the UNNATI Examination, Resume Intelligence, ATS, and Job Matching Systems in development and production environments.
 
 ---
 
 ## 1. External Services & Providers Overview
 
-| Service / Provider | Purpose in Examination System | Mandatory in Prod? | Local Development Fallback |
+| Service / Provider | Purpose in Platform | Mandatory in Prod? | Local Development Fallback |
 | :--- | :--- | :--- | :--- |
-| **PostgreSQL 15+** | Relational data persistence (Examinations, Attempts, Telemetry, Certificates) | **Yes** | **SQLite (In-Memory / File)**: Automatically used if `DATABASE_URL` is omitted or points to `sqlite:///./unnati.db`. |
-| **Google Gemini API** (`gemini-2.5-flash`) | Semantic evaluation of descriptive responses, scenario rubrics, and personalized study recommendations | **Yes** (Recommended) | **Deterministic Heuristic Evaluator**: If `GEMINI_API_KEY` is unset or unreachable, the system automatically uses token-overlap rubric scoring and rule-based feedback without throwing 500 errors. |
-| **Clerk Auth** | Learner authentication, examiner role authorization, and JWT verification | **Yes** | **Header/Mock Auth**: In local development, `X-User-Id` and `X-User-Role` headers are accepted when Clerk keys are in test mode. |
-| **WebRTC / MediaDevices** | Client-side camera presence testing and proctoring feed | **Yes** (Client browser) | **Mock Camera Stream / Graceful Skip**: Users in environments without webcam hardware can still attempt unproctored examinations; proctored attempts cleanly indicate hardware absence. |
-| **Local / S3 Storage** | Digital certificate PDF storage and tamper-evident exports | Optional | **Data URI / Dynamic Render**: Dynamic on-the-fly rendering with SHA-256 verification hash without requiring external cloud object buckets. |
+| **PostgreSQL 15+** | Relational data persistence (Examinations, Resumes, Versions, ATS Reports, JDs) | **Yes** | **SQLite (In-Memory / File)**: Automatically used if `DATABASE_URL` is omitted or points to `sqlite:///./unnati.db`. |
+| **Google Gemini API** (`gemini-2.5-flash`) | Descriptive evaluation, STAR accomplishment rewriting, JD intelligence extraction | **Yes** (Recommended) | **Deterministic Heuristic Evaluator**: If `GEMINI_API_KEY` is unset or unreachable, the system automatically uses token-overlap rubric scoring, STAR regex enhancers, and rule-based feedback without throwing 500 errors. |
+| **Clerk Auth** | Learner authentication, user ownership enforcement, and JWT verification | **Yes** | **Header/Mock Auth**: In local development, `X-User-Id` and `X-User-Role` headers are accepted when Clerk keys are in test mode. |
+| **Document Processing** (`pypdf`, `python-docx`, `reportlab`) | PDF/DOCX text extraction, machine-readable ATS exports | **Yes** | **Native Library Execution**: Included in `apps/api/.venv`. Plain text fallback for non-binary formats; zipfile XML fallback for DOCX. |
+| **WebRTC / MediaDevices** | Client-side camera presence testing and proctoring feed | **Yes** (Client browser) | **Mock Camera Stream / Graceful Skip**: Users in environments without webcam hardware can still attempt unproctored examinations. |
 
 ---
 
@@ -110,3 +110,4 @@ pnpm dev
 - **Active Exam Room:** `http://localhost:3000/examinations/1/take`
 - **Examiner & Integrity Review Dashboard:** `http://localhost:3000/examinations/admin`
 - **Public Certificate Verification:** `http://localhost:3000/examinations/certificates/UNN-APM-2026-6819`
+

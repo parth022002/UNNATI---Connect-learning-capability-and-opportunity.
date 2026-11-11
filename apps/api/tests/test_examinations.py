@@ -328,3 +328,4 @@ def test_admin_analytics_endpoint():
     assert "pass_rate" in analytics
     assert "integrity_risk_distribution" in analytics
     assert "top_knowledge_gaps" in analytics
+

@@ -275,3 +275,4 @@ class ExamCertificate(Base, UUIDPrimaryKeyMixin, TimestampMixin):
 
     examination: Mapped["Examination"] = relationship("Examination")
     user: Mapped["User"] = relationship("User")
+

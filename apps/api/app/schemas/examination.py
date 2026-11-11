@@ -311,3 +311,4 @@ class ExamAnalyticsResponse(BaseModel):
     integrity_risk_distribution: Dict[str, int]
     top_knowledge_gaps: List[Dict[str, Any]]
     recent_flagged_count: int
+

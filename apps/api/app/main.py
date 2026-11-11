@@ -11,6 +11,7 @@ from app.api.routes.assessments import router as assessments_router
 from app.api.routes.ai import router as ai_router
 from app.api.routes.ecosystem import router as ecosystem_router
 from app.api.routes.examinations import router as examinations_router
+from app.api.routes.resumes import router as resumes_router
 
 app = FastAPI(
     title="UNNATI (उन्नति) API",
@@ -50,6 +51,7 @@ app.include_router(ai_router)
 app.include_router(webhooks_router)
 app.include_router(ecosystem_router)
 app.include_router(examinations_router)
+app.include_router(resumes_router)
 
 @app.get("/")
 async def root():

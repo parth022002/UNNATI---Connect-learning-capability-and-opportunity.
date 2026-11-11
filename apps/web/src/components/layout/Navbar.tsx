@@ -18,7 +18,8 @@ import {
   HelpCircle, 
   Briefcase,
   Layers,
-  Award
+  Award,
+  FileText
 } from "lucide-react";
 
 interface NavbarProps {
@@ -45,6 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
   const authenticatedLinks = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/roadmap", label: "My Roadmap", icon: MapPin },
+    { href: "/resumes", label: "Resume Studio", icon: FileText },
     { href: "/examinations", label: "Examinations", icon: Award },
     { href: "/explore", label: "Career Pathways", icon: Compass },
     { href: "/assessments", label: "Skills Check", icon: FileCheck2 },
