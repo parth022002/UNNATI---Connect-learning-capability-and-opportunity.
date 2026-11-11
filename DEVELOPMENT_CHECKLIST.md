@@ -116,7 +116,7 @@ BACKEND & API SERVICES:     [█████████████████
   *Status:* **Completed** (Verified)
 - [x] **`FTR-06`**: **Top Baseline Alignment & Visual Separation:** Strict CSS Grid `lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]` with `items-start`, uniform `h-6` baseline alignment across all column headers, uniform `mt-4` heading-to-link spacing, and distinctive `bg-slate-50/95` surface with `border-t-2 border-slate-200/90`.  
   *Status:* **Completed** (Verified)
-- [x] **`FTR-07`**: **Sub-Footer Bar & Developer Credit:** Full-width divider (`border-t border-slate-200/90 bg-slate-100/70`), Copyright notice, DPDP Act 2026 badge, secondary legal links, and tasteful, prominent developer credit: `Designed & Developed by Part Ahuja` in a centered pill container.  
+- [x] **`FTR-07`**: **Sub-Footer Bar & Developer Credit:** Full-width divider (`border-t border-slate-200/90 bg-slate-100/70`), Copyright notice, DPDP Act 2026 badge, secondary legal links, and tasteful, prominent developer credit: `Designed & Developed by Parth Ahuja` in a centered pill container.  
   *Status:* **Completed** (Verified)
 - [x] **`FTR-08`**: **Chatbot Clearance:** Generous bottom clearance padding (`pb-28 sm:pb-8`) and right margin (`sm:pr-40`) ensuring the floating AI companion never obscures footer text, links, or developer credit.  
   *Status:* **Completed** (Verified)
@@ -226,7 +226,7 @@ BACKEND & API SERVICES:     [█████████████████
 | **Full-Width Section Alternation** | 8 distinct full-width surface tiers (Hero lavender, Audience white, Journey subtle neutral, Showcase cool neutral, Diagnostic lavender/peach, Trust deep purple, FAQ white, CTA subtle neutral) | **PASSED** |
 | **Career Journey Heading & Flow** | Complete heading: `How UNNATI Powers Your Lifelong Career Growth`, zero clipping/stray dashes, animated desktop connector line | **PASSED** |
 | **5-Column Brand Footer** | Balanced `1.5fr:1fr:1fr:1fr:1fr` grid, common top baseline, readable 14px links, GRO email, open-source repo | **PASSED** |
-| **Developer Credit** | Prominently and tastefully centered in sub-footer: `Designed & Developed by Part Ahuja` | **PASSED** |
+| **Developer Credit** | Prominently and tastefully centered in sub-footer: `Designed & Developed by Parth Ahuja` | **PASSED** |
 | **Chatbot Footer Clearance** | Bottom padding (`pb-28 sm:pb-8`) & right padding (`sm:pr-40`) prevent overlap | **PASSED** |
 | **Typography Hierarchy** | Fluid scale: H1 62px, H2 42px, Body 15-16px, Nav 14.5px | **PASSED** |
 | **Continuous Career Journey** | 6 stages visually connected with continuous loop indicator at Stage 6 | **PASSED** |
@@ -257,7 +257,7 @@ BACKEND & API SERVICES:     [█████████████████
 | **15** | **Footer Readability** | 9.5+ | **9.8 / 10** | 14px bold headers, 14px medium links, controlled description width (`max-w-sm`), single-row social icons. |
 | **16** | **Footer/Body Separation**| 9.5+ | **9.8 / 10** | Grounding `bg-slate-50/95` background with `border-t-2 border-slate-200/90`, step-down sub-footer divider `bg-slate-100/70`. |
 | **17** | **Background Motion** | 9.5+ | **9.7 / 10** | 7-stage ambient progression, drifting gradient orbs, subtle grid overlay, radial vignette, `prefers-reduced-motion` compliant. |
-| **18** | **Developer Credit** | 9.5+ | **9.9 / 10** | Dignified pill container centered in sub-footer: `Designed & Developed by Part Ahuja`. Readable on mobile & desktop. |
+| **18** | **Developer Credit** | 9.5+ | **9.9 / 10** | Dignified pill container centered in sub-footer: `Designed & Developed by Parth Ahuja`. Readable on mobile & desktop. |
 | **19** | **Responsive Design** | 9.5+ | **9.8 / 10** | Tested across 10 viewports (360px–1920px), zero horizontal overflow, fluid font clamps, adaptive columns. |
 | **20** | **Accessibility (WCAG 2.2)**| 9.5+ | **9.8 / 10** | All pairings meet/exceed 4.5:1 ratio (Indigo on White: 11.2:1), visible focus rings, semantic tags, &ge;48px touch targets. |
 | **OVERALL COMPOSITE** | **9.5+** | **9.85 / 10** | **Flagship Production Quality Achieved Across All Criteria** |
@@ -274,7 +274,7 @@ BACKEND & API SERVICES:     [█████████████████
 | **Floating Launcher Redesign** | Compact circular button (48–54px desktop, 48–52px mobile) | **PASSED** | 52px desktop / 48px mobile circular button, UNNATI purple (`bg-unnati-indigo`), white chat icon, subtle beacon dot. |
 | **No Permanent Banner** | Large permanent banner banner/pill removed | **PASSED** | Clean circular launcher only, subtle hover tooltip on desktop ("Ask UNNATI"). |
 | **Footer Collision Prevention** | IntersectionObserver & dynamic elevation above footer | **PASSED** | Elevates to `top: 223px` above footer on desktop; auto-hides on mobile when space < 150px. `overlapsCredit: false`. |
-| **Protected Footer Content** | Links, social icons, copyright, and developer credit unblocked | **PASSED** | `Designed & Developed by Part Ahuja` and all sub-footer links remain 100% visible and unblocked. |
+| **Protected Footer Content** | Links, social icons, copyright, and developer credit unblocked | **PASSED** | `Designed & Developed by Parth Ahuja` and all sub-footer links remain 100% visible and unblocked. |
 | **Chatbot Functionality** | Preserves state, history, suggestions, and clear close | **PASSED** | Verified full conversation flow, category filters, quick prompts, and escape/button dismissal. |
 | **Responsive QA (7 Viewports)**| Zero horizontal overflow across all required resolutions | **PASSED** | 360px, 390px, 411px, 768px, 1024px, 1440px, 1920px: `hasOverflow = false` across all. |
 | **Automated Test Suites** | 13/13 static routes generated, 0 type errors, 16/16 pytest | **PASSED** | Build: exit code 0; Typecheck: exit code 0; Pytest: 16/16 passed in 22.08s. |
@@ -324,7 +324,7 @@ BACKEND & API SERVICES:     [█████████████████
 | **Career Diagnostic Compensation** | Prominently displays median CTC and distinct market range | **VERIFIED** | Median `₹18.0L CTC` rendered in 3xl bold, with `Market Range: ₹12.0L – ₹24.0L CTC` clearly labeled beneath. | **9.9 / 10** |
 | **Region C: Footer Distinction & Alignment** | Soft lavender/grey `#F1F3F9` surface with `border-t-2 border-slate-300/80`; desktop headers align on exact baseline | **VERIFIED** | Desktop 5-col grid headers normalized to `h-8` with identical top baseline. Visible dividing top border. | **9.9 / 10** |
 | **Mobile Footer Sequence** | 1. Logo -> 2. Description -> 3. Socials -> 4-7 Accordions -> 8. Copyright strip -> 9. Developer credit | **VERIFIED** | Strict vertical sequence verified at 360px, 375px, 390px, 430px. Smooth accordion collapse/expand. | **9.9 / 10** |
-| **Developer Credit** | Dignified pill container with exact text `Designed & Developed by Part Ahuja` prominently in copyright strip | **VERIFIED** | Rendered in white pill with subtle border and shadow in sub-footer strip, terminating the footer sequence. | **10.0 / 10** |
+| **Developer Credit** | Dignified pill container with exact text `Designed & Developed by Parth Ahuja` prominently in copyright strip | **VERIFIED** | Rendered in white pill with subtle border and shadow in sub-footer strip, terminating the footer sequence. | **10.0 / 10** |
 | **Floating AI Launcher & Collision Avoidance** | Compact 48–52px circular purple button, z-50, dynamically elevates above footer without obscuring links or credit | **VERIFIED** | Verified via Playwright: launcher is fully clickable, elevates above footer, never covers links, credit, or copyright. | **10.0 / 10** |
 | **Scroll Motion & Headless Reliability** | ScrollReveal never hides content under fold; safety timer guarantees visibility | **VERIFIED** | `rootMargin: "250px 0px"`, threshold 0.05, 600ms fallback timer. All sections 100% visible in screenshots. | **9.9 / 10** |
 | **11-Viewport Responsive Verification** | Zero horizontal overflow across all tested viewports | **VERIFIED** | Tested at 360px, 375px, 390px, 411px, 430px, 768px, 1024px, 1280px, 1366px, 1440px, 1920px. `hasHorizontalOverflow = false` across all. | **9.9 / 10** |

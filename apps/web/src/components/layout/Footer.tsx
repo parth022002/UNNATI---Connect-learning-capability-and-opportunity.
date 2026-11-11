@@ -36,7 +36,10 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="border-t-2 border-slate-300/80 bg-[#F1F3F9] text-slate-700 relative z-10">
+    <footer className="relative z-10 brand-surface-bookend text-slate-700 border-t border-slate-200/90">
+      {/* Shared Brand Accent Line (Top Boundary matching Navbar) */}
+      <div className="brand-accent-line w-full" />
+
       {/* ========================================================
           MAIN 5-COLUMN FOOTER CONTAINER
           Proportions: Brand 1.5fr, Explore 1fr, Platform 1fr, For Learners 1fr, Trust 1fr
@@ -48,19 +51,19 @@ export const Footer: React.FC = () => {
               COLUMN 1 — BRAND (1.5fr)
              ---------------------------------------------------- */}
           <div className="space-y-4 lg:pr-4">
-            {/* Approved Logo Lockup */}
+            {/* Approved Logo Lockup (Matching Shared Brand Container Token) */}
             <Link 
               href="/" 
               className="inline-flex items-center gap-3.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet rounded-2xl"
               aria-label="UNNATI Home"
             >
-              <div className="flex h-13 w-13 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-100/90 via-white to-orange-50/80 p-1.5 border-2 border-purple-200/90 shadow-soft-md group-hover:border-unnati-violet group-hover:shadow-glow-violet transition-all shrink-0">
+              <div className="brand-logo-container relative flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-2xl p-1 transition-all duration-300 group-hover:scale-105 shrink-0">
                 <Image 
                   src="/logo.png" 
                   alt="UNNATI Official Logo" 
-                  width={52} 
-                  height={52} 
-                  className="h-10 w-10 sm:h-11 sm:w-11 object-contain transition-transform duration-300 group-hover:scale-105" 
+                  width={40} 
+                  height={40} 
+                  className="h-8 w-8 sm:h-9 sm:w-9 object-contain transition-transform duration-300" 
                   priority
                 />
               </div>
@@ -320,7 +323,7 @@ export const Footer: React.FC = () => {
       {/* ========================================================
           FOOTER BOTTOM STRIP (Full-Width Divider & Developer Credit)
          ======================================================== */}
-      <div className="border-t border-slate-300/80 bg-slate-200/70 py-6 sm:py-7">
+      <div className="border-t border-slate-200/90 bg-slate-100/80 py-6 sm:py-7">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-600">
           
           {/* Left: Copyright */}
@@ -328,11 +331,11 @@ export const Footer: React.FC = () => {
             <span className="font-medium">&copy; 2026 UNNATI. All rights reserved.</span>
           </div>
 
-          {/* Centre: Tasteful Developer Credit (Designed & Developed by Part Ahuja) */}
-          <div className="order-3 md:order-2 inline-flex items-center gap-2 font-medium text-slate-700 bg-white border border-slate-300/90 px-4 py-1.5 rounded-full shadow-soft-sm hover:border-purple-300 transition-colors">
+          {/* Centre: Tasteful Developer Credit (Designed & Developed by Parth Ahuja) */}
+          <div className="order-3 md:order-2 inline-flex items-center gap-2 font-medium text-slate-700 bg-white border border-slate-200 px-4 py-1.5 rounded-full shadow-soft-sm hover:border-purple-300 transition-colors">
             <span className="h-2 w-2 rounded-full bg-unnati-saffron animate-pulse shrink-0" />
             <span className="text-slate-500 text-xs">Designed &amp; Developed by</span>
-            <span className="font-bold text-unnati-indigo text-xs tracking-tight">Part Ahuja</span>
+            <span className="font-bold text-unnati-indigo text-xs tracking-tight">Parth Ahuja</span>
           </div>
 
           {/* Right: Legal & Compliance Links */}

@@ -55,6 +55,34 @@ body {
     linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
 }
 
+/* ========================================================
+   UNIFIED HEADER & FOOTER ARCHITECTURAL BOOKENDS
+   Shared surface, border, accent line, and logo container
+   ======================================================== */
+.brand-surface-bookend {
+  background-color: #F8FAFC;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(109, 40, 217, 0.04) 0px, transparent 45%),
+    radial-gradient(at 100% 100%, rgba(234, 88, 12, 0.04) 0px, transparent 45%);
+}
+
+.brand-accent-line {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(109, 40, 217, 0.4) 25%, rgba(234, 88, 12, 0.5) 75%, transparent 100%);
+}
+
+.brand-logo-container {
+  background: #FFFFFF;
+  border: 1.5px solid rgba(167, 139, 250, 0.45);
+  box-shadow: 0 2px 8px -1px rgba(76, 29, 149, 0.06), 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.brand-logo-container:hover {
+  border-color: #7C3AED;
+  box-shadow: 0 4px 14px -2px rgba(109, 40, 217, 0.18);
+}
+
 /* Ambient Glow Orbs (Subtle, Not Dark Neon) */
 .ambient-glow-violet {
   position: absolute;

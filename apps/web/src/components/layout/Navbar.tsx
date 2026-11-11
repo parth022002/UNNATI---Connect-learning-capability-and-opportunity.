@@ -72,8 +72,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
   };
 
   return (
-    <header className="relative z-30 w-full bg-white border-b-2 border-slate-200/90 shadow-soft-sm">
-      <div className="mx-auto flex h-[78px] sm:h-[82px] max-w-7xl items-center justify-between px-3.5 sm:px-6 lg:px-8">
+    <header className="relative z-30 w-full brand-surface-bookend border-b border-slate-200/80 shadow-soft-sm">
+      <div className="mx-auto flex h-[72px] sm:h-[76px] max-w-7xl items-center justify-between px-3.5 sm:px-6 lg:px-8">
         
         {/* ========================================================
             GROUP A: BRAND IDENTITY (Strong Left Visual Anchor)
@@ -83,14 +83,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
           className="group flex items-center gap-2.5 sm:gap-3.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet rounded-2xl shrink-0 whitespace-nowrap min-w-[155px]"
           aria-label="UNNATI Home"
         >
-          {/* Authentic Logo Mark Container (48–56px) */}
-          <div className="relative flex h-11 w-11 sm:h-13 sm:w-13 md:h-14 md:w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-100/90 via-white to-orange-50/80 p-1.5 border-2 border-purple-200/90 shadow-soft-md transition-all duration-300 group-hover:border-unnati-violet group-hover:shadow-glow-violet shrink-0">
+          {/* Authentic Logo Mark Container (Shared Brand Token) */}
+          <div className="brand-logo-container relative flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl p-1 transition-all duration-300 group-hover:scale-105 shrink-0">
             <Image 
               src="/logo.png" 
               alt="UNNATI Official Logo" 
-              width={52} 
-              height={52} 
-              className="h-8 w-8 sm:h-10 sm:w-10 md:h-11 md:w-11 object-contain transition-transform duration-300 group-hover:scale-105" 
+              width={36} 
+              height={36} 
+              className="h-7.5 w-7.5 sm:h-8.5 sm:w-8.5 object-contain transition-transform duration-300" 
               priority
             />
           </div>
@@ -98,7 +98,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
           {/* Wordmark Stack with High Readability */}
           <div className="flex flex-col shrink-0">
             <div className="flex items-center gap-1.5 sm:gap-2 leading-none whitespace-nowrap">
-              <span className="font-heading text-xl sm:text-2xl lg:text-[25px] font-black tracking-tight text-unnati-indigo group-hover:text-unnati-violet transition-colors whitespace-nowrap">
+              <span className="font-heading text-xl sm:text-[22px] lg:text-[23px] font-black tracking-tight text-unnati-indigo group-hover:text-unnati-violet transition-colors whitespace-nowrap">
                 UNNATI
               </span>
               <span className="text-[11px] sm:text-xs font-bold text-purple-700 font-sans tracking-normal whitespace-nowrap">
@@ -106,14 +106,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
               </span>
               <span className="inline-block h-2 w-2 rounded-full bg-unnati-saffron animate-pulse shrink-0" />
             </div>
-            <span className="hidden xs:block text-[10px] sm:text-[11px] font-bold tracking-wider text-slate-500 uppercase mt-0.5 sm:mt-1 whitespace-nowrap">
+            <span className="hidden xs:block text-[10px] sm:text-[10.5px] font-bold tracking-wider text-slate-500 uppercase mt-0.5 whitespace-nowrap">
               Your Growth Companion
             </span>
           </div>
         </Link>
 
         {/* ========================================================
-            GROUP B: PRIMARY NAVIGATION (Single-Line Text Enforced)
+            GROUP B: PRIMARY NAVIGATION (Single-Line Text Enforced, Clutter-Free)
            ======================================================== */}
         <nav 
           className="hidden lg:flex items-center gap-1 xl:gap-2 shrink-0 whitespace-nowrap"
@@ -121,18 +121,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
         >
           {currentLinks.map((link) => {
             const active = isActive(link.href);
-            const Icon = link.icon;
             return (
               <Link
                 key={link.label}
                 href={link.href}
-                className={`flex items-center gap-1.5 xl:gap-2 px-2.5 xl:px-3.5 py-2 rounded-xl text-[14px] xl:text-[14.5px] font-semibold whitespace-nowrap shrink-0 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet ${
+                className={`px-3 xl:px-4 py-2 rounded-xl text-[14px] xl:text-[14.5px] font-semibold whitespace-nowrap shrink-0 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet ${
                   active
                     ? "bg-purple-100/90 text-unnati-indigo border border-purple-200 shadow-soft-sm font-bold"
-                    : "text-slate-700 hover:text-unnati-indigo hover:bg-slate-100/80"
+                    : "text-slate-700 hover:text-unnati-indigo hover:bg-purple-50/80"
                 }`}
               >
-                <Icon className={`h-[17px] w-[17px] shrink-0 transition-colors ${active ? "text-unnati-saffron" : "text-slate-400 group-hover:text-unnati-indigo"}`} />
                 <span className="whitespace-nowrap shrink-0">{link.label}</span>
               </Link>
             );
@@ -162,7 +160,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-xs sm:text-[13px] font-bold text-slate-600 hover:text-slate-900 h-10 px-3.5 shrink-0 whitespace-nowrap"
+                  className="text-xs sm:text-[13px] font-bold text-slate-600 hover:text-slate-900 h-9.5 px-3.5 shrink-0 whitespace-nowrap"
                 >
                   <span className="whitespace-nowrap">Sign In</span>
                 </Button>
@@ -173,7 +171,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
                 <Button 
                   variant="saffron" 
                   size="sm" 
-                  className="btn-shimmer text-xs sm:text-[13px] py-2 px-3.5 sm:px-4 xl:px-5 shadow-soft-md font-bold whitespace-nowrap shrink-0 h-10 xl:h-11 rounded-xl shadow-glow-saffron text-white"
+                  className="btn-shimmer text-xs sm:text-[13px] py-2 px-3.5 sm:px-4 xl:px-5 shadow-soft-md font-bold whitespace-nowrap shrink-0 h-9.5 xl:h-10 rounded-xl shadow-glow-saffron text-white"
                 >
                   <span className="whitespace-nowrap">Get Started</span>
                   <ArrowRight className="h-3.5 w-3.5 ml-1 hidden xs:inline shrink-0" />
@@ -181,7 +179,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
               </Link>
             </div>
           ) : (
-            <div className="hidden sm:block h-10 w-24 bg-slate-100 rounded-xl animate-pulse shrink-0" />
+            <div className="hidden sm:block h-9.5 w-24 bg-slate-100 rounded-xl animate-pulse shrink-0" />
           )}
 
           {/* Mobile & Tablet Menu Toggle Button (Touch target >= 48px, active on < lg) */}
@@ -196,12 +194,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
         </div>
       </div>
 
+      {/* Shared Brand Accent Line (Border Boundary between Header and Main Body) */}
+      <div className="brand-accent-line w-full" />
+
       {/* ========================================================
           MOBILE & TABLET NAVIGATION DRAWER (Full Overlay, Accessible)
          ======================================================== */}
       {mobileMenuOpen && (
         <div 
-          className="lg:hidden fixed inset-x-0 top-[78px] sm:top-[82px] bg-slate-900/40 backdrop-blur-sm z-40 h-[calc(100vh-78px)] sm:h-[calc(100vh-82px)] overflow-y-auto animate-in fade-in duration-200"
+          className="lg:hidden fixed inset-x-0 top-[72px] sm:top-[76px] bg-slate-900/40 backdrop-blur-sm z-40 h-[calc(100vh-72px)] sm:h-[calc(100vh-76px)] overflow-y-auto animate-in fade-in duration-200"
           onClick={() => setMobileMenuOpen(false)}
         >
           <div 
