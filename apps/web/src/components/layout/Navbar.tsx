@@ -84,20 +84,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
 
   return (
     <header 
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+      className={`sticky top-0 z-50 w-full transition-all duration-200 bg-white ${
         isScrolled 
-          ? "bg-white/95 backdrop-blur-xl border-b border-slate-200/90 shadow-soft-md py-0" 
-          : "bg-white/85 backdrop-blur-md border-b border-slate-200/60 shadow-soft-sm py-1"
+          ? "border-b-2 border-purple-200 shadow-soft-md" 
+          : "border-b-2 border-slate-200/90 shadow-soft-sm"
       }`}
     >
-      <div className="mx-auto flex h-[76px] sm:h-[82px] max-w-7xl items-center justify-between px-3.5 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-[78px] sm:h-[82px] max-w-7xl items-center justify-between px-3.5 sm:px-6 lg:px-8">
         
         {/* ========================================================
             GROUP A: BRAND IDENTITY (Strong Left Visual Anchor)
            ======================================================== */}
         <Link 
           href="/" 
-          className="group flex items-center gap-2.5 sm:gap-3.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet rounded-2xl shrink-0 whitespace-nowrap"
+          className="group flex items-center gap-2.5 sm:gap-3.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet rounded-2xl shrink-0 whitespace-nowrap min-w-[155px]"
           aria-label="UNNATI Home"
         >
           {/* Authentic Logo Mark Container (48–56px) */}
@@ -143,13 +143,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCompanion }) => {
               <Link
                 key={link.label}
                 href={link.href}
-                className={`flex items-center gap-1.5 xl:gap-2 px-2.5 xl:px-3 py-1.5 xl:py-2 rounded-xl text-[13px] xl:text-[14px] font-semibold whitespace-nowrap shrink-0 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet ${
+                className={`flex items-center gap-1.5 xl:gap-2 px-2.5 xl:px-3.5 py-2 rounded-xl text-[14px] xl:text-[14.5px] font-semibold whitespace-nowrap shrink-0 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-unnati-violet ${
                   active
                     ? "bg-purple-100/90 text-unnati-indigo border border-purple-200 shadow-soft-sm font-bold"
-                    : "text-slate-600 hover:text-unnati-indigo hover:bg-slate-100/80"
+                    : "text-slate-700 hover:text-unnati-indigo hover:bg-slate-100/80"
                 }`}
               >
-                <Icon className={`h-4 w-4 shrink-0 transition-colors ${active ? "text-unnati-saffron" : "text-slate-400 group-hover:text-unnati-indigo"}`} />
+                <Icon className={`h-[17px] w-[17px] shrink-0 transition-colors ${active ? "text-unnati-saffron" : "text-slate-400 group-hover:text-unnati-indigo"}`} />
                 <span className="whitespace-nowrap shrink-0">{link.label}</span>
               </Link>
             );

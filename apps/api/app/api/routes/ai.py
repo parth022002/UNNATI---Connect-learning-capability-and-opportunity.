@@ -266,3 +266,4 @@ async def chat_with_career_companion(
         suggested_prompts=suggested_prompts,
         learner_context_used=learner_context
     )
+

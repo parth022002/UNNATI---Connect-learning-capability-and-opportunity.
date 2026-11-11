@@ -36,7 +36,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="border-t-2 border-slate-200/90 bg-slate-50/95 text-slate-700 relative z-10">
+    <footer className="border-t-2 border-slate-300/80 bg-[#F1F3F9] text-slate-700 relative z-10">
       {/* ========================================================
           MAIN 5-COLUMN FOOTER CONTAINER
           Proportions: Brand 1.5fr, Explore 1fr, Platform 1fr, For Learners 1fr, Trust 1fr
@@ -134,7 +134,7 @@ export const Footer: React.FC = () => {
             <button
               type="button"
               onClick={() => toggleSection("explore")}
-              className="w-full flex items-center justify-between font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2 text-left md:cursor-default"
+              className="w-full h-8 flex items-center justify-between font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2 text-left md:cursor-default"
               aria-expanded={openSections.explore}
             >
               <span>Explore</span>
@@ -176,7 +176,7 @@ export const Footer: React.FC = () => {
             <button
               type="button"
               onClick={() => toggleSection("platform")}
-              className="w-full flex items-center justify-between font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2 text-left md:cursor-default"
+              className="w-full h-8 flex items-center justify-between font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2 text-left md:cursor-default"
               aria-expanded={openSections.platform}
             >
               <span>Platform</span>
@@ -222,7 +222,7 @@ export const Footer: React.FC = () => {
             <button
               type="button"
               onClick={() => toggleSection("learners")}
-              className="w-full flex items-center justify-between font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2 text-left md:cursor-default"
+              className="w-full h-8 flex items-center justify-between font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2 text-left md:cursor-default"
               aria-expanded={openSections.learners}
             >
               <span>For Learners</span>
@@ -264,7 +264,7 @@ export const Footer: React.FC = () => {
             <button
               type="button"
               onClick={() => toggleSection("trust")}
-              className="w-full flex items-center justify-between font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2 text-left md:cursor-default"
+              className="w-full h-8 flex items-center justify-between font-heading text-[14px] font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200/60 pb-2 text-left md:cursor-default"
               aria-expanded={openSections.trust}
             >
               <span>Trust &amp; Legal</span>
@@ -320,22 +320,22 @@ export const Footer: React.FC = () => {
       {/* ========================================================
           FOOTER BOTTOM STRIP (Full-Width Divider & Developer Credit)
          ======================================================== */}
-      <div className="border-t border-slate-200/90 bg-slate-100/70 py-6 sm:py-7">
+      <div className="border-t border-slate-300/80 bg-slate-200/70 py-6 sm:py-7">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-600">
           
           {/* Left: Copyright */}
-          <div className="flex items-center gap-2">
+          <div className="order-2 md:order-1 flex items-center gap-2">
             <span className="font-medium">&copy; 2026 UNNATI. All rights reserved.</span>
           </div>
 
           {/* Centre: Tasteful Developer Credit (Designed & Developed by Part Ahuja) */}
-          <div className="flex items-center gap-1.5 font-medium text-slate-700 bg-white/90 border border-slate-200 px-3.5 py-1.5 rounded-full shadow-soft-sm">
+          <div className="order-3 md:order-2 flex items-center gap-1.5 font-medium text-slate-700 bg-white/90 border border-slate-200 px-4 py-1.5 rounded-full shadow-soft-sm">
             <span className="text-slate-500">Designed &amp; Developed by</span>
             <span className="font-bold text-unnati-indigo">Part Ahuja</span>
           </div>
 
           {/* Right: Legal & Compliance Links */}
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 font-medium">
+          <div className="order-1 md:order-3 flex flex-wrap items-center justify-center gap-4 sm:gap-6 font-medium">
             <div className="flex items-center gap-1.5 text-emerald-700 font-semibold">
               <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
               <span>DPDP Act (India 2026) Compliant</span>

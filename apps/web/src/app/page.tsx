@@ -147,7 +147,7 @@ export default function HomePage() {
 
   const currentDemo = domainDemos[selectedDemoDomain];
 
-  // 3. Hero Stepped Product Preview Steps (Goal -> Baseline -> Delta -> Roadmap -> Action)
+  // 3. Hero Stepped Product Preview Steps (Goal -> Skills -> Gaps -> Path -> Action)
   const heroSteps = [
     {
       title: "1. Goal",
@@ -161,7 +161,7 @@ export default function HomePage() {
       }
     },
     {
-      title: "2. Baseline",
+      title: "2. Skills",
       tag: "4-Tier Skill Ledger",
       summary: "Profile & coursework extracted into verified ledger",
       content: {
@@ -172,7 +172,7 @@ export default function HomePage() {
       }
     },
     {
-      title: "3. Delta",
+      title: "3. Gaps",
       tag: "Skill Gap Analysis",
       summary: "Pinpoint recommended skills to strengthen",
       content: {
@@ -183,7 +183,7 @@ export default function HomePage() {
       }
     },
     {
-      title: "4. Roadmap",
+      title: "4. Path",
       tag: "Adaptive Milestone Plan",
       summary: "3-phase curriculum tailored to your schedule",
       content: {
@@ -243,8 +243,9 @@ export default function HomePage() {
         
         {/* ========================================================
             HERO SECTION: Porsche / Trionn Visual Confidence & Polish
+            Surface: Warm white with subtle lavender ambient gradient
            ======================================================== */}
-        <section className="w-full relative overflow-hidden pt-10 sm:pt-16 pb-20">
+        <section className="w-full relative overflow-hidden pt-10 sm:pt-16 pb-20 bg-gradient-to-b from-[#FAF8FF] via-[#FCFAFF] to-white border-b border-purple-100/60">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             
@@ -273,22 +274,22 @@ export default function HomePage() {
               </p>
 
               {/* Primary Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
-                <Link href="/onboarding">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+                <Link href="/onboarding" className="w-full sm:w-auto">
                   <Button 
                     variant="saffron" 
                     size="lg" 
-                    className="btn-shimmer text-base font-bold shadow-soft-md shadow-glow-saffron h-13 px-7 sm:px-8 rounded-2xl text-white"
+                    className="btn-shimmer w-full sm:w-auto text-base font-bold shadow-soft-md shadow-glow-saffron h-13 px-7 sm:px-8 rounded-2xl text-white justify-center"
                   >
                     <span>Start Your Free Journey</span>
                     <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 </Link>
-                <Link href="/explore">
+                <Link href="/explore" className="w-full sm:w-auto">
                   <Button 
                     variant="outline" 
                     size="lg" 
-                    className="text-base font-semibold h-13 px-7 sm:px-8 rounded-2xl hover:border-purple-300 bg-white/80"
+                    className="w-full sm:w-auto text-base font-semibold h-13 px-7 sm:px-8 rounded-2xl hover:border-purple-300 bg-white/80 justify-center"
                   >
                     <Compass className="h-4 w-4 mr-2 text-unnati-violet" /> 
                     <span>Explore 20+ Career Paths</span>
@@ -296,8 +297,8 @@ export default function HomePage() {
                 </Link>
               </div>
 
-              {/* Trust Indicators */}
-              <div className="pt-6 border-t border-slate-200/80 flex flex-wrap items-center gap-6 text-xs text-slate-500 font-medium">
+              {/* Trust Indicators (Desktop view - rendered under CTAs) */}
+              <div className="hidden lg:flex pt-6 border-t border-slate-200/80 flex-wrap items-center gap-6 text-xs text-slate-500 font-medium">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="h-4 w-4 text-emerald-600" />
                   <span>DPDP Act (India 2026) Compliant</span>
@@ -316,7 +317,7 @@ export default function HomePage() {
             {/* Right Column: Hero Stepped Product Preview */}
             <div className="lg:col-span-5">
               <ScrollReveal direction="up" delayMs={150}>
-                <div className="clean-card p-6 sm:p-8 bg-white border-2 border-purple-100 shadow-soft-xl relative overflow-hidden">
+                <div className="clean-card p-5 sm:p-7 md:p-8 bg-white border-2 border-purple-100 shadow-soft-xl relative overflow-hidden">
                   
                   {/* Stepper Header */}
                   <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
@@ -331,13 +332,13 @@ export default function HomePage() {
                     </Badge>
                   </div>
 
-                  {/* Step Selector Tabs */}
-                  <div className="grid grid-cols-5 gap-1.5 my-4 bg-slate-100 p-1.5 rounded-xl">
+                  {/* Step Selector Tabs (Guaranteed no collision with 1. Goal, 2. Skills, 3. Gaps, 4. Path, 5. Action) */}
+                  <div className="grid grid-cols-5 gap-1 my-4 bg-slate-100 p-1.5 rounded-xl">
                     {heroSteps.map((s, idx) => (
                       <button
                         key={idx}
                         onClick={() => setActiveHeroStep(idx)}
-                        className={`py-1.5 text-[11px] font-bold rounded-lg transition-all cursor-pointer whitespace-nowrap px-1 text-center ${
+                        className={`py-1.5 text-[10.5px] sm:text-[11px] font-bold rounded-lg transition-all cursor-pointer whitespace-nowrap px-0.5 sm:px-1 text-center ${
                           activeHeroStep === idx
                             ? "bg-white text-unnati-indigo shadow-soft-sm"
                             : "text-slate-500 hover:text-slate-900"
@@ -416,6 +417,22 @@ export default function HomePage() {
 
                 </div>
               </ScrollReveal>
+
+              {/* Mobile Trust Indicators (rendered in requested sequence below the preview card on mobile) */}
+              <div className="lg:hidden mt-8 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-center gap-4 text-xs text-slate-500 font-medium">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+                  <span>DPDP Act (India 2026) Compliant</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-unnati-indigo shrink-0" />
+                  <span>For Students, Grads &amp; Professionals</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Lock className="h-4 w-4 text-orange-600 shrink-0" />
+                  <span>72-Hour Data Erasure Guarantee</span>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -424,8 +441,9 @@ export default function HomePage() {
 
         {/* ========================================================
             SECTION 2: AUDIENCE PATHWAYS (Who UNNATI Helps)
+            Surface: Pure white with clean subtle boundary
            ======================================================== */}
-        <section id="audiences" className="w-full bg-white border-t border-slate-200/80 py-20 sm:py-24">
+        <section id="audiences" className="w-full bg-white border-b border-slate-200/80 py-20 sm:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="up">
             <div className="text-center max-w-3xl mx-auto mb-16">
@@ -487,8 +505,9 @@ export default function HomePage() {
 
         {/* ========================================================
             SECTION 3: CONTINUOUS CAREER JOURNEY (21hrs Storytelling Flow)
+            Surface: Soft cool grey/lavender surface
            ======================================================== */}
-        <section id="how-it-works" className="w-full bg-slate-50/90 border-t border-slate-200/90 py-20 sm:py-24 relative overflow-hidden">
+        <section id="how-it-works" className="w-full bg-[#F6F7FC] border-b border-slate-200/80 py-20 sm:py-24 relative overflow-hidden">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
             <ScrollReveal direction="up">
               <div className="text-center max-w-3xl mx-auto mb-16">
@@ -562,13 +581,13 @@ export default function HomePage() {
                 const Icon = step.icon;
                 return (
                   <ScrollReveal key={idx} direction="up" delayMs={idx * 80}>
-                    <div className="h-full p-6 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-soft-sm flex flex-col justify-between relative group hover:border-purple-300 transition-all duration-300">
+                    <div className="h-full p-6 rounded-3xl bg-white border border-slate-200/90 shadow-soft-sm hover:shadow-soft-md hover:border-purple-300 flex flex-col justify-between relative group transition-all duration-300">
                       <div>
                         <div className="flex items-center justify-between mb-4">
                           <span className="font-heading text-3xl font-black text-unnati-indigo">
                             {step.num}
                           </span>
-                          <div className={`flex h-9 w-9 items-center justify-center rounded-xl bg-white border border-slate-200 shadow-soft-sm ${step.color}`}>
+                          <div className={`flex h-9 w-9 items-center justify-center rounded-xl bg-purple-50 border border-purple-100 shadow-soft-sm ${step.color}`}>
                             <Icon className="h-4.5 w-4.5" />
                           </div>
                         </div>
@@ -606,8 +625,9 @@ export default function HomePage() {
 
         {/* ========================================================
             SECTION 4: PRODUCT SHOWCASE (Epiminds / Cerebrium Working Tools)
+            Surface: Very light neutral surface
            ======================================================== */}
-        <section id="showcase" className="w-full bg-slate-100/60 border-t border-slate-200/80 py-20 sm:py-24">
+        <section id="showcase" className="w-full bg-[#F8FAFC] border-b border-slate-200/80 py-20 sm:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="up">
             <div className="text-center max-w-3xl mx-auto mb-16">
@@ -943,8 +963,9 @@ export default function HomePage() {
 
         {/* ========================================================
             SECTION 5: INTERACTIVE SKILL GAP DIAGNOSTIC
+            Surface: Subtle lavender and peach ambient gradient
            ======================================================== */}
-        <section id="diagnostic" className="w-full bg-gradient-to-b from-purple-50/40 via-orange-50/20 to-white border-t border-slate-200/80 py-20 sm:py-24">
+        <section id="diagnostic" className="w-full bg-gradient-to-b from-[#FAF7FF] via-[#FFFDF5] to-white border-b border-slate-200/80 py-20 sm:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="up">
             <div className="text-center max-w-3xl mx-auto mb-14">
@@ -1005,7 +1026,7 @@ export default function HomePage() {
                 <div>
                   <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Typical Market Compensation</p>
                   <p className="font-heading text-2xl sm:text-3xl font-black text-slate-900 mt-2">{currentDemo.medianSalary}</p>
-                  <p className="text-xs text-slate-400 mt-1">Range: {currentDemo.salaryRange}</p>
+                  <p className="text-xs text-slate-600 font-medium mt-1">Market Range: <span className="font-bold text-slate-700">{currentDemo.salaryRange}</span></p>
                 </div>
               </div>
 
@@ -1054,9 +1075,10 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================
-            SECTION 6: TRUST, ETHICS & DATA PROTECTION (Midnight / Deep Indigo)
+            SECTION 6: TRUST, ETHICS & DATA PROTECTION (Deep Brand Purple)
+            Surface: Deep brand purple
            ======================================================== */}
-        <section id="trust" className="w-full bg-purple-950 text-white border-t border-purple-900/60 py-20 sm:py-24 relative overflow-hidden">
+        <section id="trust" className="w-full bg-[#2A0E5C] text-white border-b border-purple-900 py-20 sm:py-24 relative overflow-hidden">
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
             <ScrollReveal direction="up">
               <div className="text-center max-w-3xl mx-auto">
@@ -1120,8 +1142,9 @@ export default function HomePage() {
 
         {/* ========================================================
             SECTION 7: FREQUENTLY ASKED QUESTIONS
+            Surface: Clean white surface
            ======================================================== */}
-        <section id="faq" className="w-full bg-white border-t border-slate-200/80 py-20 sm:py-24">
+        <section id="faq" className="w-full bg-white border-b border-slate-200/80 py-20 sm:py-24">
           <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="up">
               <div className="text-center mb-16">
@@ -1171,8 +1194,9 @@ export default function HomePage() {
 
         {/* ========================================================
             SECTION 8: FINAL CONVERSION BANNER
+            Surface: Separate soft container
            ======================================================== */}
-        <section className="w-full bg-slate-50/90 border-t border-slate-200/80 py-20 sm:py-24">
+        <section className="w-full bg-slate-50/90 py-20 sm:py-24">
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="up">
               <div className="rounded-[2.5rem] bg-gradient-to-r from-unnati-indigo via-purple-900 to-unnati-indigo p-8 sm:p-14 text-center text-white shadow-soft-xl relative overflow-hidden">

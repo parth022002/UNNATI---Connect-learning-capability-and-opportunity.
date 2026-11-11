@@ -16,3 +16,4 @@ class CompanionChatResponse(BaseModel):
     suggested_action: Optional[SuggestedAction] = None
     suggested_prompts: List[str] = []
     learner_context_used: Optional[Dict[str, Any]] = None
+

@@ -29,16 +29,22 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
       return;
     }
 
+    // Safety fallback: ensure content is never permanently hidden
+    const safetyTimer = setTimeout(() => {
+      setIsVisible(true);
+    }, 600);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+          clearTimeout(safetyTimer);
           if (domRef.current) observer.unobserve(domRef.current);
         }
       },
       {
-        threshold: 0.12,
-        rootMargin: "0px 0px -40px 0px"
+        threshold: 0.05,
+        rootMargin: "250px 0px"
       }
     );
 
@@ -48,6 +54,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
     }
 
     return () => {
+      clearTimeout(safetyTimer);
       if (currentElem) observer.unobserve(currentElem);
     };
   }, []);

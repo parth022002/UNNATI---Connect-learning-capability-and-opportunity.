@@ -47,3 +47,4 @@ class InterviewPrepQuestionResponse(BaseModel):
     evaluation_rubric: List[str]
     sample_approach: str
     tips: List[str]
+

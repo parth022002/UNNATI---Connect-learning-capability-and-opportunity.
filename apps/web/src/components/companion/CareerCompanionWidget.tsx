@@ -358,13 +358,14 @@ export const CareerCompanionWidget: React.FC = () => {
     <>
       {/* 1. FLOATING LAUNCHER BUTTON (Compact Circular 48–54px, Footer Collision-Aware) */}
       <div 
-        className={`fixed z-40 transition-all duration-300 ease-out motion-reduce:transition-none ${
+        className={`fixed z-50 transition-all duration-300 ease-out motion-reduce:transition-none ${
           isFooterCollisionHidden ? "opacity-0 scale-75 pointer-events-none" : "opacity-100 scale-100"
         }`}
         style={{
-          bottom: `max(1.25rem, env(safe-area-inset-bottom))`,
+          bottom: footerOffset > 0 
+            ? `calc(max(1.25rem, env(safe-area-inset-bottom)) + ${footerOffset}px)`
+            : `max(1.25rem, env(safe-area-inset-bottom))`,
           right: `max(1.25rem, env(safe-area-inset-right))`,
-          transform: footerOffset > 0 ? `translateY(-${footerOffset}px)` : undefined
         }}
       >
         <button
@@ -408,7 +409,7 @@ export const CareerCompanionWidget: React.FC = () => {
         <div 
           role="dialog"
           aria-label="UNNATI AI Career Chatbot"
-          className="fixed z-40 w-[calc(100vw-1.5rem)] sm:w-[440px] md:w-[470px] h-[580px] sm:h-[620px] max-h-[82vh] bg-white border-2 border-purple-200/90 rounded-3xl shadow-2xl shadow-slate-900/30 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200 motion-reduce:animate-none"
+          className="fixed z-50 w-[calc(100vw-1.5rem)] sm:w-[440px] md:w-[470px] h-[580px] sm:h-[620px] max-h-[82vh] bg-white border-2 border-purple-200/90 rounded-3xl shadow-2xl shadow-slate-900/30 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200 motion-reduce:animate-none"
           style={{
             bottom: `max(5rem, calc(env(safe-area-inset-bottom) + 4.5rem))`,
             right: `max(0.75rem, env(safe-area-inset-right))`,
