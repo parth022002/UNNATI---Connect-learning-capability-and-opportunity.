@@ -198,3 +198,4 @@ class ResumeJDMatch(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     resume: Mapped["Resume"] = relationship("Resume", back_populates="jd_matches")
     resume_version: Mapped["ResumeVersion"] = relationship("ResumeVersion", back_populates="jd_matches")
     job_description: Mapped["JobDescription"] = relationship("JobDescription", back_populates="matches")
+

@@ -207,6 +207,11 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/interviews" className="text-slate-600 hover:text-unnati-indigo transition-colors block">
+                  AI Interview Studio
+                </Link>
+              </li>
+              <li>
                 <Link href="/resumes" className="text-slate-600 hover:text-unnati-indigo transition-colors block">
                   Resume Studio &amp; ATS
                 </Link>

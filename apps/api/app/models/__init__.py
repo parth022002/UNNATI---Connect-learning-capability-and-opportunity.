@@ -19,6 +19,11 @@ from app.models.resume import (
     JobDescription,
     ResumeJDMatch,
 )
+from app.models.interview import (
+    InterviewSession,
+    InterviewQuestion,
+    InterviewTurn,
+)
 
 __all__ = [
     "Base",
@@ -49,5 +54,8 @@ __all__ = [
     "ResumeATSReport",
     "JobDescription",
     "ResumeJDMatch",
+    "InterviewSession",
+    "InterviewQuestion",
+    "InterviewTurn",
 ]
 

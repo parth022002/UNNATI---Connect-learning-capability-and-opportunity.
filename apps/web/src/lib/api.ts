@@ -911,6 +911,86 @@ export const api = {
   getResumeExportUrl(resumeId: string, format: "pdf" | "docx"): string {
     return `${API_BASE_URL}/api/v1/resumes/${resumeId}/export/${format}`;
   },
+
+  // ============================================================================
+  // AI INTERVIEW PREPARATION & REALISTIC SIMULATION STUDIO APIS
+  // ============================================================================
+
+  async getInterviewDashboard(token: string): Promise<InterviewStudioDashboardData> {
+    return request<InterviewStudioDashboardData>("/api/v1/interviews/studio/dashboard", { method: "GET" }, token);
+  },
+
+  async createInterviewSession(
+    token: string,
+    data: {
+      target_role: string;
+      interview_mode: string;
+      difficulty_level?: string;
+      target_duration_minutes?: number;
+      voice_mode_enabled?: boolean;
+      resume_id?: string;
+      job_description_id?: string;
+      custom_focus_areas?: string[];
+    }
+  ): Promise<InterviewSessionDetail> {
+    return request<InterviewSessionDetail>(
+      "/api/v1/interviews/sessions",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
+  async getInterviewSession(token: string, sessionId: string): Promise<InterviewSessionDetail> {
+    return request<InterviewSessionDetail>(`/api/v1/interviews/sessions/${sessionId}`, { method: "GET" }, token);
+  },
+
+  async submitInterviewAnswer(
+    token: string,
+    sessionId: string,
+    questionId: string,
+    data: {
+      candidate_response: string;
+      turn_type?: string;
+      input_mode?: string;
+      response_duration_seconds?: number;
+    }
+  ): Promise<InterviewTurnItem> {
+    return request<InterviewTurnItem>(
+      `/api/v1/interviews/sessions/${sessionId}/questions/${questionId}/answer`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
+  async finishInterviewSession(token: string, sessionId: string): Promise<InterviewReportData> {
+    return request<InterviewReportData>(
+      `/api/v1/interviews/sessions/${sessionId}/finish`,
+      {
+        method: "POST",
+      },
+      token
+    );
+  },
+
+  async getInterviewReport(token: string, sessionId: string): Promise<InterviewReportData> {
+    return request<InterviewReportData>(
+      `/api/v1/interviews/sessions/${sessionId}/report`,
+      {
+        method: "GET",
+      },
+      token
+    );
+  },
+
+  async deleteInterviewSession(token: string, sessionId: string): Promise<void> {
+    return request<void>(`/api/v1/interviews/sessions/${sessionId}`, { method: "DELETE" }, token);
+  },
 };
 
 export interface CohortSummary {
@@ -1418,5 +1498,170 @@ export interface ResumeCompareMatrixData {
   resume_title: string;
   target_role?: string | null;
   comparisons: MultipleJDCompareItem[];
+}
+
+// ============================================================================
+// AI INTERVIEW SIMULATION STUDIO TYPES
+// ============================================================================
+
+export interface InterviewSessionListItem {
+  id: string;
+  user_id: string;
+  target_role: string;
+  interview_mode: string;
+  difficulty_level: string;
+  target_duration_minutes: number;
+  status: string;
+  overall_score?: number | null;
+  readiness_tier?: string | null;
+  question_count: number;
+  created_at: string;
+  completed_at?: string | null;
+}
+
+export interface InterviewTurnItem {
+  id: string;
+  question_id: string;
+  turn_type: string;
+  input_mode: string;
+  candidate_response: string;
+  score?: number | null;
+  score_rationale?: string | null;
+  dimension_scores?: {
+    technical_depth: number;
+    communication_clarity: number;
+    problem_solving: number;
+    role_competency: number;
+    star_rigor: number;
+  } | null;
+  strengths?: string[] | null;
+  improvement_areas?: string[] | null;
+  star_analysis?: {
+    situation_present: boolean;
+    task_present: boolean;
+    action_present: boolean;
+    result_quantified: boolean;
+    feedback: string;
+  } | null;
+  suggested_follow_up?: string | null;
+  ideal_refinement?: string | null;
+  created_at: string;
+}
+
+export interface InterviewQuestionItem {
+  id: string;
+  session_id: string;
+  order_index: number;
+  question_text: string;
+  question_type: string;
+  category: string;
+  target_competency: string;
+  difficulty: string;
+  ideal_approach?: string | null;
+  rubric_criteria?: string[] | null;
+  is_answered: boolean;
+  created_at: string;
+  turns: InterviewTurnItem[];
+}
+
+export interface InterviewSessionDetail {
+  id: string;
+  user_id: string;
+  target_role: string;
+  interview_mode: string;
+  difficulty_level: string;
+  target_duration_minutes: number;
+  status: string;
+  overall_score?: number | null;
+  readiness_tier?: string | null;
+  technical_score?: number | null;
+  hr_score?: number | null;
+  voice_mode_enabled: boolean;
+  grounded_resume_id?: string | null;
+  grounded_jd_id?: string | null;
+  questions: InterviewQuestionItem[];
+  performance_report?: any | null;
+  created_at: string;
+  completed_at?: string | null;
+}
+
+export interface CompetencyBreakdownItem {
+  competency: string;
+  category: string;
+  score: number;
+  level: string;
+  feedback: string;
+}
+
+export interface StarRigorSummary {
+  situation_adherence: number;
+  task_clarity: number;
+  action_depth: number;
+  metric_quantification: number;
+  summary: string;
+}
+
+export interface RoadmapRecommendationItem {
+  competency: string;
+  target_role: string;
+  suggested_module: string;
+  action_type: string;
+  urgency: string;
+}
+
+export interface QuestionReviewItem {
+  question_id: string;
+  order_index: number;
+  question_text: string;
+  question_type: string;
+  category: string;
+  target_competency: string;
+  candidate_response: string;
+  score: number;
+  dimension_scores: Record<string, number>;
+  strengths: string[];
+  improvement_areas: string[];
+  star_analysis: any;
+  follow_up_prompt?: string | null;
+  follow_up_response?: string | null;
+  ideal_refinement?: string | null;
+}
+
+export interface InterviewReportData {
+  session_id: string;
+  target_role: string;
+  interview_mode: string;
+  difficulty_level: string;
+  overall_score: number;
+  readiness_tier: string;
+  technical_score: number;
+  hr_score: number;
+  total_questions_answered: number;
+  dimension_averages: Record<string, number>;
+  executive_summary: string;
+  top_strengths: string[];
+  priority_improvements: string[];
+  competency_breakdown: CompetencyBreakdownItem[];
+  star_rigor_summary: StarRigorSummary;
+  roadmap_recommendations: RoadmapRecommendationItem[];
+  question_reviews: QuestionReviewItem[];
+  completed_at: string;
+}
+
+export interface InterviewStudioDashboardData {
+  total_interviews_completed: number;
+  average_readiness_score: number;
+  overall_readiness_tier: string;
+  technical_readiness_average: number;
+  hr_readiness_average: number;
+  competencies_mastered_count: number;
+  recent_sessions: InterviewSessionListItem[];
+  recommended_practice: {
+    role: string;
+    mode: string;
+    priority_reason: string;
+    recommended_difficulty: string;
+  }[];
+  active_session?: InterviewSessionListItem | null;
 }
 

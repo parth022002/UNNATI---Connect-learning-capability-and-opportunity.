@@ -254,3 +254,4 @@ class ResumeCompareMatrixResponse(BaseModel):
     resume_title: str
     target_role: Optional[str] = None
     comparisons: List[MultipleJDCompareItem] = []
+
