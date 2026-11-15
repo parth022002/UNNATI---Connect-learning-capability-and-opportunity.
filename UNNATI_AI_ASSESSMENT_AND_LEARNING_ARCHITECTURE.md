@@ -321,3 +321,4 @@ erDiagram
 3. **Graceful Network Degradation:**
    - Client event dispatcher buffers violation telemetry during transient disconnections and retries with exponential backoff.
    - Final answers are autosaved incrementally after every question response.
+

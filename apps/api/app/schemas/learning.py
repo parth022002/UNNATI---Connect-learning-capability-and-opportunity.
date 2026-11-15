@@ -145,3 +145,4 @@ class LearningDashboardSummary(BaseModel):
     skills_in_learning: List[str]
     recent_resources: List[UserLearningProgressItem]
     recommended_next_actions: List[Dict[str, Any]]
+

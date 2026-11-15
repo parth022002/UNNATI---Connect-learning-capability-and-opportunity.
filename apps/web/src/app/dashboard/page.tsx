@@ -36,7 +36,8 @@ import {
   MapPin,
   X,
   Compass,
-  PieChart
+  PieChart,
+  Video
 } from "lucide-react";
 import { 
   api, 
@@ -100,6 +101,7 @@ export default function DashboardPage() {
   const [selectedSkillName, setSelectedSkillName] = useState("");
   const [selectedProficiency, setSelectedProficiency] = useState(0.6);
   const [claiming, setClaiming] = useState(false);
+  const [skillFilter, setSkillFilter] = useState<string>("ALL");
 
   const fetchDashboardData = async () => {
     if (!isSignedIn) return;
@@ -380,6 +382,59 @@ export default function DashboardPage() {
           </div>
         </section>
 
+        {/* Quick Launch Action Hub */}
+        <section className="mb-8">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <Link href="/assessments">
+              <div className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-purple-300 hover:shadow-soft-md transition-all flex items-center gap-3.5">
+                <div className="p-3 rounded-xl bg-purple-100 text-unnati-indigo group-hover:scale-105 transition-transform">
+                  <FileCheck2 className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900 group-hover:text-unnati-indigo transition-colors">Skill Checks &amp; Learn</h4>
+                  <p className="text-[11px] text-slate-500">Free/Paid courses &amp; quizzes</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/interviews">
+              <div className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-purple-300 hover:shadow-soft-md transition-all flex items-center gap-3.5">
+                <div className="p-3 rounded-xl bg-emerald-100 text-emerald-700 group-hover:scale-105 transition-transform">
+                  <Video className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">AI Interview Studio</h4>
+                  <p className="text-[11px] text-slate-500">Practice Tech &amp; HR with STAR</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/resumes">
+              <div className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-purple-300 hover:shadow-soft-md transition-all flex items-center gap-3.5">
+                <div className="p-3 rounded-xl bg-sky-100 text-sky-700 group-hover:scale-105 transition-transform">
+                  <FileText className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900 group-hover:text-sky-700 transition-colors">Resume &amp; ATS Studio</h4>
+                  <p className="text-[11px] text-slate-500">Multi-template &amp; JD match</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/jobs">
+              <div className="group p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-purple-300 hover:shadow-soft-md transition-all flex items-center gap-3.5">
+                <div className="p-3 rounded-xl bg-amber-100 text-amber-700 group-hover:scale-105 transition-transform">
+                  <Briefcase className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900 group-hover:text-amber-700 transition-colors">Job Discovery</h4>
+                  <p className="text-[11px] text-slate-500">Matched Indian &amp; global jobs</p>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </section>
+
         {/* Metric Cards Row */}
         <StaggerContainer delayStepMs={80} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
           <StaggerItem index={0} direction="up">
@@ -459,6 +514,31 @@ export default function DashboardPage() {
             </Button>
           </div>
 
+          {/* Skill Filter Pills */}
+          {skills.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 mb-6">
+              {[
+                { id: "ALL", label: `All Capabilities (${skills.length})` },
+                { id: "VERIFIED", label: `Certified (${skills.filter((s) => s.state === "VERIFIED").length})` },
+                { id: "ASSESSED", label: `Diagnostic Verified (${skills.filter((s) => s.state === "ASSESSED").length})` },
+                { id: "INFERRED", label: `Resume Inferred (${skills.filter((s) => s.state === "INFERRED").length})` },
+                { id: "CLAIMED", label: `Self-Reported (${skills.filter((s) => s.state === "CLAIMED").length})` },
+              ].map((pill) => (
+                <button
+                  key={pill.id}
+                  onClick={() => setSkillFilter(pill.id)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
+                    skillFilter === pill.id
+                      ? "bg-unnati-indigo text-white shadow-soft-sm font-bold"
+                      : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+                >
+                  {pill.label}
+                </button>
+              ))}
+            </div>
+          )}
+
           {skills.length === 0 ? (
             <div className="rounded-3xl border border-dashed border-slate-300 bg-white/60 p-12 text-center">
               <Zap className="mx-auto h-8 w-8 text-orange-500 animate-bounce" />
@@ -487,7 +567,7 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {skills.map((s) => {
+              {(skillFilter === "ALL" ? skills : skills.filter((s) => s.state === skillFilter)).map((s) => {
                 const tier = SKILL_STATE_CONFIG[s.state] || SKILL_STATE_CONFIG.CLAIMED;
                 const profPercent = Math.round(s.proficiency * 100);
                 return (

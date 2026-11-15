@@ -153,3 +153,4 @@ class AssessmentReadinessLog(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     metadata_payload: Mapped[Dict[str, Any]] = mapped_column(JSONB, default=dict, nullable=False)
 
     user: Mapped["User"] = relationship("User")
+

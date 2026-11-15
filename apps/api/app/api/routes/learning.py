@@ -209,3 +209,4 @@ def trigger_seed_resources(
     """Administrative utility to seed or refresh verified multi-platform catalog."""
     count = seed_learning_resources(db)
     return {"status": "SUCCESS", "resources_seeded": count}
+
