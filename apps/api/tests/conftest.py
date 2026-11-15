@@ -16,3 +16,4 @@ def setup_test_database():
     """Initializes schema for all models before running tests."""
     Base.metadata.create_all(bind=engine)
     yield
+
