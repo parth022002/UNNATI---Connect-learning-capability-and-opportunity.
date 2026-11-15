@@ -22,6 +22,9 @@ from app.models.examination import (
     ExamAttempt,
     ExamAttemptAnswer,
     ExamProctoringEvent,
+    ProctoringEvidence,
+    ProctoringReview,
+    ProctoringAuditLog,
     ExamCertificate,
 )
 from app.models.roadmap import CareerRoadmap, RoadmapMilestone
@@ -528,13 +531,16 @@ def start_or_resume_attempt(
     )
 
     if active_attempt:
-        # Check if already expired
-        if active_attempt.expires_at <= now:
+        # Check if already expired (normalize naive datetime for SQLite compatibility)
+        attempt_expires = active_attempt.expires_at
+        if attempt_expires and attempt_expires.tzinfo is None:
+            attempt_expires = attempt_expires.replace(tzinfo=timezone.utc)
+        if attempt_expires <= now:
             # Auto-submit expired attempt
             finalize_attempt_submission(db, user, active_attempt.id)
         else:
             # Resume existing attempt
-            time_remaining = max(0, int((active_attempt.expires_at - now).total_seconds()))
+            time_remaining = max(0, int((attempt_expires - now).total_seconds()))
             saved_answers = {
                 str(a.question_id): {
                     "question_id": str(a.question_id),
@@ -623,7 +629,10 @@ def autosave_answer(
         raise ValueError(f"Cannot save answer: attempt is {attempt.status}.")
 
     now = datetime.now(timezone.utc)
-    if now > attempt.expires_at:
+    attempt_expires = attempt.expires_at
+    if attempt_expires and attempt_expires.tzinfo is None:
+        attempt_expires = attempt_expires.replace(tzinfo=timezone.utc)
+    if attempt_expires and now > attempt_expires:
         raise ValueError("Examination time has expired. Please submit your attempt.")
 
     # Upsert answer
@@ -660,11 +669,17 @@ def ingest_proctoring_event(
     attempt_id: uuid.UUID,
     event_type: str,
     severity: str = "INFO",
-    metadata_payload: Optional[Dict[str, Any]] = None
+    metadata_payload: Optional[Dict[str, Any]] = None,
+    client_event_id: Optional[str] = None,
+    duration_seconds: Optional[float] = 0.0,
+    confidence_score: Optional[float] = 1.0,
+    detection_source: str = "CLIENT_SENSOR",
+    description: Optional[str] = None
 ) -> ExamProctoringEvent:
     """
     Records an examination proctoring telemetry event.
     Stores contextual metadata without retaining continuous private video/audio.
+    Supports client_event_id for idempotency on network retries.
     """
     attempt = db.scalar(
         select(ExamAttempt).where(ExamAttempt.id == attempt_id, ExamAttempt.user_id == user.id)
@@ -672,18 +687,212 @@ def ingest_proctoring_event(
     if not attempt:
         raise ValueError("Examination attempt not found.")
 
+    # Idempotency check: if client_event_id already exists for this attempt, return it
+    if client_event_id:
+        existing = db.scalar(
+            select(ExamProctoringEvent).where(
+                ExamProctoringEvent.attempt_id == attempt_id,
+                ExamProctoringEvent.client_event_id == client_event_id
+            )
+        )
+        if existing:
+            return existing
+
     now = datetime.now(timezone.utc)
     event = ExamProctoringEvent(
         attempt_id=attempt_id,
+        client_event_id=client_event_id,
         event_type=event_type.upper(),
         severity=severity.upper(),
+        duration_seconds=duration_seconds or 0.0,
+        confidence_score=confidence_score if confidence_score is not None else 1.0,
+        detection_source=detection_source or "CLIENT_SENSOR",
+        description=description,
+        review_status="PENDING",
         timestamp=now,
         metadata_payload=metadata_payload or {}
     )
     db.add(event)
+
+    audit_entry = ProctoringAuditLog(
+        attempt_id=attempt_id,
+        actor_type="CANDIDATE",
+        actor_id=str(user.id),
+        action_type="EVENT_INGESTED",
+        target_type="PROCTORING_EVENT",
+        target_id=str(event.id),
+        new_state={"event_type": event_type.upper(), "severity": severity.upper()}
+    )
+    db.add(audit_entry)
+
     db.commit()
     db.refresh(event)
     return event
+
+
+def save_proctoring_evidence(
+    db: Session,
+    user: User,
+    attempt_id: uuid.UUID,
+    storage_key: str,
+    evidence_type: str,
+    checksum_sha256: str,
+    event_id: Optional[uuid.UUID] = None,
+    storage_provider: str = "SECURE_BLOB",
+    mime_type: str = "application/octet-stream",
+    file_size_bytes: int = 0,
+    captured_at: Optional[datetime] = None,
+    access_classification: str = "RESTRICTED",
+    metadata_payload: Optional[Dict[str, Any]] = None
+) -> ProctoringEvidence:
+    """Stores secure reference to supporting proctoring evidence in PostgreSQL."""
+    attempt = db.scalar(
+        select(ExamAttempt).where(ExamAttempt.id == attempt_id, ExamAttempt.user_id == user.id)
+    )
+    if not attempt:
+        raise ValueError("Examination attempt not found.")
+
+    now = datetime.now(timezone.utc)
+    evidence = ProctoringEvidence(
+        attempt_id=attempt_id,
+        event_id=event_id,
+        storage_provider=storage_provider,
+        storage_key=storage_key,
+        evidence_type=evidence_type.upper(),
+        mime_type=mime_type,
+        file_size_bytes=file_size_bytes,
+        checksum_sha256=checksum_sha256,
+        captured_at=captured_at or now,
+        retention_expires_at=now + timedelta(days=90),
+        access_classification=access_classification,
+        metadata_payload=metadata_payload or {}
+    )
+    db.add(evidence)
+
+    audit_entry = ProctoringAuditLog(
+        attempt_id=attempt_id,
+        actor_type="CANDIDATE",
+        actor_id=str(user.id),
+        action_type="EVIDENCE_REGISTERED",
+        target_type="PROCTORING_EVIDENCE",
+        target_id=str(evidence.id),
+        new_state={"evidence_type": evidence_type.upper(), "checksum": checksum_sha256}
+    )
+    db.add(audit_entry)
+
+    db.commit()
+    db.refresh(evidence)
+    return evidence
+
+
+def record_proctoring_review(
+    db: Session,
+    reviewer: User,
+    attempt_id: uuid.UUID,
+    review_decision: str,
+    reviewer_notes: Optional[str] = None,
+    review_status: str = "COMPLETED"
+) -> ProctoringReview:
+    """Records proctoring review decision and audit trail."""
+    attempt = db.scalar(select(ExamAttempt).where(ExamAttempt.id == attempt_id))
+    if not attempt:
+        raise ValueError("Examination attempt not found.")
+
+    now = datetime.now(timezone.utc)
+    prev_decision = attempt.reviewer_decision
+
+    attempt.reviewer_decision = review_decision.upper()
+    attempt.reviewer_notes = reviewer_notes
+    attempt.reviewed_by = reviewer.email or str(reviewer.id)
+    attempt.reviewed_at = now
+
+    review = ProctoringReview(
+        attempt_id=attempt_id,
+        reviewer_id=str(reviewer.id),
+        review_status=review_status.upper(),
+        review_decision=review_decision.upper(),
+        reviewer_notes=reviewer_notes,
+        reviewed_at=now
+    )
+    db.add(review)
+
+    audit_entry = ProctoringAuditLog(
+        attempt_id=attempt_id,
+        actor_type="PROCTOR" if getattr(reviewer, "role", "student") in ["admin", "proctor"] else "SYSTEM",
+        actor_id=str(reviewer.id),
+        action_type="REVIEW_RECORDED",
+        target_type="EXAM_ATTEMPT",
+        target_id=str(attempt_id),
+        previous_state={"decision": prev_decision},
+        new_state={"decision": review_decision.upper(), "notes": reviewer_notes}
+    )
+    db.add(audit_entry)
+
+    db.commit()
+    db.refresh(review)
+    return review
+
+
+def get_proctoring_session_summary(
+    db: Session,
+    user: User,
+    attempt_id: uuid.UUID
+) -> Dict[str, Any]:
+    """Retrieves full proctoring session summary with events, evidence, reviews, and audit trail."""
+    attempt = db.scalar(select(ExamAttempt).where(ExamAttempt.id == attempt_id))
+    if not attempt:
+        raise ValueError("Examination attempt not found.")
+
+    is_owner = (attempt.user_id == user.id)
+    is_staff = getattr(user, "role", "student") in ["admin", "proctor", "staff"]
+    if not is_owner and not is_staff:
+        raise ValueError("Access denied: Not authorized to view proctoring session records.")
+
+    events = db.scalars(
+        select(ExamProctoringEvent)
+        .where(ExamProctoringEvent.attempt_id == attempt_id)
+        .order_by(ExamProctoringEvent.timestamp.asc())
+    ).all()
+
+    evidence = db.scalars(
+        select(ProctoringEvidence)
+        .where(ProctoringEvidence.attempt_id == attempt_id)
+        .order_by(ProctoringEvidence.captured_at.asc())
+    ).all()
+
+    reviews = db.scalars(
+        select(ProctoringReview)
+        .where(ProctoringReview.attempt_id == attempt_id)
+        .order_by(ProctoringReview.reviewed_at.desc())
+    ).all()
+
+    audit_trail = db.scalars(
+        select(ProctoringAuditLog)
+        .where(ProctoringAuditLog.attempt_id == attempt_id)
+        .order_by(ProctoringAuditLog.created_at.asc())
+    ).all()
+
+    return {
+        "attempt_id": attempt.id,
+        "examination_id": attempt.examination_id,
+        "user_id": attempt.user_id,
+        "status": attempt.status,
+        "started_at": attempt.started_at,
+        "expires_at": attempt.expires_at,
+        "submitted_at": attempt.submitted_at,
+        "proctoring_consent": attempt.proctoring_consent,
+        "consent_timestamp": attempt.consent_timestamp,
+        "device_info": attempt.device_info,
+        "integrity_risk_category": attempt.integrity_risk_category,
+        "integrity_summary": attempt.integrity_summary,
+        "reviewer_decision": attempt.reviewer_decision,
+        "events_count": len(events),
+        "evidence_count": len(evidence),
+        "events": events,
+        "evidence": evidence,
+        "reviews": reviews,
+        "audit_trail": audit_trail
+    }
 
 
 # ------------------------------------------------------------------------------

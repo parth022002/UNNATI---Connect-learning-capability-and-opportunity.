@@ -185,6 +185,24 @@ class ExamAttempt(Base, UUIDPrimaryKeyMixin, TimestampMixin):
         cascade="all, delete-orphan",
         order_by="ExamProctoringEvent.timestamp"
     )
+    proctoring_evidence: Mapped[List["ProctoringEvidence"]] = relationship(
+        "ProctoringEvidence",
+        back_populates="attempt",
+        cascade="all, delete-orphan",
+        order_by="ProctoringEvidence.captured_at"
+    )
+    proctoring_reviews: Mapped[List["ProctoringReview"]] = relationship(
+        "ProctoringReview",
+        back_populates="attempt",
+        cascade="all, delete-orphan",
+        order_by="ProctoringReview.reviewed_at"
+    )
+    proctoring_audit_logs: Mapped[List["ProctoringAuditLog"]] = relationship(
+        "ProctoringAuditLog",
+        back_populates="attempt",
+        cascade="all, delete-orphan",
+        order_by="ProctoringAuditLog.created_at"
+    )
 
 
 class ExamAttemptAnswer(Base, UUIDPrimaryKeyMixin, TimestampMixin):
@@ -221,18 +239,21 @@ class ExamProctoringEvent(Base, UUIDPrimaryKeyMixin):
     """
     Chronological tamper-evident proctoring telemetry record.
     Preserves privacy: no raw video/audio retention, purely event metadata.
+    Supports client_event_id for idempotency and offline reconciliation.
     """
     __tablename__ = "exam_proctoring_events"
 
     attempt_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("exam_attempts.id", ondelete="CASCADE"), index=True, nullable=False
     )
-    # Event types:
-    # TAB_SWITCH, WINDOW_BLUR, FULLSCREEN_EXIT, COPY_ATTEMPT, PASTE_ATTEMPT,
-    # RIGHT_CLICK, CAMERA_DISCONNECTED, CAMERA_OBSTRUCTED, MULTIPLE_FACES_DETECTED,
-    # FACE_NOT_VISIBLE, AUDIO_SPIKE, NETWORK_OFFLINE, SESSION_RESTARTED
+    client_event_id: Mapped[Optional[str]] = mapped_column(String(100), index=True, nullable=True)
     event_type: Mapped[str] = mapped_column(String(100), index=True, nullable=False)
     severity: Mapped[str] = mapped_column(String(30), default="INFO", nullable=False) # INFO, WARNING, SUSPICIOUS
+    duration_seconds: Mapped[Optional[float]] = mapped_column(Float, default=0.0, nullable=True)
+    confidence_score: Mapped[Optional[float]] = mapped_column(Float, default=1.0, nullable=True)
+    detection_source: Mapped[str] = mapped_column(String(50), default="CLIENT_SENSOR", nullable=False)
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    review_status: Mapped[str] = mapped_column(String(50), default="PENDING", nullable=False)
     
     timestamp: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
@@ -243,7 +264,77 @@ class ExamProctoringEvent(Base, UUIDPrimaryKeyMixin):
 
     __table_args__ = (
         Index("ix_proctoring_attempt_time", "attempt_id", "timestamp"),
+        Index("ix_proctoring_client_event", "attempt_id", "client_event_id"),
     )
+
+
+class ProctoringEvidence(Base, UUIDPrimaryKeyMixin, TimestampMixin):
+    """
+    Secure references to supporting evidence (screenshots, telemetry blobs, audio metrics).
+    Stores pointers and cryptographic checksums in DB; raw assets reside in secure private object storage.
+    """
+    __tablename__ = "proctoring_evidence"
+
+    attempt_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("exam_attempts.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    event_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+        ForeignKey("exam_proctoring_events.id", ondelete="SET NULL"), index=True, nullable=True
+    )
+    storage_provider: Mapped[str] = mapped_column(String(50), default="SECURE_BLOB", nullable=False)
+    storage_key: Mapped[str] = mapped_column(String(500), nullable=False)
+    evidence_type: Mapped[str] = mapped_column(String(50), nullable=False)
+    mime_type: Mapped[str] = mapped_column(String(100), default="application/octet-stream", nullable=False)
+    file_size_bytes: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    checksum_sha256: Mapped[str] = mapped_column(String(64), nullable=False)
+    captured_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    retention_expires_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    access_classification: Mapped[str] = mapped_column(String(50), default="RESTRICTED", nullable=False)
+    metadata_payload: Mapped[Dict[str, Any]] = mapped_column(JSONB, default=dict, nullable=False)
+
+    attempt: Mapped["ExamAttempt"] = relationship("ExamAttempt", back_populates="proctoring_evidence")
+
+
+class ProctoringReview(Base, UUIDPrimaryKeyMixin, TimestampMixin):
+    """
+    Human proctor review decision on flagged attempts or anomalies.
+    """
+    __tablename__ = "proctoring_reviews"
+
+    attempt_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("exam_attempts.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    reviewer_id: Mapped[str] = mapped_column(String(100), nullable=False)
+    review_status: Mapped[str] = mapped_column(String(50), default="COMPLETED", nullable=False)
+    review_decision: Mapped[str] = mapped_column(String(50), nullable=False) # APPROVED, CONFIRMED_VIOLATION, DISMISSED, FURTHER_REVIEW
+    reviewer_notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    reviewed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+    attempt: Mapped["ExamAttempt"] = relationship("ExamAttempt", back_populates="proctoring_reviews")
+
+
+class ProctoringAuditLog(Base, UUIDPrimaryKeyMixin):
+    """
+    Immutable audit trail for all proctoring session actions and state transitions.
+    """
+    __tablename__ = "proctoring_audit_logs"
+
+    attempt_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("exam_attempts.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    actor_type: Mapped[str] = mapped_column(String(50), nullable=False) # SYSTEM, CANDIDATE, PROCTOR, ADMIN
+    actor_id: Mapped[str] = mapped_column(String(100), nullable=False)
+    action_type: Mapped[str] = mapped_column(String(100), nullable=False)
+    target_type: Mapped[str] = mapped_column(String(50), nullable=False)
+    target_id: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    previous_state: Mapped[Optional[Dict[str, Any]]] = mapped_column(JSONB, nullable=True)
+    new_state: Mapped[Optional[Dict[str, Any]]] = mapped_column(JSONB, nullable=True)
+    request_id: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
+    )
+
+    attempt: Mapped["ExamAttempt"] = relationship("ExamAttempt", back_populates="proctoring_audit_logs")
 
 
 class ExamCertificate(Base, UUIDPrimaryKeyMixin, TimestampMixin):

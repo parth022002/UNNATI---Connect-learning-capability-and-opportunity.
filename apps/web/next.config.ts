@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const securityHeaders = [
   {
@@ -23,7 +24,7 @@ const securityHeaders = [
   },
   {
     key: "Permissions-Policy",
-    value: "camera=(), microphone=(), geolocation=(), browsing-topics=()"
+    value: "camera=(self), microphone=(self), geolocation=(), browsing-topics=()"
   },
   {
     key: "Content-Security-Policy",
@@ -45,6 +46,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: path.resolve(__dirname, "../../"),
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,

@@ -29,5 +29,6 @@ storage/
 # Test screenshots and browser session dumps
 /*.png
 .playwright-mcp/
+*.db
 
 

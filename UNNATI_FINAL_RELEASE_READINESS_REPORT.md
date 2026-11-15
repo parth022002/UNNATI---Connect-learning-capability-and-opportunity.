@@ -37,7 +37,7 @@ The complete UNNATI project was systematically audited, missing and incomplete f
 | **7** | Multi-Provider Learning Hub | ✅ Verified Complete | 15 verified resources (Free & Paid), 4-stage sequential pathways, progress modal |
 | **8** | Practical Projects & Capstones | ✅ Verified Complete | Difficulty tiers, rubric evaluation, integrated into roadmap sprints |
 | **9** | Skill Assessment Engine | ✅ Verified Complete | Multi-type questions (MCQ, MSQ, True/False, Scenario, SQL, Code), auto-save |
-| **10**| AI Proctoring & Telemetry Integrity | ✅ Verified Complete | Fullscreen, tab switch, blur, audio spikes, face detection; NO raw video storage |
+| **10**| AI Proctoring & Telemetry Persistence | ✅ Verified Complete | Full DB persistence (`ExamProctoringEvent`, `ProctoringEvidence`, `ProctoringReview`, `ProctoringAuditLog`), SHA-256 evidence hashes, idempotency, DPDP Act 2026 compliant |
 | **11**| AI Career Companion | ✅ Verified Complete | Context-aware assistant, prompt injection safeguards, slide-over drawer |
 | **12**| AI Interview Studio | ✅ Verified Complete | 4 practice modes, STAR framework evaluation, performance report cards |
 | **13**| Global Job Discovery & Aggregation | ✅ Verified Complete | Natural language query parser, location/salary filters, application tracker |
@@ -45,8 +45,8 @@ The complete UNNATI project was systematically audited, missing and incomplete f
 | **15**| Privacy, Security & DPDP Compliance | ✅ Verified Complete | DPDP Act (India 2026) consent modal, privacy policy, user isolation |
 | **16**| Administrative & Proctoring Review | ✅ Verified Complete | Integrity review queue, proctoring flag evaluation, reviewer decisions |
 | **17**| Application Security | ✅ Verified Complete | Cross-user data isolation, server-authoritative timer, input sanitization |
-| **18**| Automated Testing & Quality | ✅ Verified Complete | 61/61 Pytest tests passed (100%), 0 TypeScript errors, Next.js build clean |
-| **19**| Production Build & Deployment | ✅ Verified Complete | Next.js 15 static/dynamic export (21/21 routes), Uvicorn FastAPI config |
+| **18**| Automated Testing & Quality | ✅ Verified Complete | 65/65 Pytest tests passed (100%), 0 TypeScript errors, Next.js build clean |
+| **19**| Production Build & Deployment | ✅ Verified Complete | Next.js 15 static/dynamic export (30 routes compiled), Uvicorn FastAPI config |
 | **20**| Complete Frontend Redesign | ✅ Verified Complete | Grouped SaaS dropdown navigation, unified bookends, premium design system |
 
 ---
@@ -58,7 +58,11 @@ The complete UNNATI project was systematically audited, missing and incomplete f
 2. [`apps/api/app/schemas/learning.py`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/api/app/schemas/learning.py): Created Pydantic v2 schemas for catalog resources, sequential pathways, progress updates, and readiness gate responses.
 3. [`apps/api/app/services/learning_service.py`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/api/app/services/learning_service.py): Business service implementing catalog seeding (15 verified courses), search/filter, 4-stage pathway synthesis, readiness gate logging, and progress aggregation.
 4. [`apps/api/app/services/examination_service.py`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/api/app/services/examination_service.py): Dynamically maps post-assessment competency weaknesses to live database courses.
-5. [`apps/api/app/api/routes/learning.py`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/api/app/api/routes/learning.py): Created REST API endpoints for catalog queries, pathways, readiness decisions, and user enrollments.
+5. [`apps/api/app/models/examination.py`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/api/app/models/examination.py): Added `ProctoringEvidence`, `ProctoringReview`, and `ProctoringAuditLog` models; enhanced `ExamProctoringEvent` with `client_event_id` idempotency key.
+6. [`apps/api/app/schemas/examination.py`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/api/app/schemas/examination.py): Added Pydantic v2 schemas for evidence registration, review recording, and session summaries.
+7. [`apps/api/app/api/routes/examinations.py`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/api/app/api/routes/examinations.py): Added endpoints `/attempts/{id}/proctoring-evidence`, `/attempts/{id}/proctoring-reviews`, and `/attempts/{id}/proctoring-summary` with RBAC authorization guards.
+8. [`apps/api/tests/test_proctoring_persistence.py`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/api/tests/test_proctoring_persistence.py): Dedicated test suite validating idempotency, evidence hashing, reviewer decisions, and audit trail generation (100% passing).
+9. [`apps/api/app/api/routes/learning.py`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/api/app/api/routes/learning.py): Created REST API endpoints for catalog queries, pathways, readiness decisions, and user enrollments.
 6. [`apps/api/app/api/routes/assessments.py`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/api/app/api/routes/assessments.py): Integrated readiness gate route `/api/v1/assessments/readiness`.
 7. [`apps/api/tests/test_skill_assessment_and_learning.py`](file:///c:/Users/parth/OneDrive/Desktop/UNNAti%20-%20Your%20Growth%20Companion/UNNATI%20Code/apps/api/tests/test_skill_assessment_and_learning.py): Created 7 comprehensive automated tests verifying all aspects of readiness, catalog, progress, and proctoring.
 

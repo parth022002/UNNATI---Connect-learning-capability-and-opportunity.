@@ -25,6 +25,11 @@ from app.schemas.examination import (
     SaveAnswerResponse,
     ProctoringEventRequest,
     ProctoringEventResponse,
+    ProctoringEvidenceCreate,
+    ProctoringEvidenceResponse,
+    ProctoringReviewCreate,
+    ProctoringReviewResponse,
+    ProctoringSessionSummaryResponse,
     ExamSubmissionRequest,
     ExamResultResponse,
     CertificateResponse,
@@ -39,6 +44,9 @@ from app.services.examination_service import (
     start_or_resume_attempt,
     autosave_answer,
     ingest_proctoring_event,
+    save_proctoring_evidence,
+    record_proctoring_review,
+    get_proctoring_session_summary,
     finalize_attempt_submission,
     get_attempt_result_response,
     admin_get_reviews_list,
@@ -231,7 +239,7 @@ def record_telemetry_event(
     user: User = Depends(get_db_user),
     db: Session = Depends(get_db)
 ):
-    """Records privacy-preserving proctoring telemetry event (tab switch, camera, mic)."""
+    """Records privacy-preserving proctoring telemetry event with idempotency support."""
     try:
         event = ingest_proctoring_event(
             db=db,
@@ -239,17 +247,121 @@ def record_telemetry_event(
             attempt_id=attempt_id,
             event_type=body.event_type,
             severity=body.severity or "INFO",
-            metadata_payload=body.metadata_payload
+            metadata_payload=body.metadata_payload,
+            client_event_id=body.client_event_id,
+            duration_seconds=body.duration_seconds or 0.0,
+            confidence_score=body.confidence_score if body.confidence_score is not None else 1.0,
+            detection_source=body.detection_source or "CLIENT_SENSOR",
+            description=body.description
         )
         return ProctoringEventResponse(
             id=event.id,
+            attempt_id=event.attempt_id,
+            client_event_id=event.client_event_id,
             event_type=event.event_type,
             severity=event.severity,
+            duration_seconds=event.duration_seconds,
+            confidence_score=event.confidence_score,
+            detection_source=event.detection_source,
+            description=event.description,
+            review_status=event.review_status,
             timestamp=event.timestamp,
             metadata_payload=event.metadata_payload
         )
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+
+@router.post("/attempts/{attempt_id}/proctoring-evidence", response_model=ProctoringEvidenceResponse)
+def record_telemetry_evidence(
+    attempt_id: uuid.UUID,
+    body: ProctoringEvidenceCreate,
+    user: User = Depends(get_db_user),
+    db: Session = Depends(get_db)
+):
+    """Registers reference and cryptographic hash for proctoring evidence in PostgreSQL."""
+    try:
+        evidence = save_proctoring_evidence(
+            db=db,
+            user=user,
+            attempt_id=attempt_id,
+            storage_key=body.storage_key,
+            evidence_type=body.evidence_type,
+            checksum_sha256=body.checksum_sha256,
+            event_id=body.event_id,
+            storage_provider=body.storage_provider or "SECURE_BLOB",
+            mime_type=body.mime_type or "application/octet-stream",
+            file_size_bytes=body.file_size_bytes or 0,
+            captured_at=body.captured_at,
+            access_classification=body.access_classification or "RESTRICTED",
+            metadata_payload=body.metadata_payload
+        )
+        return ProctoringEvidenceResponse(
+            id=evidence.id,
+            attempt_id=evidence.attempt_id,
+            event_id=evidence.event_id,
+            storage_provider=evidence.storage_provider,
+            storage_key=evidence.storage_key,
+            evidence_type=evidence.evidence_type,
+            mime_type=evidence.mime_type,
+            file_size_bytes=evidence.file_size_bytes,
+            checksum_sha256=evidence.checksum_sha256,
+            captured_at=evidence.captured_at,
+            access_classification=evidence.access_classification,
+            metadata_payload=evidence.metadata_payload
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+
+@router.post("/attempts/{attempt_id}/proctoring-reviews", response_model=ProctoringReviewResponse)
+def record_proctor_review(
+    attempt_id: uuid.UUID,
+    body: ProctoringReviewCreate,
+    user: User = Depends(get_db_user),
+    db: Session = Depends(get_db)
+):
+    """Records human review decision on proctoring attempt."""
+    try:
+        review = record_proctoring_review(
+            db=db,
+            reviewer=user,
+            attempt_id=attempt_id,
+            review_decision=body.review_decision,
+            reviewer_notes=body.reviewer_notes,
+            review_status=body.review_status or "COMPLETED"
+        )
+        return ProctoringReviewResponse(
+            id=review.id,
+            attempt_id=review.attempt_id,
+            reviewer_id=review.reviewer_id,
+            review_status=review.review_status,
+            review_decision=review.review_decision,
+            reviewer_notes=review.reviewer_notes,
+            reviewed_at=review.reviewed_at
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+
+@router.get("/attempts/{attempt_id}/proctoring-summary", response_model=ProctoringSessionSummaryResponse)
+def get_session_proctoring_summary(
+    attempt_id: uuid.UUID,
+    user: User = Depends(get_db_user),
+    db: Session = Depends(get_db)
+):
+    """Retrieves full proctoring session summary with events, evidence, reviews, and audit trail."""
+    try:
+        summary_data = get_proctoring_session_summary(
+            db=db,
+            user=user,
+            attempt_id=attempt_id
+        )
+        return ProctoringSessionSummaryResponse(**summary_data)
+    except ValueError as e:
+        if "Access denied" in str(e):
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 
 @router.post("/attempts/{attempt_id}/submit", response_model=ExamResultResponse)

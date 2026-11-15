@@ -10,6 +10,9 @@ from app.models.examination import (
     ExamAttempt,
     ExamAttemptAnswer,
     ExamProctoringEvent,
+    ProctoringEvidence,
+    ProctoringReview,
+    ProctoringAuditLog,
     ExamCertificate,
 )
 from app.models.resume import (
@@ -63,6 +66,9 @@ __all__ = [
     "ExamAttempt",
     "ExamAttemptAnswer",
     "ExamProctoringEvent",
+    "ProctoringEvidence",
+    "ProctoringReview",
+    "ProctoringAuditLog",
     "ExamCertificate",
     "Resume",
     "ResumeVersion",

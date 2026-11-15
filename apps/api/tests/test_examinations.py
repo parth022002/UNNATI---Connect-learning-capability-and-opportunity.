@@ -152,9 +152,11 @@ def test_start_attempt_enforces_consent():
 
 def test_autosave_and_proctoring_telemetry():
     """Verifies autosave and proctoring event ingestion."""
-    # Find active attempt or create one
+    # Find active attempt or create one on an exam with questions
     res = client.get("/api/v1/examinations")
-    exam_id = res.json()[0]["id"]
+    exams = res.json()
+    exam = next(e for e in exams if e.get("question_count", 0) > 0)
+    exam_id = exam["id"]
     start_res = client.post(
         f"/api/v1/examinations/{exam_id}/start",
         json={"proctoring_consent": True}

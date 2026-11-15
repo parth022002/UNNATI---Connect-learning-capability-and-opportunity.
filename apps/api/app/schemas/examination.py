@@ -148,16 +148,119 @@ class ProctoringEventRequest(BaseModel):
         description="Type: TAB_SWITCH, WINDOW_BLUR, FULLSCREEN_EXIT, COPY_ATTEMPT, CAMERA_OBSTRUCTED, etc."
     )
     severity: Optional[str] = Field(default="INFO", description="INFO, WARNING, SUSPICIOUS")
+    client_event_id: Optional[str] = Field(default=None, description="Client idempotency key to prevent duplicate logs on network retry")
+    duration_seconds: Optional[float] = Field(default=0.0, description="Duration of violation in seconds")
+    confidence_score: Optional[float] = Field(default=1.0, description="Confidence score from client sensor (0.0 to 1.0)")
+    detection_source: Optional[str] = Field(default="CLIENT_SENSOR", description="CLIENT_SENSOR, WEBCAM_ANALYZER, AUDIO_ANALYZER, DOM_LISTENER")
+    description: Optional[str] = None
     metadata_payload: Optional[Dict[str, Any]] = Field(default_factory=dict)
     client_timestamp: Optional[str] = None
 
 
 class ProctoringEventResponse(BaseModel):
     id: uuid.UUID
+    attempt_id: Optional[uuid.UUID] = None
+    client_event_id: Optional[str] = None
     event_type: str
     severity: str
+    duration_seconds: Optional[float] = 0.0
+    confidence_score: Optional[float] = 1.0
+    detection_source: Optional[str] = "CLIENT_SENSOR"
+    description: Optional[str] = None
+    review_status: Optional[str] = "PENDING"
     timestamp: datetime
+    metadata_payload: Dict[str, Any] = Field(default_factory=dict)
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ------------------------------------------------------------------------------
+# Proctoring Evidence, Reviews & Audit Schemas
+# ------------------------------------------------------------------------------
+class ProctoringEvidenceCreate(BaseModel):
+    event_id: Optional[uuid.UUID] = None
+    storage_provider: Optional[str] = "SECURE_BLOB"
+    storage_key: str = Field(..., description="Encrypted storage path or object key")
+    evidence_type: str = Field(..., description="SCREENSHOT, AUDIO_METRIC, DOM_TELEMETRY, WEBCAM_FRAME")
+    mime_type: Optional[str] = "application/octet-stream"
+    file_size_bytes: Optional[int] = 0
+    checksum_sha256: str = Field(..., description="Cryptographic SHA-256 integrity hash")
+    captured_at: Optional[datetime] = None
+    access_classification: Optional[str] = "RESTRICTED"
+    metadata_payload: Optional[Dict[str, Any]] = Field(default_factory=dict)
+
+
+class ProctoringEvidenceResponse(BaseModel):
+    id: uuid.UUID
+    attempt_id: uuid.UUID
+    event_id: Optional[uuid.UUID] = None
+    storage_provider: str
+    storage_key: str
+    evidence_type: str
+    mime_type: str
+    file_size_bytes: int
+    checksum_sha256: str
+    captured_at: datetime
+    access_classification: str
     metadata_payload: Dict[str, Any]
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ProctoringReviewCreate(BaseModel):
+    reviewer_notes: Optional[str] = None
+    review_decision: str = Field(..., description="APPROVED, CONFIRMED_VIOLATION, DISMISSED, FURTHER_REVIEW")
+    review_status: Optional[str] = "COMPLETED"
+
+
+class ProctoringReviewResponse(BaseModel):
+    id: uuid.UUID
+    attempt_id: uuid.UUID
+    reviewer_id: str
+    review_status: str
+    review_decision: str
+    reviewer_notes: Optional[str] = None
+    reviewed_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ProctoringAuditLogResponse(BaseModel):
+    id: uuid.UUID
+    attempt_id: uuid.UUID
+    actor_type: str
+    actor_id: str
+    action_type: str
+    target_type: str
+    target_id: Optional[str] = None
+    previous_state: Optional[Dict[str, Any]] = None
+    new_state: Optional[Dict[str, Any]] = None
+    request_id: Optional[str] = None
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ProctoringSessionSummaryResponse(BaseModel):
+    attempt_id: uuid.UUID
+    examination_id: uuid.UUID
+    user_id: uuid.UUID
+    status: str
+    started_at: datetime
+    expires_at: datetime
+    submitted_at: Optional[datetime] = None
+    proctoring_consent: bool
+    consent_timestamp: Optional[datetime] = None
+    device_info: Optional[Dict[str, Any]] = None
+    integrity_risk_category: str
+    integrity_summary: Optional[Dict[str, Any]] = None
+    reviewer_decision: str
+    events_count: int
+    evidence_count: int
+    events: List[ProctoringEventResponse]
+    evidence: List[ProctoringEvidenceResponse]
+    reviews: List[ProctoringReviewResponse]
+    audit_trail: List[ProctoringAuditLogResponse]
 
     model_config = ConfigDict(from_attributes=True)
 
